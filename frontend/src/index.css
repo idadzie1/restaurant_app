@@ -1,0 +1,521 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Caveat:wght@400..700&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=GFS+Didot&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oooh+Baby&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    outline: none; 
+    outline: 0;
+    list-style: none;      
+}
+
+
+a{
+    color: black;
+}
+
+
+html{
+    line-height: 1.5;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;    
+    font-style: normal;
+   
+}
+
+/* ===================== Nav ====================================================== */
+
+nav{
+    position:fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.15); /* translucency */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 9999;
+    
+}
+
+.nav-container{
+    position: relative;
+    width: 95%;    
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+}
+
+.logo-container{
+    width: 5rem;
+    height: 4rem;
+}
+
+.logo-container img{
+    width: 100%;
+    height: 100%;
+    object-fit:fill;
+}
+
+.menu-items, .login-container{
+    font-size: 0.85rem;
+}
+
+.menu-items ul li{
+    background-color: #fff;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+   
+}
+
+.login-container{
+    margin-right: 4rem;
+    background-color: #EFE9E3;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+ul{
+    display: flex;
+    gap: 3rem;
+}
+
+.close-icon{
+    display: none;
+}
+
+
+.hamburger-btn{
+    display: none;
+}
+
+/* ============================================================================================== */
+/* =============================== Nav Media Queries ============================================*/
+/* ============================================================================================== */
+
+@media (hover: none) {
+    .restaurant-item:hover {
+        border-color: transparent;
+        background-color: transparent;
+    }
+}
+
+
+@media screen and (max-width:1024px){
+   
+
+    .banner-text{
+        /* background-color: #FF6B35; */
+    }
+
+    .menu-items{        
+        position: fixed;
+        left: 0;
+        top: 0;        
+        background-color: rgba(0,0,0,0.8);
+        width: 100vw;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+     .slide-in{
+        transform: translateX(0);
+    }
+
+    .menu-items ul{
+        margin-top: 4rem;               
+        display: flex;
+        flex-direction: column;
+        align-items: center;     
+    }
+
+    .menu-items ul{
+        margin: 4rem auto;
+        width: 40%;
+    }
+
+    .menu-items ul li{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-container{
+      margin-right: -35rem;
+    }
+
+    .hamburger-btn{
+        margin-top: 0.5rem;
+        display: block;
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .close-icon{
+        position: absolute;
+        top: 4rem;
+        right: 3rem;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 2rem;
+        height: 2rem;
+        font-size: 2rem;
+        border-radius: 50%;
+        cursor: pointer;
+       
+        
+    }
+
+   
+    
+    /* .hide{
+        display: none;
+    } */
+}
+
+/*  */
+
+@media screen and (max-width:992px){
+  
+}
+
+@media (max-width: 768px){
+
+      .login-container{
+      margin-right: -20rem;
+    }
+}
+
+@media (max-width: 600px){
+
+}
+
+@media (max-width: 480px){
+
+
+          .login-container{
+             margin-right: -10rem;
+    }
+}
+
+
+@media (max-width: 400px){
+
+}
+
+
+@media (max-width: 360px){
+
+
+    .login-container{
+       margin-right: -5rem; 
+    }
+}
+
+
+
+/* ================================= Header ===================================================== */
+.header-container{
+    position: relative;
+    width: 100%;
+    height: 10rem;
+}
+
+.header-image{
+    position: relative;
+}
+
+.search-text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 30rem;
+    height: 1.5rem;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;    
+    align-items: center;
+    /* padding: 0.5rem; */
+     padding-left: 0.5rem;
+     padding-top: 0.5rem;
+     /* padding-right: 0.5rem; */
+     padding-bottom: 0.5rem;
+    border-radius: 2rem;
+}
+
+.banner-text{
+    position: absolute;
+    left: 2rem;
+    top: 5rem;  
+    width: 23rem;
+    height: 22rem;
+    z-index: 10;
+    /* background-color: red; */
+    color: #FF6B35;
+    color: #fff;
+    font-family: "Playfair Display", serif;
+    font-weight: 500;
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;       
+}
+
+/*   font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal; */
+
+.search-icon{    
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    padding: 0.5rem;
+    color: #fff;
+    color: black;    
+    background-color: #FF6B35;
+    background-color: #EFE9E3;
+    border-top-right-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    cursor: pointer;
+}
+
+.search-text input{
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: large;    
+}
+
+.header-image img{
+    margin-top: 3rem;
+    width: 100%;
+    height: 25rem;
+    object-fit:cover;
+    object-position: center 27%;   
+}
+
+
+/* overlay */
+.header-image::after {
+    content: "";
+    margin-top: 3rem;
+    width: 100%;
+    height: 25rem;
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.35); 
+    
+}
+
+
+
+.login{
+    margin-top: 50rem;
+    /* background-color: red; */
+}
+
+/* ====================== Header Media Queries ========================= */
+@media screen and (max-width:1024px){
+    .search-text{
+        width: 20rem;
+    }
+
+    .banner-text{
+        font-size: 2rem;
+        width: 15rem;
+    }
+}
+
+
+@media (max-width: 768px){    
+        .banner-text{
+            font-size: 2rem;
+            width: 10rem;
+    }
+}
+
+
+@media (max-width: 600px){
+
+        .banner-text{
+            font-size: 2rem;
+            width: 90%;
+            height: 10rem;
+            /* background-color: #FF6B35; */
+            left: 1rem;
+            top: 3.5rem;
+        }
+
+        @media (max-width: 480px){
+            .banner-text{
+                font-size: 1.5rem;
+            }
+        }
+}
+
+@media (max-width: 360px){
+    .search-text{
+        width: 15rem;
+    }
+}
+
+
+/* ================================  Home Page =============================*/
+
+.container{
+    margin: 20rem auto;
+    width: 80%;
+}
+
+.container-heading{
+    width: 100%;
+    text-align: center;
+}
+
+.text{
+    font-size: 0.7rem;
+    font-weight: 600;
+    
+}
+
+
+.restaurant-items{
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+
+.restaurant-item{   
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+    border-radius: 2rem; 
+    border: 1px solid transparent;
+    transition: border-color 300ms ease; 
+    
+}
+
+
+.restaurant-item:hover{
+     border-color: #EFE9E3;
+     background-color: #EFE9E3;
+    transition: all 300ms ease;        
+}
+
+.contact{
+    display: flex;
+    flex-direction: column;
+}
+
+.whatsapp::first-letter{
+    color: greenyellow;
+}
+.facebook{
+    color: blue;
+}
+
+iframe{
+    margin-top: 0.5rem;
+    width: 18rem;
+    height: 8rem;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.restaurant-photo img{
+    width: 18rem;
+    height: 10rem;
+    object-fit: fill;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    
+}
+
+.owner{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+
+/* ================== Home Page Media query ====================== */
+@media screen and (max-width:1024px){
+    .restaurant-items{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px){
+   .restaurant-items{
+    gap: 3rem;
+   }
+
+   iframe, .restaurant-photo img{
+     width: 15rem;
+   }
+}
+
+
+@media (max-width: 600px){
+        .restaurant-items{
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+
+    .container{    
+        width: 50%;
+    }    
+
+}
+
+@media (max-width: 480px){
+        .container{    
+        width: 60%;
+        } 
+}
+
+
+@media screen and (max-width:400px){
+    .restaurant-item{       
+    border-radius: 2rem; 
+    border: none solid;
+    
+    
+    }
+
+}
+
+
+@media screen and (max-width:375px) {
+        .restaurant-items{
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .restaurant-item:hover {
+        border-color: transparent;
+        background-color: transparent;
+    }
+
+
+}
+
+
+
+
