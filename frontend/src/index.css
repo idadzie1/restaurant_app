@@ -58,6 +58,10 @@ nav{
     object-fit:fill;
 }
 
+.arrowdn{
+    /* background-color: red; */
+}
+
 .menu-items, .login-container{
     font-size: 0.85rem;
 }
@@ -71,12 +75,16 @@ nav{
 
 .login-container{
     margin-right: 4rem;
-    background-color: #EFE9E3;
+    /* background-color: #EFE9E3; */
     padding: 0.25rem;
     border-radius: 0.25rem;
+    display: flex;   
+    align-items: center;
+    gap: 0.5rem;
+    
 }
 
-ul{
+ul.nav{
     display: flex;
     gap: 3rem;
 }
@@ -90,9 +98,18 @@ ul{
     display: none;
 }
 
+img.profile-image{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
 /* ============================================================================================== */
 /* =============================== Nav Media Queries ============================================*/
 /* ============================================================================================== */
+
+/* arrowdn */
 
 @media (hover: none) {
     .restaurant-item:hover {
@@ -145,6 +162,7 @@ ul{
 
     .login-container{
       margin-right: -35rem;
+     
     }
 
     .hamburger-btn{
@@ -374,7 +392,8 @@ ul{
 /* ================================  Home Page =============================*/
 
 .container{
-    margin: 20rem auto;
+    position: relative;
+    margin: 20rem auto 1rem;
     width: 80%;
 }
 
@@ -383,6 +402,9 @@ ul{
     text-align: center;
 }
 
+
+
+
 .text{
     font-size: 0.7rem;
     font-weight: 600;
@@ -390,11 +412,17 @@ ul{
 }
 
 
-.restaurant-items{
+.restaurant-items{    
     margin-top: 1.5rem;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+    
+}
+
+
+.notification{
+   
 }
 
 
@@ -439,7 +467,7 @@ iframe{
 .restaurant-photo img{
     width: 18rem;
     height: 10rem;
-    object-fit: fill;
+    object-fit: cover;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
     
@@ -450,6 +478,14 @@ iframe{
     display: flex;
     justify-content: space-between;
 
+}
+
+.reviews-ownership{
+    cursor: pointer;
+}
+
+.star-color{   
+    color: grey;
 }
 
 
@@ -517,5 +553,924 @@ iframe{
 }
 
 
+/* ================================= register form ========================== */
+.register-form{
+    position: relative;
+    width: 90%;
+    margin: 4rem auto;
+       
+}
+
+.error{
+    width: 100%;
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.register-form .container-heading{    
+    margin-top: 4rem;
+}
+
+label{
+    margin-bottom: -1rem;
+    font-size: small;
+}
+
+.register{
+    margin: 0 auto;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: #EFE9E3; 
+    padding: 1rem;
+    border-radius: 1rem;     
+    border: 1px solid transparent;
+    transition: border 300ms ease
+}
+
+/*    border-color: #EFE9E3;
+     background-color: #EFE9E3; */
+
+.register:hover{
+    border: 1px solid gray;
+    transition: border 300ms ease;
+}
+
+h5.error{
+    margin: 0rem auto;
+    color:#FF6B35;
+    width: 30%;   
+    height: 2rem;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+
+.register input{
+   height: 1.7rem;
+   border: none;
+   border-radius: 0.5rem;
+}
+
+.buttons{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    
+}
+
+.register input[type='email']{
+    width: 100%;
+}
+
+.register input[type='tel']{
+    width: 100%;
+}
+
+button{
+    height: 2rem;
+    width: 5rem;
+    border-radius: 0.5rem;
+    /* border: 1px solid gray; */
+    cursor: pointer;
+    border: none;
+}
+
+.remind, .password-forgotten{
+  margin-top: 0.5rem;
+  width: 100%;
+  text-align: center;
+}
 
 
+/*===================== Media Queries for register an login ====================*/
+@media screen and (min-width: 320px) and (max-width: 650px) {
+    .register{
+        width: 90vw;       
+        padding: 0;    
+    }
+
+    h5.error{
+        width: 100%;        
+    }
+
+}
+
+@media screen and (min-width: 760px) and (max-width: 1024px) {
+    .register{
+        width: 50vw;       
+        padding: 0;    
+    }
+
+    h5.error{
+        width: 100%;        
+    }
+
+}
+
+/* ===================================Admin page=============================================== */
+
+.admin-page{
+    width: 95%;
+    margin: 4rem auto;
+}
+
+.admin-form{
+    width: 50%;
+    margin: -1rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    /* background-color: #FF6B35; */
+}
+
+.admin-form input[type='text']{
+    font-size: 1rem;
+}
+
+.admin-form label{
+    margin-bottom: -2rem;
+}
+
+input{
+    height: 2rem;
+}
+
+input[type='time']{
+    width: 6rem;
+}
+
+
+input[type='tel'],
+input[type='email']{
+    width: 35%;
+}
+
+input[type='number']{
+    width: 3rem;
+}
+
+.max-min input{
+    margin-left: -1rem;
+}
+
+.max-min{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    font-size: small;
+}
+
+.socials{
+    display: flex;
+    flex-direction: column;
+    gap: 2.3rem;
+    
+}
+
+.socials input{
+    width: 35%;
+}
+
+
+/* ================================= Media Queries ========================= */
+@media screen and (min-width: 320px) and (max-width: 1024px){
+    .admin-page .error{
+        margin-bottom: 0.5rem;
+    }
+
+    .admin-form{
+        width: 90vw;
+        
+    }
+
+    .admin-form input{
+        margin: 1rem auto;
+    }
+
+    .admin-form label{
+         /* margin: -2rem auto; */
+         margin-bottom: -3rem;
+         margin-left: auto;
+         margin-right: auto;
+    }
+
+    .admin-form input[type='text']{
+        width: 65%;
+    }
+
+    .max-min{
+        /* width: 100%;
+        margin-left: auto;
+        margin-right: auto; */
+        /* background-color: #FF6B35; */
+       
+    }
+
+    .min, .max{
+        margin-right: -5rem;
+    }
+
+    input[name='max']{
+        margin-right: 2rem;
+    }
+}
+
+/* ========================= Admin /owner dashboard Page ================================= */
+
+.admin-dashboard{
+    width: 100vw;
+    margin-top: 4.5rem;   
+}
+
+.admin-dashboard .heading{
+    width: 100%;
+    margin-bottom: 2rem;
+    text-align: center;    
+}
+
+.form-link{ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    margin: 1rem auto;
+    
+}
+
+.form-link button{
+    height: 4rem;
+    width: 15rem;
+    background-color: #3CB371;
+    color: #fff;
+    font-size: medium;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.6)
+}
+
+.form-link button:hover{
+
+}
+
+.admin-dashboard-items{
+    width: 95%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;    
+}
+
+.admin-dash-board-item{
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    padding: 0.25rem;
+    border-bottom: 1px solid gray;
+}
+
+.image{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image img{
+    width: 15rem;
+    height: 10rem;
+    object-fit: cover;
+}
+
+.restaurant-information{
+   
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+}
+
+.controls{    
+    display: flex;
+    flex-direction: column;
+    justify-content:space-evenly;
+    align-items: center;
+}
+
+.approve{
+    background-color:#A5CF83;
+    color: #fff;
+}
+
+.deny{
+    background-color:#FFD400;    
+}
+
+.del{
+    background-color: #FF6B35;
+}
+
+
+/* ========================= media queries for Admin dashboard Page ================== */
+@media screen and (min-width: 320px) and (max-width: 760px){
+    .admin-dash-board-item{
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .controls{
+        flex-direction: row;
+    }
+}
+
+/* ========================= restaurant Detail ======================================== */
+.detail-info{
+    width: 100%;
+    margin-top: 4rem;
+}
+
+.restuarant-name{
+    width: 95%;
+    margin: 0 auto;
+    text-align: center;
+    /* background-color: #FF6B35; */
+}
+
+.detail-info .controls{
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    margin-top: 2rem;    
+}
+
+.detail-info .controls button{
+    width: 10rem;
+    height: 2.5rem;
+    background-color: #BFDDF0;
+    
+}
+
+.detail-info .controls button:hover{
+    background-color: #BBD5DA;
+}
+
+.btn-gallery,
+.btn-menu,
+.btn-edit{  
+    color: green;
+}
+
+
+.btn-delete{
+    color: red;
+}
+
+.cover-image{
+    width: 80%;
+    margin: 1.5rem auto 1rem;
+}
+
+.cover-image img{
+    width: 100%;
+    height: 30rem;
+    object-fit: cover;
+}
+
+.description-text{
+    width: 80%;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+
+
+.contact-details{
+    width: 95%;
+    margin: 2rem auto 1rem;
+}
+
+.contact-details .contact{
+    width: 50%;
+    display: flex;
+    flex-direction: row;    
+    margin: -1rem auto 1rem;
+    justify-content: space-between;
+}
+
+.contact-details h3{
+    width: 50%;
+    margin: 2rem auto 1rem;
+    /* background-color: #FF6B35; */
+    text-align: center;
+}
+
+.contact-details .social-media{
+    width: 50%;
+    /* background-color: #FF6B35; */
+     margin: 1rem auto 1rem;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 3rem;     
+     
+}
+
+.opening-closing-hours{
+    width: 95%;
+    margin: 2rem auto 1rem;
+}
+
+.opening-closing-hours h3{
+    width: 50%;
+    margin: 1rem auto 1rem;
+    text-align: center;
+      
+}
+
+.opening-closing{ 
+    margin: -1rem auto 1rem;    
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+   
+}
+
+.menu-dishes{
+    width: 100%;
+    margin: 2rem auto 1rem;
+}
+
+.the-menu-items{
+    width: 95%;
+     margin: 2rem auto 1rem;
+}
+
+.the-menu-item{
+    width: 100%;
+    border: 1px gray solid;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.25rem;
+}
+
+.menu-photo-left-side{
+    width: 20rem;
+    height: 15rem;
+}
+
+.menu-photo-left-side img{
+    width: 20rem;
+    height: 15rem;
+    border-radius: 0.5rem;
+    object-fit: cover;
+}
+
+.right-side{
+    height: 15rem; 
+}
+
+.the-menu-item .button-class{
+    display: flex;    
+    gap: 0.5rem;
+   
+}
+
+.right-side:hover{
+    background-color: lightgray;
+    transition: all 300ms ease;
+    cursor: pointer;       
+    
+}
+
+.menu-name-menu-price{
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem auto;
+
+}
+
+.dishes{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0rem auto 1rem;
+}
+
+.dishes li{
+    width: 100%;    
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px gray solid;
+    border-radius: 1rem;
+    padding: 0.5rem; 
+    transition: all 300ms ease;
+    cursor: pointer; 
+}
+
+.dishes li:hover{
+    background-color: lightgray;
+    transition: all 300ms ease; 
+}
+
+.menu-heading{
+    width: 100%;
+    /* background-color: #FF6B35; */
+    text-align: center;
+}
+
+.gallery{
+    width: 95%;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.image{
+    /* background-color: #FF6B35; */
+}
+
+.gallery-item{
+    width: 100%;
+}
+
+.button-class{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 0.5rem;
+}
+
+.image img{
+    width: 100%;
+    height: 15rem;
+    object-fit: cover;
+    transition: all 300ms ease-in;
+    cursor: pointer;
+}
+
+.image img:hover{
+    transition: all 300ms ease-in;
+    transform: scale(1.02);
+}
+
+.gallery-section h3{
+    width: 50%;
+    /* background-color: #FF6B35; */
+    margin: 2rem auto -1rem;
+    text-align: center;
+}
+
+.google-map-location{
+    width: 95%;
+    margin: 2rem auto -5rem;
+}
+
+.google-map-location iframe{
+    width: 100%;
+    height: 10rem;
+}
+
+/* ========================= Media queries for restaurant Detail ======================= */
+@media screen and (min-width:320px) and (max-width:912px){
+    .detail-info .controls{
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .the-menu-item{
+        padding: 0rem;
+    }
+
+    .description-text{
+        width: 95vw;       
+        text-align:justify;         
+        margin-left: 2.5vw;
+        margin-right: 2.5vw;
+    }
+
+    .menu-photo-left-side{
+        width: 20rem;
+        height: 15rem;
+    }
+
+
+    .menu-photo-left-side{
+        width: 95vw;
+        margin-left: 2.5vw;
+        margin-right: 2.5vw;
+    }
+
+    .menu-photo-left-side img{
+        width: 95vw;
+   
+    /* height: 15rem;
+    border-radius: 0.5rem;
+    object-fit: cover; */
+    }
+
+    .menu-name-menu-price{
+        width: 95vw;
+    }
+
+    .detail-info .controls button{
+        width: 15rem
+    }
+
+    .contact-details .contact{
+        width: 70%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .opening-closing{
+        width: 70%;
+    }
+
+
+    .the-menu-item{
+        flex-direction: column;
+        padding: 0rem;
+        
+    }
+
+    .menu-description{
+        width: 95vw;       
+        text-align:justify;        
+    }
+
+    .dishes{
+        width: 70%;
+    }
+
+    .gallery{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .image img:hover{    
+    transform: scale(1);
+}
+}
+
+@media screen and (min-width:320px) and (max-width:480px){
+        .gallery{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+/* ============================== gallery upload page================================= */
+.gallery-upload{
+    width:95%;    
+    margin: 7rem auto 7rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+}
+
+.gallery-upload form{
+    background-color: #F5F5F5;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    padding: 1.4rem; 
+    border-radius:1rem;
+}
+
+.gallery-upload form label{
+    width: 8rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    background-color: #fff;
+}
+
+.gallery-upload form label:hover{
+    background-color: #EDE9E6;
+}
+
+.gallery-upload form label:active{
+    background-color: #EDE9E6;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px)
+}
+
+input.fileupload{
+    display: none;
+    width: 15rem;    
+}
+
+.button-conrol{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-conrol button{
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    background-color: #fff;
+}
+
+/* EDE9E6 */
+
+.button-conrol button:hover{
+    background-color: #EDE9E6; 
+}
+
+.button-conrol button:active{
+    background-color: #EDE9E6;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px)
+}
+
+.display-area{
+    margin-top: 1rem;
+    width: 20rem;
+    /* background-color: #FF6B35; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+/* ========================= Menu Upload ============================================ */
+.rest-menu{
+    width: 50%;
+    margin: 5rem auto;
+    /* background-color:#FF6B35;     */
+}
+
+.menu-dishes-drinks{
+    /* background-color: #FFD400; */
+    text-align: center;
+}
+
+.rest-menu form{
+    width: 70%;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* background-color: #A5CF83; */
+}
+
+.menu-name-price{
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;    
+    /* background-color: #FF6B35; */
+}
+
+.availabilty{
+    position: relative;
+    width: 30%;   
+    /* background-color: #FF6B35; */
+    display: flex;
+    align-items: center;    
+    justify-content: space-around;
+}
+
+.availabilty label{
+    margin-top: -0.7rem;    
+   /* background-color: green; */
+}
+
+textarea{
+    width: 100%;
+    height: 20rem;
+    border-radius: 0.5rem;   
+}
+
+.menu-upload{
+    width: 50%;
+    margin: 2rem auto;    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+/* ====================media queris for Menu upload=============== */
+@media screen and (min-width:320px) and (max-width:912px){
+  .rest-menu{
+    width: 98%;
+  }
+
+  .menu-name-price{
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+ 
+
+
+/* ==============================Error Page ====================================== */
+
+.error-page{
+  width: 95vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+a p{
+    width: 20rem;
+    background-color: #BBD5DA;
+    font-size: medium;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.buttons a{
+    background-color:#A5CF83;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.25rem;
+    color: #fff;
+    border-radius: 5px;
+}
+
+/* ============================Forhotten Password page ============================== */
+
+.forgotten-password{
+  width: 95vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ================================modals=========================================== */
+.confirmation-modal{   
+   position: fixed;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center; 
+   z-index: 2;  
+   background-color: rgba(0,0,0,0.35);  
+    
+}
+
+.modal-information{
+    width: 20rem;
+    height: 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #3CB371;
+    background-color: #fff;
+    border-radius: 1rem;
+}
+.confirmation-notice p{
+    text-align: center;
+    font-size: small;
+}
+
+.confirmation-notice{  
+    /* color: red;    */
+}
+
+.buttons-controls{
+    display: flex;
+    gap: 0.5rem;
+}
+
+.no-listings{    
+    width: 100%;
+    text-align: center;
+}
+
+/* ============================= Loader =========================================== */
+
+
+/* ========================= Footer CSS =============================================== */
+
+footer{
+    margin-top: 5rem;
+    width: 100vw;
+    height: 10rem;
+    background-color: gray;
+}

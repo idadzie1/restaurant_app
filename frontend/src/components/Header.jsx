@@ -3,12 +3,12 @@ import { IoIosSearch } from "react-icons/io";
 import HeaderImage from '../assets/people_in_restaurant2.jpg'
 import { useState } from 'react';
 
-const Header = () => {
-  const [searchItem, setSearchItem] = useState('');
+const Header = ({ searchItem, setSearchItem }) => {  
 
-  const handleSearch = (e)=>{
-    searchItem(e.target.value)
-  }
+   const handleChanges = (e) => {
+    setSearchItem(e.target.value);
+  };
+  
   
   return (
     <>
@@ -25,10 +25,11 @@ const Header = () => {
                 type="text" 
                 name='search'
                 value={searchItem} 
-                placeholder='eg Restaurants in Accra'              
+                placeholder='eg Restaurants in Accra'
+                onChange={handleChanges}              
               />
               </form>
-              <div className="search-icon" onClick={handleSearch}>
+              <div className="search-icon">
                 <IoIosSearch />
               </div>              
             </div>

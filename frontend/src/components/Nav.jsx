@@ -1,23 +1,31 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import Logo from '../assets/logo2.png'
+import { FaUser } from "react-icons/fa";
+import ppic from '../assets/isu.jpg'
+import { BiSolidDownArrow } from "react-icons/bi";
+import { UserContext } from '../context/userContext';
 
 
 const Nav = () => {
   const[menuShowing, setMenuShowing] = useState(false);
+  // const[loggedIn, setLoggedIn ] = useState(false)
+   const { currentUser } = useContext(UserContext);
+  
+  const token = currentUser?.token
 
   return (
 
           <nav>
             <div className="nav-container">
               <div className="logo-container">
-                <Link><img src={Logo} alt="logo image" /></Link>
+                <Link to='/'><img src={Logo} alt="logo image" /></Link>
               </div>
               <div className={`menu-items ${menuShowing? 'slide-in' : ''}`}>
-                <ul>
+                <ul className='nav'>
                   <li onClick={()=>setMenuShowing(prev=>!prev)}>
                     <NavLink to='/'>Home</NavLink>
                   </li>
@@ -32,14 +40,19 @@ const Nav = () => {
                   </li>
                   <li onClick={()=>setMenuShowing(prev=>!prev)}>
                     <NavLink to='/contact'>Contact</NavLink>
-                  </li>                           
+                  </li>
+                  {token && <li onClick={()=>setMenuShowing(prev=>!prev)}>
+                    <NavLink to='/userdashpage'>Dashboard</NavLink>
+                  </li>}                            
                 </ul>
                 <div className="close-icon" onClick={()=>setMenuShowing(prev=>!prev)}>
                   <IoMdClose />
                 </div>
               </div>
               <div className="login-container">
-                <Link to='/Login'>Sign in</Link>
+                <Link to={token? "/LogOut" : "/login"}>{token? "Log out" :"Sign in"}</Link>
+                {token && <img className='profile-image' onClick='' src={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${currentUser?.profilePic}`}/>}
+                {token && <span className='arrowdn'><BiSolidDownArrow /></span>}
               </div>
               <div className="hamburger-btn" onClick={()=>setMenuShowing(prev => !prev)}>
                 <GiHamburgerMenu />
@@ -50,3 +63,5 @@ const Nav = () => {
 }
 
 export default Nav
+
+// const loggedIn = !!currentUser?.id;

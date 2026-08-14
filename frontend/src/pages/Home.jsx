@@ -1,43 +1,126 @@
-import React from 'react'
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet";
 import Header from '../components/Header';
 import Restaurant from '../components/Restaurant';
 import restaurantData from '../data/datafile'
-
+import Loader from '../components/Loader/Loader.jsx'
+import DialogueBox from '../components/modals/Dialoguebox.jsx';
+import ErrorAndResDialogueBox from '../components/modals/ErrorAndResDialogueBox.jsx';
+import { UserContext } from '../context/userContext.jsx';
 
 const Home = () => {
+const [ dataInfo, setDataInfo ] = useState([]);
+const [ searchItem, setSearchItem ] = useState('');
+const [ errorMessage, setErrorMessage ] = useState("");
+const [ response, setResponse ] = useState("")
+const [ confirmationMessage, setconfirmationMessage ] = useState("Do you want to proceed?");
+const [ loading, setLoading ] = useState(true);
+const [ selectRestaurantId, setSelectRestaurantId ] = useState(null)
+const [ showDialogueBox, setShowDialogueBox ] = useState(false);
+const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox ] = useState(false)
+const {currentUser} = useContext(UserContext);
 
-const[ dataInfo, setDataInfo ] = useState(restaurantData);
+// Search logic to be introduced here later.
+ const token = currentUser?.token
+ const navigate = useNavigate()
+ useEffect(()=>{
+    const fetchAllRestaurants = async()=>{     
+      try {
+          const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/get-all-approved-restaurants`);
 
-// 1. Restaurant Profiles
+          if(!response.ok){
+            const errorData = await response.json();
+            throw new Error(errorData.message)
+          }
 
-// Each restaurant gets:
+          const data = await response.json()
+          setDataInfo(data)         
+          
 
-// Photos
-// Menu
-// Price range
-// Opening hours
-// Google Map embed
-// Cuisine tags
-// Contact/WhatsApp
-// Reviews
+      } catch (error) {
+        setErrorMessage(error.message)
+      } finally {
+       setLoading(false);
+    }
 
-        // id:1,
-        // restaurantName:'Treehouse Restaurant',
-        // photo: img1,
-        // priceRange:'Ghs100 - Ghs400',
-        // openingHours:'08:00hrsLT-22:10hrsLT',
-        // contact:'+233 599400737',
-        // Whatsapp: '+233 599400737',
-        // email: 'Not Avaialable',
-        // facebook: '',
-        // instagram: '',
-        // ratings: 4,
-        // location: "Accra",
-        // website: null,        
-        // googleMap
+    };
+     fetchAllRestaurants();
+
+ }, [])
+
+  if (loading) {    
+     return  <Loader />    
+  }
+
+    const filteredRestaurants = dataInfo.filter((restaurant) =>
+    restaurant.name.toLowerCase().includes(searchItem.toLowerCase()) ||
+    restaurant.location.toLowerCase().includes(searchItem.toLowerCase()) ||
+    restaurant.area.toLowerCase().includes(searchItem.toLowerCase())
+  );
+
+  // ====================
+ 
+
+  // click on the claim Ownership and the confirmation box pops up
+//   const handleDialogueBox = (restaurantId) => {
+//   setSelectRestaurantId(restaurantId);
+//   setShowDialogueBox(true);
+// };
+
+      
+      const handleDialogueBox = (restaurantId)=>{       
+        setSelectRestaurantId(restaurantId)                       
+        setShowDialogueBox(true)        
+      }
+      
+        const handleNo = ()=>{
+        setShowDialogueBox(false)
+        return
+      }
+      
+     
+      const clickToCklaimOwnerShip = async ()=>{
+        
+        try {
+              
+            // if a user who is not logged in clicks ok on the dialogue box
+            // he/she be redirected to the ligin page
+            if(!token){
+              // redirect to login page
+              navigate('/login')
+              return;
+            }
+            
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/claim/${selectRestaurantId}`, {
+            method:'PATCH',
+            headers:{
+            Authorization: `Bearer ${token}`
+          }
+        })           
+
+            const data = await response.json()
+           
+            if(!response.ok){             
+              setErrorMessage(data.message)              
+              setShowErrorAndResDialogueBox(true)
+              setShowDialogueBox(false)                             
+              return                            
+            }
+            
+            setResponse(data.message)
+            setShowDialogueBox(false) 
+            setShowErrorAndResDialogueBox(true)                                                
+            return
+        
+      } catch (error) {
+           setErrorMessage(error.message)
+           setShowDialogueBox(false) 
+           setShowErrorAndResDialogueBox(true) 
+           return 
+        }
+      }
 
 
   return (
@@ -48,38 +131,50 @@ const[ dataInfo, setDataInfo ] = useState(restaurantData);
           name="description"
           content="Discover the best restaurants in Ghana."
         />
-    </Helmet>     
-      <Header />
 
-      <section className='container'>
+    </Helmet>
+            {showDialogueBox && <DialogueBox confirmationMessage={confirmationMessage}  clickYes={clickToCklaimOwnerShip} clickNo={handleNo} />}
+        {showErrorAndResDialogueBox && <ErrorAndResDialogueBox errorMessage={errorMessage} response={response} clickOk={()=>setShowErrorAndResDialogueBox(false)} />}     
+      <Header
+        searchItem={searchItem}
+        setSearchItem={setSearchItem}      
+      />
+ 
+      <section className='container'>       
+  
         <h2 className='container-heading'>Restaurant Listings</h2>
+        {filteredRestaurants.length !=0?
         <div className="restaurant-items">
-
-        {dataInfo.map(({id, restaurantName, photo, priceRange, openingHours, contact, Whatsapp, email, facebook, instagram, ratings, location, area, website, googleMap})=>{
-          return <Restaurant 
-                            key={id} 
-                            restaurantName={restaurantName} 
-                            photo={photo}
-                            priceRange={priceRange}
-                            openingHours={openingHours}
-                            contact={contact}
-                            Whatsapp={Whatsapp}
+      
+        {filteredRestaurants.map(({_id, name, coverPhoto, priceRange:{min, max}, openingHours:{open, close}, socials:{whatsapp, facebook, instagram}, phone, email, ratings, location, area, website, googleMap})=>{
+            return <Restaurant 
+                            key={_id} 
+                            name={name} 
+                            coverPhoto={coverPhoto}
+                            priceRange={{ min, max }}                            
+                            openingHours={{open, close}}
+                            phone={phone}
+                            socials={{whatsapp, facebook, instagram}}
                             email={email}
                             facebook={facebook}
                             instagram={instagram}
                             ratings={ratings}
                             location={location}
                             area={area}
+                            onClick={()=>handleDialogueBox(_id)}
                             website={website}
                             googleMap={googleMap}
+                            restaurantId={_id}
+                          
 
-                  />
+                  /> 
         })
+      }
         
-        }          
-      
-        </div>        
-      </section>    
+        </div>  
+          : <div className='no-listings'>No available listings </div>}     
+            
+      </section>     
   </>
   )
 }

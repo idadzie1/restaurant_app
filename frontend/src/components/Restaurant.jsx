@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import GoogleMap from './GoogleMap';
 import TreehouseRestaurant from '../assets/treehouse_restaurant.png'
@@ -7,30 +7,54 @@ import { BsTelephone } from "react-icons/bs";
 import { FaWhatsapp } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
 import { FaFacebook } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../context/userContext';
+import Confirmation from './modals/Dialoguebox';
+import Ack from './modals/ActionConfirmationDialogueBox'
 
-const Restaurant = ({id, restaurantName, photo, priceRange, openingHours, contact, Whatsapp, email, facebook, instagram, ratings, location, area, website, googleMap}) => {
+const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, openingHours:{open, close}, socials:{whatsapp, facebook, instagram}, phone, email, ratings, location, area, onClick, website, googleMap}) => {
+    const [showModalm, setShowModal] = useState(false);
+    
 
-  return (
+    const {currentUser} = useContext(UserContext);
+    const navigate = useNavigate()        
+              
+
+        const handleClick =()=>{
+           setShowConfirmation(true)
+        }
+
+        const handleClaim =()=>{
+            if(!currentUser?.token){
+                navigate('/login')
+                return
+            }
+
+            handleClick()
+        }
+
+  return (         
             <div className="restaurant-item">                               
                 <div className="restaurant-name">
-                    <h4>{restaurantName}</h4>
+                    <h4>{name}</h4>
                 </div>
             
                 <div className="restuarant-detail">
                     <div className="restaurant-photo">
-                        <img src={photo} alt="image" />
+                        <img src={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${coverPhoto}`} alt={name} />
                     </div>
                     <hr />
                 <div className='details'>
                     <div className="prices text">
-                        Price Range: {priceRange}
+                        Price Range: GHS {min} - {max}
                     </div>
                     <div className="opening-hours text">
-                        Opening Hours: {openingHours}
+                        Opening Hours: {open} - {close}
                     </div>
                     <div className="contact text">
-                        <span className='telephone'><BsTelephone /> {contact}</span>
-                        <span className='whatsapp'><FaWhatsapp /> {Whatsapp}</span>
+                        <span className='telephone'><BsTelephone /> {phone}</span>
+                        <span className='whatsapp'><FaWhatsapp /> {whatsapp}</span>
                         <span className='mail'><MdOutlineMail /> {email}</span>                  
                                                   
                         <span className='facebook'> <FaFacebook /> <FaFacebook /> <FaFacebook /> </span>           
@@ -38,18 +62,19 @@ const Restaurant = ({id, restaurantName, photo, priceRange, openingHours, contac
                         <span>{location} : {area}</span> 
                     </div>
                     <div className=" text">
-                        <Link to='/menulist'>Click to see menu</Link>
+                        <Link to='/restaurants/id'>Click to see menu</Link>
+                        
                     </div>
                     <div className="reviews-ownership">
-                        <span><IoIosStarOutline />
-                                <IoIosStarOutline />
-                                <IoIosStarOutline />
-                                <IoIosStarOutline />
-                                <IoIosStarOutline />                                
-                        </span>
+                            <span className=''><IoIosStarOutline /></span>
+                            <span className=''><IoIosStarOutline /></span>
+                            <span className=''><IoIosStarOutline /></span>
+                            <span className=''><IoIosStarOutline /></span>
+                            <span className=''><IoIosStarOutline /></span>                                
+                        
                         <div className="owner text">
-                            <Link to='/login'><span>Claim ownership</span></Link>
-                            <Link to='/posts/id'><span>View</span></Link>
+                            <span onClick={onClick}>Claim ownership</span>
+                            <Link to={`restaurants/${restaurantId}`}><span>View</span></Link>
                         </div>
                     </div>
                     <div className="website">
@@ -63,6 +88,7 @@ const Restaurant = ({id, restaurantName, photo, priceRange, openingHours, contac
                     <iframe src={googleMap} frameborder="0"></iframe>
                 </div>
             </div>
+            
   )
 }
 

@@ -8,11 +8,11 @@ const restaurantData = [
 
     {
         id:1,
-        restaurantName:'Treehouse Restaurant',
-        photo: img1,
-        priceRange:'Ghs100 - Ghs400',
+        name:'Treehouse Restaurant',
+        coverPhoto: img1,
+        priceRange: {min:100, max:400},
         openingHours:'08:00hrsLT-22:10hrsLT',
-        contact:'+233 599400737',
+        phone:'+233 599400737',
         Whatsapp: '+233 599400737',
         email: 'Not Avaialable',
         facebook: '',
@@ -27,11 +27,11 @@ const restaurantData = [
 
     {
         id:2,
-        restaurantName:'Tunnel Lounge',
-        photo: img2,
+        name:'Tunnel Lounge',
+        coverPhoto: img2,
         priceRange: 'Ghs100 - Ghs400',
         openingHours:'08:00hrsLT-22:10hrsLT',
-        contact: '+233 551556444',
+        phone: '+233 551556444',
         Whatsapp: '+233 551556444',
         email: 'Not Avaialable',
         facebook: '',
@@ -45,11 +45,11 @@ const restaurantData = [
 
     {
         id:3,
-        restaurantName:'Capital Cafe',
-        photo: img3,
+        name:'Capital Cafe',
+        coverPhoto: img3,
         priceRange: 'Ghs100 - Ghs400',
         openingHours:'08:00hrsLT-22:00hrsLT',
-        contact: '+233 507111117',
+        phone: '+233 507111117',
         Whatsapp: '+233 507111117',
         email: 'Not Avaialable',
         facebook: '',
@@ -64,11 +64,11 @@ const restaurantData = [
 
     {
         id:4,
-        restaurantName:'Mama Cuisine',
-        photo: img4,
+        name:'Mama Cuisine',
+        coverPhoto: img4,
         priceRange: 'Ghs100 - Ghs300',
         openingHours:'08:00hrsLT-22:00hrsLT',
-        contact: '+233 598414036',
+        phone: '+233 598414036',
         Whatsapp: '+233 598414036',
         email: 'Not Avaialable',
         facebook: '',
@@ -84,11 +84,11 @@ const restaurantData = [
 
     {
         id:5,
-        restaurantName:'Tribeca Ghana',
-        photo: img5,
+        name:'Tribeca Ghana',
+        coverPhoto: img5,
         priceRange: 'Ghs100 - Ghs300',
         openingHours:'08:00hrsLT-23:30hrsLT',
-        contact: '+233 55 300 2222',
+        phone: '+233 55 300 2222',
         Whatsapp: '+233 55 300 2222',
         email: 'Not Avaialable',
         facebook: '',
