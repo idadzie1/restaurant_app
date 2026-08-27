@@ -15,8 +15,12 @@ import MenuUpload from './pages/MenuUpload';
 import GalleryUpload from './pages/GalleryUpload';
 import EditRestaurantDetails from './pages/EditRestaurantDetails';
 import ForgottenPassword from './pages/ForgottenPassword';
+import ChangePassword from './pages/ChangePassword';
 import About from './pages/About';
 import Message from './pages/Message'
+import PrivacyPolicy from './pages/Legal_docs/PrivacyPolicy';
+import TermsAndConditions from './pages/Legal_docs/TermsAndConditions';
+import CookiePolicy from './pages/Legal_docs/CookiePoliciy';
 import './index.css'
 import UserProvider from './context/userContext';
 
@@ -36,6 +40,7 @@ const router = createBrowserRouter([
       {path: "forgottenpassword", element: <ForgottenPassword />},
       {path: "login", element: <Login />},
       {path: "logout", element: <LogOut />},
+      {path: "changepassword", element: <ChangePassword />},
       {path: "restaurant-form", element: <RestaurantForm />},
       {path: "admindashpage/", element: <AdminDashBoard />},
       {path: "userdashpage/", element: <UserDashPage />},
@@ -43,7 +48,10 @@ const router = createBrowserRouter([
       {path: "menuupload/:id", element: <MenuUpload />},
       {path: "uploadgallery/:id", element: <GalleryUpload />},
       {path: "editdetails/:restaurantId", element: <EditRestaurantDetails />},
-      {path: "message", element: <Message />}
+      {path: "message", element: <Message />}, 
+      {path: "privacy-policy", element: <PrivacyPolicy />},
+      {path: "terms-and-conditions", element: <TermsAndConditions />},
+      {path: "cookies-policy", element: <CookiePolicy />}
       
     ]
   }

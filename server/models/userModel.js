@@ -8,6 +8,7 @@ const userSchema = new Schema({
     profilePic:{type: String},
     telephone: {type: String, required: true},
     password:{type: String, required: true},
+    agree:{type: Boolean, required: true},
     role:{type:String, default:"user", required: true}
 
 })

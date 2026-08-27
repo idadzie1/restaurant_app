@@ -23,6 +23,7 @@ const EditRestaurantDetails = () => {
 
     })
     const [file, setFile] = useState(null)
+    const [ response, setResponse ] = useState("")
     const [ errorMessage, setErrorMessage ] = useState('')
     const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox ] = useState(false)
     const [ loading, setLoading ] = useState(true)
@@ -104,12 +105,15 @@ const EditRestaurantDetails = () => {
                 if(!response.ok){
                     setErrorMessage(data.message)
                     setShowErrorAndResDialogueBox(true)
+                    return
                 }
 
                 setRestaurantData(data)                              
 
             } catch (error) {
                 setErrorMessage(error.message)
+                return
+
             }finally{
                 setLoading(false)
             }
@@ -156,21 +160,43 @@ const EditRestaurantDetails = () => {
             const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/edit/${restaurantId}`, {
                 method: 'PATCH',
                 headers:{
-                    Authorization: `Beare ${token}`
+                    Authorization: `Bearer ${token}`
                 },
 
                 body: formData
             })
 
+            const data = await response.json();
+
+            if(!response.ok){
+                setErrorMessage(data.message)
+                setShowErrorAndResDialogueBox(true)
+                return
+            }
+
+            
+                setRestaurantData(data.data)
+                setResponse(data.message)
+                setShowErrorAndResDialogueBox(true)
+
+
         } catch (error) {
             setErrorMessage(error.message)
+            return
         }
     }
     
+        
 
 
   return (
     <section className='admin-page'>
+
+        {showErrorAndResDialogueBox && <ErrorAndResDialogueBox
+            response={response}  
+            errorMessage={errorMessage} 
+            clickOk={()=> setShowErrorAndResDialogueBox(false)} />}
+
         <h2 className='container-heading'>Edit Your Informtaion and Details</h2>
         <h5 className='error'>{errorMessage}</h5>
         <form className='admin-form' onSubmit={handleSubmitForm}>

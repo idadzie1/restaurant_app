@@ -10,7 +10,8 @@ const Register = () => {
     email: '',
     telephone: '',
     password:'',
-    cfmpassword:''
+    cfmpassword:'',
+    agree:''
   })
 
   const [errorMessage, setErrorMessage]=useState('');
@@ -20,12 +21,14 @@ const Register = () => {
       try {        
 
       const name = e.target.name;
-      const value = e.target.value;
+      // const value = e.target.value;
+      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
       setUserData(prev=>({...prev, [name]:value}))      
 
         
       } catch (error) {
-        
+        setErrorMessage(error.message)
+        return
       }
 
     }   
@@ -39,7 +42,8 @@ const Register = () => {
       email: '',
       telephone: '',
       password: '',
-      cfmpassword: ''
+      cfmpassword: '',
+      agree:''
   });
       
     }
@@ -143,6 +147,13 @@ const Register = () => {
             name='cfmpassword' 
             value={userData.cfmpassword}
             onChange={handleChange}
+        />
+        <label htmlFor='termsConditions'>I have read and agreed to the <Link>Terms & Conditions</Link> and acknowledge the <Link>Privacy Policy</Link></label>
+        <input 
+          type="checkbox"
+          name='agree'
+          checked = {userData.agree} 
+          onChange={handleChange}
         />
         <div className="buttons">
           <button type='submit'>Submit</button>

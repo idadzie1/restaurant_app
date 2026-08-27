@@ -8,14 +8,15 @@ import { FaUser } from "react-icons/fa";
 import ppic from '../assets/isu.jpg'
 import { BiSolidDownArrow } from "react-icons/bi";
 import { UserContext } from '../context/userContext';
+import ProfileMenu from '../pages/ProfileMenu';
 
 
 const Nav = () => {
   const[menuShowing, setMenuShowing] = useState(false);
-  // const[loggedIn, setLoggedIn ] = useState(false)
+  const [showProfileMenu, setShowProfileMenu] = useState(false)
    const { currentUser } = useContext(UserContext);
   
-  const token = currentUser?.token
+  const token = currentUser?.token 
 
   return (
 
@@ -52,10 +53,11 @@ const Nav = () => {
               <div className="login-container">
                 <Link to={token? "/LogOut" : "/login"}>{token? "Log out" :"Sign in"}</Link>
                 {token && <img className='profile-image' onClick='' src={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${currentUser?.profilePic}`}/>}
-                {token && <span className='arrowdn'><BiSolidDownArrow /></span>}
+                {token && <span className='arrowdn' onClick={()=>setShowProfileMenu(prev=>!prev)}><BiSolidDownArrow /></span>}
+                {showProfileMenu && <ProfileMenu click={()=>setShowProfileMenu(prev=>!prev)}/>}
               </div>
               <div className="hamburger-btn" onClick={()=>setMenuShowing(prev => !prev)}>
-                <GiHamburgerMenu />
+                <GiHamburgerMenu/>
               </div>
             </div>
           </nav>   
@@ -64,4 +66,4 @@ const Nav = () => {
 
 export default Nav
 
-// const loggedIn = !!currentUser?.id;
+

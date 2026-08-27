@@ -7,6 +7,7 @@ import Restaurant from '../components/Restaurant';
 import restaurantData from '../data/datafile'
 import Loader from '../components/Loader/Loader.jsx'
 import DialogueBox from '../components/modals/Dialoguebox.jsx';
+import ConfirmAndAckBox from '../components/modals/ConfirmAndAckBox.jsx'
 import ErrorAndResDialogueBox from '../components/modals/ErrorAndResDialogueBox.jsx';
 import { UserContext } from '../context/userContext.jsx';
 
@@ -19,8 +20,14 @@ const [ confirmationMessage, setconfirmationMessage ] = useState("Do you want to
 const [ loading, setLoading ] = useState(true);
 const [ selectRestaurantId, setSelectRestaurantId ] = useState(null)
 const [ showDialogueBox, setShowDialogueBox ] = useState(false);
+const [ showConfirmAndAck, setShowConfirmAndAck ] = useState(false);
 const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox ] = useState(false)
 const {currentUser} = useContext(UserContext);
+
+const [ confirm, setConfirm ] = useState("");
+const [ acknowledgement, setAcknowledgement ] = useState("");
+
+
 
 // Search logic to be introduced here later.
  const token = currentUser?.token
@@ -69,21 +76,39 @@ const {currentUser} = useContext(UserContext);
 //   setShowDialogueBox(true);
 // };
 
-      
+      const handleUserConfirm =(e)=>{
+        setConfirm(e.target.checked)
+      }
+
+      const handleUserAck =(e)=>{
+        setAcknowledgement(e.target.checked)
+      }
+
       const handleDialogueBox = (restaurantId)=>{       
         setSelectRestaurantId(restaurantId)                       
         setShowDialogueBox(true)        
       }
       
         const handleNo = ()=>{
+        setShowConfirmAndAck(false)
         setShowDialogueBox(false)
         return
       }
+
       
+      const handleClickYesOnDialogueBox=()=>{
+            if(!token){
+            // redirect to login page
+            navigate('/login')
+            return;
+            }else{
+
+            clickToCklaimOwnerShip()              
+             return
+            }
+        }
      
-      const clickToCklaimOwnerShip = async ()=>{
-        
-        try {
+      const clickToCklaimOwnerShip = ()=>{        
               
             // if a user who is not logged in clicks ok on the dialogue box
             // he/she be redirected to the ligin page
@@ -91,13 +116,33 @@ const {currentUser} = useContext(UserContext);
               // redirect to login page
               navigate('/login')
               return;
+            }else{
+              setShowConfirmAndAck(true)
+              setShowDialogueBox(false)
+              return
+            }          
+          }
+
+        const claim = async ()=>{
+          try {       
+          
+            if(!confirm || !acknowledgement){
+              setShowConfirmAndAck(false)
+              setErrorMessage("Check the boxes for confirmation and acknowlegdement")              
+              setShowErrorAndResDialogueBox(true)
+              return
             }
             
             const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/claim/${selectRestaurantId}`, {
             method:'PATCH',
             headers:{
-            Authorization: `Bearer ${token}`
-          }
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            confirm,
+            acknowledgement
+          })
         })           
 
             const data = await response.json()
@@ -105,18 +150,21 @@ const {currentUser} = useContext(UserContext);
             if(!response.ok){             
               setErrorMessage(data.message)              
               setShowErrorAndResDialogueBox(true)
-              setShowDialogueBox(false)                             
+              setShowConfirmAndAck(false)
+              // setShowDialogueBox(false)                             
               return                            
             }
             
             setResponse(data.message)
-            setShowDialogueBox(false) 
+            setShowConfirmAndAck(false)
+            // setShowDialogueBox(false) 
             setShowErrorAndResDialogueBox(true)                                                
             return
         
       } catch (error) {
            setErrorMessage(error.message)
-           setShowDialogueBox(false) 
+           setShowConfirmAndAck(false)
+          //  setShowDialogueBox(false) 
            setShowErrorAndResDialogueBox(true) 
            return 
         }
@@ -133,7 +181,11 @@ const {currentUser} = useContext(UserContext);
         />
 
     </Helmet>
-            {showDialogueBox && <DialogueBox confirmationMessage={confirmationMessage}  clickYes={clickToCklaimOwnerShip} clickNo={handleNo} />}
+       
+        {showConfirmAndAck && <ConfirmAndAckBox onChangeCfm={handleUserConfirm} onChangeAck={handleUserAck} clickYes={claim} clickNo={handleNo} />}
+
+        {showDialogueBox && <DialogueBox confirmationMessage={confirmationMessage} clickYes={handleClickYesOnDialogueBox} clickNo={handleNo} />}  
+
         {showErrorAndResDialogueBox && <ErrorAndResDialogueBox errorMessage={errorMessage} response={response} clickOk={()=>setShowErrorAndResDialogueBox(false)} />}     
       <Header
         searchItem={searchItem}
@@ -163,7 +215,7 @@ const {currentUser} = useContext(UserContext);
                             area={area}
                             onClick={()=>handleDialogueBox(_id)}
                             website={website}
-                            googleMap={googleMap}
+                            googleMap={googleMap}                         
                             restaurantId={_id}
                           
 
@@ -177,6 +229,6 @@ const {currentUser} = useContext(UserContext);
       </section>     
   </>
   )
-}
+  }
 
 export default Home

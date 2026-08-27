@@ -1,11 +1,11 @@
 const {Router} = require('express')
 const authMiddleWare = require('../middleware/authMiddleWare')
-const { createRestaurant, editRestuarant, getAllApprovedRestaurants, getAllRestaurants, getUserRestaurants, getRestaurant, claimRequest, adminApproval, reject, uploadResturantMenu, editRestaurantMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery, deleteFromGalleryImage, deleteRestaurant, adminAprovalPage} = require("../controllers/restaurantControllers")
+const { createRestaurant, editRestaurant, getAllApprovedRestaurants, getAllRestaurants, getUserRestaurants, getRestaurant, claimRequest, adminApproval, reject, uploadResturantMenu, editRestaurantMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery, deleteFromGalleryImage, deleteRestaurant, adminAprovalPage} = require("../controllers/restaurantControllers")
 
 const router = Router()
 
 router.post('/create-restaurant', authMiddleWare, createRestaurant);
-router.patch('edit/:restaurantId', authMiddleWare, editRestuarant);
+router.patch('/edit/:restaurantId', authMiddleWare, editRestaurant);
 router.get("/get-all-approved-restaurants", getAllApprovedRestaurants);
 router.get('/get-all-restaurants', authMiddleWare, getAllRestaurants);
 router.get("/get-restaurant/:restaurantId", getRestaurant);

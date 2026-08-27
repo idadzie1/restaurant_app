@@ -69,7 +69,7 @@ const createRestaurant = async (req, res, next)=>{
                     return next(new HttpError("Could not upload file", 422))
                 }
 
-                const newRestauant = await Restaurant.create({name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, creator:req.user.id})
+                const newRestauant = await Restaurant.create({name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, claimed:true, approvalStatus:"pending", creator:req.user.id})
                 res.status(201).json("Success. Pending verification and approval")
             })
         }        
@@ -84,7 +84,7 @@ const createRestaurant = async (req, res, next)=>{
 // api/restaurants/edit-restaurant
 // patch
 // protected
-const editRestuarant = async (req, res, next)=>{
+const editRestaurant = async (req, res, next)=>{
     try {
         // find restaurant by id and edit
         const {restaurantId} = req.params;
@@ -92,7 +92,7 @@ const editRestuarant = async (req, res, next)=>{
 
         const {name, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;
 
-        // console.log(req.body)
+        console.log(req.body)
 
         if(!name || min == null || max == null || !open || !close || !phone || !email || !whatsapp || !facebook || !instagram || !location || !area || !website || !googleMap){
             
@@ -106,7 +106,7 @@ const editRestuarant = async (req, res, next)=>{
         if((req.user.id === findRestaurant.creator.toString()) || (req.user.role === 'user' && findRestaurant.approved)){
             if(!req.files){
                 const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap}, {returnDocument:'after'});
-                res.status(201).json(updated)
+                res.status(201).json({message:"Success", data:updated})
 
             }else if(req.files){
                 // find old cover photo and remove it
@@ -222,11 +222,14 @@ const getUserRestaurants = async (req, res, next)=>{
 // claimed: false/true
 // role: user
 const claimRequest = async (req, res, next)=>{    
-    // logged in user claim to a resturant
-    // check DB whether it's been claimed already
-    // if not update db to true
+ 
     try {
         // find the restaurant id
+        const { confirm, acknowledgement } = req.body;
+        console.log(req.body)
+            if(!confirm || !acknowledgement){
+                return next(new HttpError("Confirm and Acknowledge by checking the boxes", 422))
+            }
         const {restaurantId}=req.params;
         const findRestaurant = await Restaurant.findById(restaurantId);
             if(req.user.role === 'user' || req.user.role === 'admin'){
@@ -239,7 +242,7 @@ const claimRequest = async (req, res, next)=>{
                 return next(new HttpError("Restaurant ownership has been claimed already", 422))
                 }
                 
-                const claim = await Restaurant.findByIdAndUpdate(restaurantId, {claimed:true, claimedBy:req.user.id, claimer:req.user.firstName, approvalStatus:"pending"}, {returnDocument:'after'});
+                const claim = await Restaurant.findByIdAndUpdate(restaurantId, {claimed:true, confirm:true, acknowledgement:true, claimedBy:req.user.id, claimer:req.user.firstName, approvalStatus:"pending"}, {returnDocument:'after'});
                 res.status(200).json({message:"The admin will verify you claims in 48 hours", claim})            
                 
             }
@@ -680,5 +683,5 @@ const adminAprovalPage = async (req, res, next)=>{
 
 }
 
-module.exports = { createRestaurant, editRestuarant, getAllApprovedRestaurants, getAllRestaurants, getRestaurant, getUserRestaurants, claimRequest, adminApproval, reject, uploadCoverPic, changeCoverPic, uploadResturantMenu, editRestaurantMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery,  deleteFromGalleryImage, deleteRestaurant, adminAprovalPage }
+module.exports = { createRestaurant, editRestaurant, getAllApprovedRestaurants, getAllRestaurants, getRestaurant, getUserRestaurants, claimRequest, adminApproval, reject, uploadCoverPic, changeCoverPic, uploadResturantMenu, editRestaurantMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery,  deleteFromGalleryImage, deleteRestaurant, adminAprovalPage }
 

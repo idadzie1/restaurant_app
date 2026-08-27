@@ -13,7 +13,7 @@ import { UserContext } from '../context/userContext';
 import Confirmation from './modals/Dialoguebox';
 import Ack from './modals/ActionConfirmationDialogueBox'
 
-const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, openingHours:{open, close}, socials:{whatsapp, facebook, instagram}, phone, email, ratings, location, area, onClick, website, googleMap}) => {
+const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, openingHours:{open, close}, socials:{whatsapp, facebook, instagram}, phone, email, ratings, location, area, onClick, website, googleMap, confirm, acknowledgement}) => {
     const [showModalm, setShowModal] = useState(false);
     
 

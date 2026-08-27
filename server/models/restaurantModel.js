@@ -45,11 +45,13 @@ const restaurantSchema = new Schema({
                 type: String,
                 enum: ["none", "pending", "approved", "rejected"],
                 default: "none"},
-                claimed:{type: Boolean, default: false},
-                claimer:{type: String, default: null},
-                claimedBy:{type: Schema.Types.ObjectId, ref: "User", default: null},    
-                creator:{type: Schema.Types.ObjectId, ref: "User"},
-                role:{type: Schema.Types.ObjectId, ref: "User"},
+    confirm:{type: Boolean, default: false},
+    acknowledgement:{type: Boolean, default: false},           
+    claimed:{type: Boolean, default: false},
+    claimer:{type: String, default: null},
+    claimedBy:{type: Schema.Types.ObjectId, ref: "User", default: null},    
+    creator:{type: Schema.Types.ObjectId, ref: "User"},
+    role:{type: Schema.Types.ObjectId, ref: "User"},
      
 
 }, {timestamps: true})
