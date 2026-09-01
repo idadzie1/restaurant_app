@@ -63,13 +63,13 @@ const createRestaurant = async (req, res, next)=>{
                 const newRestauant = await Restaurant.create({name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, approvalStatus:"approved", creator:req.user.id})
                 res.status(201).json("Success. Pending verification and approval")
             })
-        }else{
+            }else{
             coverPhoto.mv(path.join(__dirname, '..', 'uploads', newFileName), async(err)=>{
                 if(err){
                     return next(new HttpError("Could not upload file", 422))
                 }
 
-                const newRestauant = await Restaurant.create({name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, claimed:true, approvalStatus:"pending", creator:req.user.id})
+                const newRestauant = await Restaurant.create({name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, claimed:true, approvalStatus:"pending", claimer:req.user.firstName, claimedBy:req.user.id, creator:req.user.id})
                 res.status(201).json("Success. Pending verification and approval")
             })
         }        
@@ -91,8 +91,7 @@ const editRestaurant = async (req, res, next)=>{
         const findRestaurant = await Restaurant.findById(restaurantId);
 
         const {name, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;
-
-        console.log(req.body)
+       
 
         if(!name || min == null || max == null || !open || !close || !phone || !email || !whatsapp || !facebook || !instagram || !location || !area || !website || !googleMap){
             
@@ -127,7 +126,7 @@ const editRestaurant = async (req, res, next)=>{
                         return next(new HttpError(err.message))
                     }else{
                         const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto:newFileName}, {returnDocument:'after'});
-                        res.status(201).json(updated) 
+                        res.status(201).json({message:"Success", data:updated}) 
                     }
 
                 })
@@ -191,6 +190,7 @@ const getRestaurant = async (req, res, next)=>{
         const {restaurantId}  = req.params
         
         const getArestaurant = await Restaurant.findById(restaurantId)
+           
         if(!getArestaurant){
             return next(new HttpError("The restaurant cannot be found", 404))
         }
@@ -226,12 +226,12 @@ const claimRequest = async (req, res, next)=>{
     try {
         // find the restaurant id
         const { confirm, acknowledgement } = req.body;
-        console.log(req.body)
+       
             if(!confirm || !acknowledgement){
                 return next(new HttpError("Confirm and Acknowledge by checking the boxes", 422))
             }
         const {restaurantId}=req.params;
-        const findRestaurant = await Restaurant.findById(restaurantId);
+        const findRestaurant = await Restaurant.findById(restaurantId).populate("creator");
             if(req.user.role === 'user' || req.user.role === 'admin'){
 
                 if(!findRestaurant){
@@ -239,12 +239,15 @@ const claimRequest = async (req, res, next)=>{
                 } 
 
                 if(findRestaurant.claimed){
-                return next(new HttpError("Restaurant ownership has been claimed already", 422))
+                    return next(new HttpError("Restaurant ownership has been claimed already", 422))
                 }
-                
+                // only for restaurants posted by admin
+                if(findRestaurant.creator.role === "admin"){
                 const claim = await Restaurant.findByIdAndUpdate(restaurantId, {claimed:true, confirm:true, acknowledgement:true, claimedBy:req.user.id, claimer:req.user.firstName, approvalStatus:"pending"}, {returnDocument:'after'});
                 res.status(200).json({message:"The admin will verify you claims in 48 hours", claim})            
-                
+                }else{
+                    return next(new HttpError("Restaurant ownership has been claimed already", 422))
+                }
             }
     } catch (error) {
         return next(new HttpError(error.message))
@@ -263,13 +266,14 @@ const adminApproval = async (req, res, next)=>{
         const {restaurantId} = req.params;
         // find the restaurant ressource 
         
-        const findRestaurant = await Restaurant.findById(restaurantId)
+        const findRestaurant = await Restaurant.findById(restaurantId).populate("creator")
+        
         if(!findRestaurant){
             return next(new HttpError("Can not find restaurant", 422))
         }
 
         if(findRestaurant.approvalStatus === "pending" && req.user.role === 'admin'){
-            const approve = await Restaurant.findByIdAndUpdate(restaurantId, {approvalStatus:"approved", creator:findRestaurant.claimedBy, claimer:findRestaurant.claimer}, {returnDocument:'after'});
+            const approve = await Restaurant.findByIdAndUpdate(restaurantId, {approvalStatus:"approved", creator:findRestaurant.creator.claimedBy, claimer:findRestaurant.creator.fisrtName}, {returnDocument:'after'});
             res.status(200).json({message: "Approved successfuly", approve});
       
 
@@ -344,37 +348,37 @@ const changeCoverPic = (req, res, next)=>{
 // api/restaurants/upload-to-menu
 // post
 // protected
-const uploadResturantMenu = async (req, res, next)=>{
+const uploadResturantMenu = async (req, res, next)=>{    
         try {
-            const {menuName, menuPrice, menuDescription, available} = req.body;
-                if(!menuName || !menuPrice || !menuDescription || available === undefined){
+            const {name, price, description, available} = req.body;
+                if(!name || !price || !description || !available){
                     return next(new HttpError("Fill in all fields", 422))
                 }
 
-             if(!req.files || !req.files.menuImage){
+             if(!req.files || !req.files.menuPhoto){
                 return next(new HttpError("Upload photo of menu", 422))
              }
 
-             const {menuImage} = req.files
-             if(menuImage.size > 200000){
+             const {menuPhoto} = req.files
+             if(menuPhoto.size > 200000){
                 return next(new HttpError("File size should be less than 2KB", 422))
              }
              
-            let fileName = menuImage.name;
+            let fileName = menuPhoto.name;
             let splittedFileName = fileName.split('.')
             let newFileName = fileName.split('.')[0] + uuid() +'.' + splittedFileName[splittedFileName.length-1]                         
 
-            const { id } = req.params;
+            const { restaurantId } = req.params;
             // firmd the restaurant
-            const findRestaurant = await Restaurant.findById(id)            
+            const findRestaurant = await Restaurant.findById(restaurantId)                      
             if(req.user.id === findRestaurant.creator.toString() || req.user.role === 'admin' && findRestaurant.approved){                
-                     menuImage.mv(path.join(__dirname, '..', '/uploads', newFileName), async(err)=>{
+                     menuPhoto.mv(path.join(__dirname, '..', '/uploads', newFileName), async(err)=>{
                 if(err){
                     return next(new HttpError("Could not upload file", 422))
                 }            
 
-                const restaurant = await Restaurant.findByIdAndUpdate(id, {$push: {menu: {menuName, menuPrice, menuDescription, menuImage:newFileName, available}}}, { returnDocument: 'after'});
-                res.status(200).json(restaurant)
+                const restaurant = await Restaurant.findByIdAndUpdate(restaurantId, {$push: {menu: {name, price, description, menuPhoto:newFileName, available}}}, { returnDocument: 'after'});
+                res.status(200).json({message:"Menu successfully added", restaurant})
                 })    
 
             }else{

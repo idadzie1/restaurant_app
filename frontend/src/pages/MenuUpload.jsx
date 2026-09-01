@@ -3,18 +3,22 @@ import { useState, useRef, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/userContext';
 import { useParams } from 'react-router-dom';
+import ErrorAndResDialogueBox from '../components/modals/ErrorAndResDialogueBox';
+import ErrorAndResDialogueBoxTwo from '../components/modals/ErrorAndResDialogueBoxTwo';
 
 // To upload both menu image and description
 // =================================================================
 
 const MenuUpload = () => {
     const [restaurant, setRestaurant] = useState({});
-    const [description, setDescription] = useState("");
-    const [menuPhoto, setmenuPhoto] = useState(null);
-    const [menuName, setMenuName]=useState("");
-    const [menuPrice, setMenuPrice] = useState("");
-    const [available, setAvailable]= useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [ response, setResponse ] = useState("")
+    const [ description, setDescription ] = useState("");
+    const [ menuPhoto, setMenuPhoto ] = useState(null);
+    const [ menuName, setMenuName ]=useState("");
+    const [ menuPrice, setMenuPrice ] = useState("");
+    const [ available, setAvailable ] = useState(false);
+    const [ errorMessage, setErrorMessage ] = useState("");
+    const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox ] = useState(false);
 
      const fileInputRef = useRef(null);
 
@@ -27,41 +31,9 @@ const MenuUpload = () => {
         if(!token){
           navigate('/login')
         }
-      }, [])
+      }, [token, navigate])
 
-    const {id} = useParams()
-    // fetch data from the database
-    
-
-    useEffect(()=>{
-      const fetchData = async ()=>{
-        try {
-            await fetch(
-                  `${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/${id}/menu`,
-                  {
-                      method: "PATCH",
-                      headers: {
-                          Authorization: `Bearer ${token}`
-                      },
-                      body: formData
-                  });
-          if(!response.ok){
-            const errorMessage = await response.json();
-            throw new Error(errorData.message);
-          }
-           const data = await response.json();
-           setRestaurant(data);
-           
-
-        } catch (error) {
-          
-        }
-      }
-
-      fetchData()
-    }, [])
-
-    console.log(restaurant.menu)
+    const { restaurantId } = useParams()   
     
     const handleDescriptionChange =(e)=>{ 
       setDescription(e.target.value);      
@@ -81,14 +53,14 @@ const MenuUpload = () => {
   }
 
     const handleFile = (e) => {
-        menuPhoto(e.target.files[0])
+        setMenuPhoto(e.target.files[0])
     }
 
       const handleClear = () => {
         setDescription("");
         setErrorMessage("");
         setMenuName("");
-        setAvailable(null);
+        setAvailable(false);
         setMenuPrice("");
 
       setFImage(null);
@@ -97,21 +69,72 @@ const MenuUpload = () => {
     }
   }
 
+   const handleOkClick = ()=>{
+         setDescription("");
+        setErrorMessage("");
+        setMenuName("");
+        setAvailable(false);
+        setMenuPrice("");
+        navigate(`/restaurants/${restaurantId}`)
+        setShowErrorAndResDialogueBox(false)
 
-    const handleSubmit =(e)=>{
-      e.preventDefault()      
-        const formData = new FormData();
-                formData.append("name", menuName);
-                formData.append("price", menuPrice);
-                formData.append("description", description);
-                formData.append("available", available);
-                formData.append("menuPhoto", menuPhoto);      
-      }
+   }
+
+
+    const handleSubmit = async (e)=>{
+      e.preventDefault()
+      setErrorMessage('')
+      
+      try {
+
+          const formData = new FormData();
+          formData.append("name", menuName);
+          formData.append("price", menuPrice);
+          formData.append("description", description);
+          formData.append("available", available);
+          formData.append("menuPhoto", menuPhoto);
+
+          const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/${restaurantId}/menu`,
+                  {
+                      method: "PATCH",
+                      headers: {
+                          Authorization: `Bearer ${token}`
+                      },
+                      body: formData
+                  });
+
+                  const data = await response.json();
+
+                  
+
+                  if(!response.ok){
+                    setErrorMessage(data.message)
+                    setShowErrorAndResDialogueBox(true)
+                    return
+                  }
+
+                  setRestaurant(data)
+                  setResponse(data.message)
+                  setShowErrorAndResDialogueBox(true)
+                  return
+        
+      } catch (error) {
+          setErrorMessage(error.message);
+          setShowErrorAndResDialogueBox(true);
+      }                
+                
+    }
 
   return (
-
+    <>
+      {showErrorAndResDialogueBox && <ErrorAndResDialogueBoxTwo
+      response={response}  
+      errorMessage={errorMessage}      
+      clickOk={handleOkClick}  
+  />}     
     <section className='rest-menu'>
       <h3 className='menu-dishes-drinks'>Upload Your Menu</h3>
+
       <form className=''onSubmit={handleSubmit} encType="multipart/form-data">
         <label htmlFor="image">Insert Image</label>
         <input
@@ -151,7 +174,7 @@ const MenuUpload = () => {
 
         <label htmlFor="msg">Menu Description</label>
         <textarea
-          name = "menuDescription" 
+          name = "description" 
           value = {description}
           id = "msg"
           onChange = {handleDescriptionChange}
@@ -159,12 +182,12 @@ const MenuUpload = () => {
 
         <div className="button-conrol">
           <button>Submit</button>
-          <button onClick={handleClear}>Clear</button>
+          <button type='button' onClick={handleClear}>Clear</button>
         </div>                       
         
       </form>     
     </section>
- 
+    </>
   )
 }
 

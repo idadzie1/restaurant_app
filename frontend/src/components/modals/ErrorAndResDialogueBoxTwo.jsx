@@ -1,6 +1,4 @@
-import React from 'react'
-
-const ErrorAndResDialogueBox = ({errorMessage, response, clickOk}) => {
+const ErrorAndResDialogueBoxTwo = ({errorMessage, response, clickOk}) => {
   const notification = errorMessage || response || ""
   return (
         <div className='confirmation-modal'>
@@ -17,4 +15,4 @@ const ErrorAndResDialogueBox = ({errorMessage, response, clickOk}) => {
   )
 }
 
-export default ErrorAndResDialogueBox
+export default ErrorAndResDialogueBoxTwo

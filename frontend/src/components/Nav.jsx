@@ -16,7 +16,10 @@ const Nav = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false)
    const { currentUser } = useContext(UserContext);
   
-  const token = currentUser?.token 
+  const token = currentUser?.token  
+  const role = currentUser?.role
+
+ 
 
   return (
 
@@ -43,7 +46,7 @@ const Nav = () => {
                     <NavLink to='/contact'>Contact</NavLink>
                   </li>
                   {token && <li onClick={()=>setMenuShowing(prev=>!prev)}>
-                    <NavLink to='/userdashpage'>Dashboard</NavLink>
+                    <NavLink to={role === "admin" ? '/admindashpage' : '/userdashpage'}>Dashboard</NavLink>
                   </li>}                            
                 </ul>
                 <div className="close-icon" onClick={()=>setMenuShowing(prev=>!prev)}>

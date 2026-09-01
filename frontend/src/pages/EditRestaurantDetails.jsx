@@ -100,14 +100,15 @@ const EditRestaurantDetails = () => {
             try {
                 const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/get-restaurant/${restaurantId}`)
                 
-                const data = await response.json();
+                const data = await response.json();                
 
                 if(!response.ok){
                     setErrorMessage(data.message)
                     setShowErrorAndResDialogueBox(true)
                     return
                 }
-
+                
+                
                 setRestaurantData(data)                              
 
             } catch (error) {
@@ -258,7 +259,7 @@ const EditRestaurantDetails = () => {
             <label htmlFor="tel">Telephone Contact</label>
             <input 
                 type="tel"
-                name='contact'
+                name='phone'
                 value={restaurantData.phone}
                 id='tel'
                 onChange={handleChanges} 

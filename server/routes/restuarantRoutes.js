@@ -14,7 +14,7 @@ router.get('/restaurants-by-user/:userId', authMiddleWare, getUserRestaurants);
 router.patch("/reject-restaurant/:restaurantId", authMiddleWare, reject);
 router.patch("/claim/:restaurantId", authMiddleWare, claimRequest);
 router.patch("/approve/:restaurantId", authMiddleWare, adminApproval);
-router.patch("/:id/menu", authMiddleWare, uploadResturantMenu);
+router.patch("/:restaurantId/menu", authMiddleWare, uploadResturantMenu);
 router.patch('/:restaurantId/menu/:menuId', authMiddleWare, editRestaurantMenu);
 router.get('/:restaurantId/menu/', getMenu)
 router.delete('/:restaurantId/menu/:menuId', authMiddleWare, deleteRestaurantMenu);

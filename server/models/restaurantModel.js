@@ -25,10 +25,10 @@ const restaurantSchema = new Schema({
     website: {type: String, required: true},
     googleMap: {type: String, required: true},  
     menu: [
-        {   menuName: String,
-            menuImage: String, // optional
-            menuPrice: Number, // optional for now
-            menuDescription: String,
+        {   name: String,
+            menuPhoto: String, // optional
+            price: Number, // optional for now
+            description: String,
             available:{
                 type: Boolean,
                 default: true

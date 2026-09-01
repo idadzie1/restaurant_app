@@ -85,7 +85,7 @@ const loginUser = async (req, res, next) => {
         res.status(200).json({ token, id, firstName, role });
 
     } catch (error) {
-        return next(new HttpError(error.message, 422))
+        return next(new HttpError("Unable to log you in. It could be newtwork related issues. Try again later", 422))
     }
 }
 

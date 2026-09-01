@@ -34,7 +34,7 @@ nav{
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px); 
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    z-index: 9999;
+    z-index:999;
     
 }
 
@@ -1122,6 +1122,20 @@ input[type='number']{
     gap: 2rem;
 }
 
+.gallery-section h3{    
+    /* background-color: red; */
+    
+}
+
+/* Blue button color to be maintained for all butttons */
+button.add-menu, button.add-gallery{    
+    width: 40%;
+    margin: 0 30%;    
+    background-color: #3b43d6;
+    color:#fff;
+    font-weight: 600;
+}
+
 .image{
     /* background-color: #FF6B35; */
 }
@@ -1152,7 +1166,7 @@ input[type='number']{
 .gallery-section h3{
     width: 50%;
     /* background-color: #FF6B35; */
-    margin: 2rem auto -1rem;
+    margin: 2rem auto 0rem;
     text-align: center;
 }
 

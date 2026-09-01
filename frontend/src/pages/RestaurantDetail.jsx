@@ -1,10 +1,6 @@
 import React from 'react'
 import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom';
-import mamaCuisine from '../assets/Mama_cuisine.jpg';
-import restaurant1 from '../assets/people_in_restaurant1.jpg';
-import restaurant2 from '../assets/people_in_restaurant2.jpg';
-import galleryData from '../data/gallery'
 import { FaWhatsapp } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa6";
@@ -18,30 +14,33 @@ import Loader from '../components/Loader/Loader.jsx'
 // users can view the information but can't manipulate the infoamtion by not having acce4ss to the control buttons
 
 const RestaurantDetail = () => {
-  const[galleryInfo, setGalleryInfo] = useState(galleryData);
-  const [ restaurant, setRestaurant] = useState({});
-  const [ menu, setMenu ] = useState({});
-  const {currentUser} = useContext(UserContext);
-  const [errorMessage, setErrorMessage]=useState("");
-  const [loading, setLoading] = useState(true)
+  const [ galleryInfo, setGalleryInfo ] = useState([]);
+  const [ restaurant, setRestaurant ] = useState({});  
+  const { currentUser } = useContext(UserContext);
+  const [ errorMessage, setErrorMessage ]=useState("");
+  const [ loading, setLoading]  = useState(true)
 
   const userId = currentUser?.id
-  const {id} = useParams()
+  const {restaurantId} = useParams()  
   
 
   useEffect(()=>{
     const fectchRestaurantDetail = async ()=>{    
     try {
-       const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/get-restaurant/${id}`);
-      if(!response.ok){
-         const errorData = await response.json();
-            throw new Error(errorData.message)        
-      }
+       const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/get-restaurant/${restaurantId}`);
 
-      const data = await response.json()      
-      setRestaurant(data)
+
+      const data = await response.json()            
+     
       
+       if(!response.ok){         
+         setErrorMessage(data) 
+         return                  
+      }       
       
+       setRestaurant(data)
+       
+
     } catch (error) {
       setErrorMessage(error.message)
     } finally{
@@ -51,36 +50,20 @@ const RestaurantDetail = () => {
     }
 
     fectchRestaurantDetail()
-  }, [])
+    
+  }, [`${restaurantId}`])
+
+
 
    if (loading) {    
-     return  <Loader />  
-  }
-
-  useEffect(()=>{
-    const fetchMenu = async()=>{
-      try {
-              const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/${restaurantId}/menu/`)
-
-              if(!response.ok){
-                const errorData = await response.json()
-                throw new Error(errorData.message)
-              }
-      
-            const menuData = await response.json()
-            setMenu(menuData)
-        
-      } catch (error) {
-        
-      } finally{
-        
-      }           
-   
-
-    }
+     return  <Loader /> 
     
-  }, [])
+    }
 
+  console.log(restaurant)
+  console.log("This is restaurant.creator", restaurant.creator)
+  console.log("This is restaurant.claimedBy", restaurant.claimedBy)
+  console.log("This is userId", userId)
 
 
    const handleMenuChange =()=>{
@@ -94,12 +77,12 @@ const RestaurantDetail = () => {
   return (
     <section className='detail-info'>
       <h2 className='restuarant-name'>{restaurant.name}</h2>
-      {userId && restaurant.creator &&<div className="controls">        
-        <Link to={`/uploadgallery/${id}`}><button className='btn-gallery'>Add to Gallery</button></Link>
-        <Link to={`/menuupload/${id}`}><button className='btn-menu'>Add to Menu</button></Link>
-        <Link to={`/editdetails/${id}`}><button className='btn-edit'>Edit</button></Link>        
-        <Link to={`/ownerpage/${id}`}><button className='btn-dash'>Dashboard</button></Link>        
-      </div>}
+      {/* {userId && restaurant.creator &&<div className="controls">        
+        <Link to={`/uploadgallery/${restaurantId}`}><button className='btn-gallery'>Add to Gallery</button></Link>
+        <Link to={`/menuupload/${restaurantId}`}><button className='btn-menu'>Add to Menu</button></Link>
+        <Link to={`/editdetails/${restaurantId}`}><button className='btn-edit'>Edit</button></Link>        
+        <Link to={`/ownerpage/${restaurantId}`}><button className='btn-dash'>Dashboard</button></Link>        
+      </div>} */}
       <div className="cover-image">
         <img
             src={`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${restaurant.coverPhoto}`}
@@ -133,10 +116,13 @@ const RestaurantDetail = () => {
         </div> 
       </div>
       <div className="menu-dishes">
-        <h3 className='menu-heading'>Menu</h3>        
+        <h3 className='menu-heading'>Menu</h3>
+        {userId === restaurant.claimedBy && <Link to={`/menuupload/${restaurantId}`}>
+         <button className='add-menu'>Add Menu</button>
+        </Link>}       
         <div className="the-menu-items">          
-          {restaurant.menu.map(({name, menuPhoto, price, description}, index)=>{
-          return <div className="the-menu-item" key={index}>
+          {restaurant.menu.map(({_id, name, menuPhoto, price, description})=>{
+          return <div className="the-menu-item" key={_id}>
             <div className="menu-photo-left-side">
               <img src={`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${menuPhoto}`} alt="menu image" />
             </div>
@@ -162,8 +148,11 @@ const RestaurantDetail = () => {
       </div>  
         <div className="gallery-section">
           <h3>Photo Gallery</h3>
+         {userId && restaurant.claimedBy && <Link to={`/uploadgallery/${restaurantId}`}>
+            <button className='add-gallery'>Add Gallery</button>
+          </Link>}
           <div className="gallery">
-            {galleryInfo[0].gallery.map((item, id)=>(
+            {restaurant.gallery.map((item, id)=>(
               <div className='gallery-item'>
                 <div className="image">
                   <img key={id} src={item} alt="" />                             
@@ -177,7 +166,7 @@ const RestaurantDetail = () => {
         </div>
         <div className="google-map-location">
           <h3>Location on Google Map</h3>
-          <iframe src={galleryInfo[0].googleMap} frameborder="0"></iframe>
+          <iframe src={restaurant.googleMap} frameborder="0"></iframe>
         </div>
     </section>
   

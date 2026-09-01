@@ -62,7 +62,7 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                         <span>{location} : {area}</span> 
                     </div>
                     <div className=" text">
-                        <Link to='/restaurants/id'>Click to see menu</Link>
+                        <Link to={`restaurants/${restaurantId}`}>Click to see menu</Link>
                         
                     </div>
                     <div className="reviews-ownership">
