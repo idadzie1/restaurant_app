@@ -79,10 +79,10 @@ const loginUser = async (req, res, next) => {
             return next(new HttpError("Invalid Password", 422));
         }
 
-        const { _id: id, firstName, role } = findUser;
+        const { _id: id, firstName, role, profilePic } = findUser;
 
         const token = jwt.sign({ id, firstName, role }, process.env.JWT_SECRET, { expiresIn: "1d" });
-        res.status(200).json({ token, id, firstName, role });
+        res.status(200).json({ token, id, firstName, role, profilePic });
 
     } catch (error) {
         return next(new HttpError("Unable to log you in. It could be newtwork related issues. Try again later", 422))
@@ -113,52 +113,102 @@ const getUser = async (req, res, next) => {
 // potected
 const changeAvatar = async (req, res, next) => {
     try {
-        if (!req.files.profilePic) {
+        if (!req.files || !req.files.profilePic) {
             return next(new HttpError("Please choose photo", 422));
         }
 
-        // action is preotected and needs authorization to ensure it's the currect logged in user to proceed. Current looged in user is req.user.id;
-        // find user
+        const { profilePic } = req.files;
+        if(profilePic.size > 200000){
+            return next(new HttpError("File size is must be not be more than 200KB"))
+        }
+
+        if (!profilePic.mimetype.startsWith('image/')) {
+            return next(new HttpError("Please select an image file", 422));
+        }
+
+        const fileName = profilePic.name;
+        const splittedFileName = fileName.split('.')
+        const newFileName = splittedFileName[0] + uuid() + '.' + splittedFileName[splittedFileName.length-1]
 
         const findUser = await User.findById(req.user.id)
         // delete old avatar if it exists
-        if (findUser.profilePic) {
-            fs.unlink(path.join(__dirname, '..', 'uploads', findUser.profilePic), err => {
-                if (err) {
-                    return next(new HttpError(err))
+        // associate the new file name to the photo and move it into the uploads folder and save name in the database
+        profilePic.mv(path.join(__dirname, '..', '/uploads', newFileName), async (err)=>{
+            if(err){
+                return next(new HttpError("Could not move the file into the folder", 422))
+            }
+            
+             const updatedUser = await User.findByIdAndUpdate(req.user.id, {profilePic:newFileName}, { returnDocument: 'after' })
+             
+             if(!updatedUser){
+                return next(new HttpError("Could not save phto to DB", 422))                
+             }
+
+             const oldProfilePic = findUser.profilePic
+            if(oldProfilePic){
+            fs.unlink(path.join(__dirname, '..', '/uploads', oldProfilePic), async(err)=>{
+                if(err){
+                    return next(new HttpError("Could not remove old photo", 422))
+                    
                 }
             })
         }
 
-        const { profilePic } = req.files;
-        if (profilePic.size > 500000) {
-            return next(new HttpError("File size should be less than 500KB", 422));
-        }
-
-        let fileName;
-        fileName = profilePic.name;
-        let splittedFileName = fileName.split('.');
-        let newFileName = splittedFileName[0] + uuid() + '.' + splittedFileName[splittedFileName.length - 1]
-        profilePic.mv(path.join(__dirname, "..", "/uploads", newFileName), async (err) => {
-            if (err) {
-                return next(new HttpError(err))
-            }
-            // reserved space here
-            const updatedProfilePic = await User.findByIdAndUpdate(req.user.id, { profilePic: newFileName }, { returnDocument: 'after' })
-
-            if (!updatedProfilePic) {
-                return next(new HttpError("Could not change profilePic", 422))
-            }
-            res.status(200).json(updatedProfilePic)
-        })
-
-        // ==== marked to be moved up there for reserved space
-        // ====
+             res.status(200).json(updatedUser) 
+        })      
+   
 
     } catch (error) {
         return next(new HttpError(error.message));
     }
 }
+
+// ===========================================================================================
+// ======================= change avatar another way to do=======================================
+//     profilePic.mv(
+//     path.join(__dirname, '..', 'uploads', newFileName),
+//     async (err) => {
+
+//         if (err) {
+//             return next(
+//                 new HttpError(
+//                     "Could not move the file into the folder",
+//                     422
+//                 )
+//             );
+//         }
+
+//         const updatedUser = await User.findByIdAndUpdate(
+//             req.user.id,
+//             { profilePic: newFileName },
+//             { returnDocument: 'after' }
+//         );
+
+//         if (!updatedUser) {
+//             return next(
+//                 new HttpError("Could not update profile photo", 422)
+//             );
+//         }
+
+//         if (oldProfilePic) {
+//             fs.unlink(
+//                 path.join(__dirname, '..', 'uploads', oldProfilePic),
+//                 (err) => {
+//                     if (err) {
+//                         console.log(
+//                             "Could not remove old photo:",
+//                             err.message
+//                         );
+//                     }
+//                 }
+//             );
+//         }
+
+//         res.status(200).json(updatedUser);
+//     }
+// );
+
+// ==========================================================================================
 
 // ============edit user deatails==============
 // Patch api/users/:id
@@ -216,4 +266,51 @@ const allUsers = async (req, res, next) => {
     }
 }
 
-module.exports = { registerUser, loginUser, getUser, changeAvatar, editUser, allUsers }
+
+// ===============================Change Password========================================
+
+const changePassword = async (req, res, next)=>{
+    try {        
+        // find current User
+        const loggedInUser = await User.findById(req.user.id)
+        if(!loggedInUser){
+            return next(new HttpError("User does not exist", 422))
+        }
+        const {currentPassword, newPassword, cfmNewPassword } = req.body;
+
+        if(!currentPassword || !newPassword || !cfmNewPassword){
+            return next(new HttpError("Fill in all the fields", 422))
+        }
+
+                // check current password if it's correct
+        const passwordMatches = await bcrypt.compare(currentPassword, loggedInUser.password );
+
+        if (!passwordMatches) {
+            return next( new HttpError("Current password does not match", 422));
+        }
+
+        if ((newPassword.trim()).length < 8) {
+            return next(new HttpError("New password must be at least 8 characters long", 422))
+        }
+
+        if (newPassword != cfmNewPassword) {
+            return next(new HttpError("Passwords do not match", 422))
+        }
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPass = await bcrypt.hash(newPassword, salt)
+
+        const updatedUser = await User.findByIdAndUpdate(req.user.id, {password:hashedPass})
+        if(!updatedUser){
+            return next(new HttpError("Password Change unsuccessful", 422))
+        }
+
+        res.status(200).json("Password Change successful")        
+                        
+    } catch (error) {
+        return next(new HttpError(error.message))
+    }
+
+}
+
+module.exports = { registerUser, loginUser, getUser, changeAvatar, editUser, allUsers, changePassword }

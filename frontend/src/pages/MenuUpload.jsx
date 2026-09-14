@@ -135,8 +135,8 @@ const MenuUpload = () => {
     <section className='rest-menu'>
       <h3 className='menu-dishes-drinks'>Upload Your Menu</h3>
 
-      <form className=''onSubmit={handleSubmit} encType="multipart/form-data">
-        <label htmlFor="image">Insert Image</label>
+      <form className='upload-toMenu'onSubmit={handleSubmit} encType="multipart/form-data">
+        <label className='menu-label' htmlFor="image">Insert Image</label>
         <input
           id ='image'
           ref={fileInputRef} 
@@ -181,7 +181,7 @@ const MenuUpload = () => {
          />
 
         <div className="button-conrol">
-          <button>Submit</button>
+          <button>Upload</button>
           <button type='button' onClick={handleClear}>Clear</button>
         </div>                       
         

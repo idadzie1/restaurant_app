@@ -227,7 +227,7 @@ const claimRequest = async (req, res, next)=>{
         // find the restaurant id
         const { confirm, acknowledgement } = req.body;
        
-            if(!confirm || !acknowledgement){
+            if(confirm === false || acknowledgement === false){
                 return next(new HttpError("Confirm and Acknowledge by checking the boxes", 422))
             }
         const {restaurantId}=req.params;
@@ -397,7 +397,7 @@ const editRestaurantMenu = async (req, res, next)=>{
     // find the restaurant id
     const { restaurantId, menuId } = req.params;   
     const findRestaurant = await Restaurant.findById(restaurantId);
-    // const findMenu = findRestaurant.menu[menuId];
+    const findMenu = findRestaurant.menu.id(menuId);
     try {          
          
          if(req.user.id === findRestaurant.creator.toString() || req.user.role === 'admin'){
@@ -408,52 +408,54 @@ const editRestaurantMenu = async (req, res, next)=>{
             if(!findMenu){
                 return next(new HttpError("No records of menu found", 404))
             }
-            const {menuName, menuDescription, menuImage, menuPrice, available} = req.body;
-            if(!menuName || !menuDescription || !menuImage || !menuPrice || available === false){
-            return next(new HttpError("Fill in the fileds", 422))       
+     
+            const {name, description, price, available} = req.body;
+            if(!name || !description || !price || available === false){
+            return next(new HttpError("Fill in the fileds", 422))
+
          }else if(!req.files){
             const menu = findRestaurant.menu.id(menuId);
-                menu.menuName = menuName;
-                menu.menuDescription = menuDescription
-                menu.menuPrice = menuPrice;
+                menu.name = name;
+                menu.description = description
+                menu.price = price;
                 menu.available = available;
                 await findRestaurant.save();
-                res.status(200).json(findRestaurant);
+                res.status(200).json({ message: "Updated Successfully", data: findRestaurant});
           }else{
             // check if there an existig menu image and remove
-            const oldMenuImage = findRestaurant.menu.id(menuId)?.menuImage
+            const oldMenuImage = findRestaurant.menu.id(menuId)?.menuPhoto
             fs.unlink(path.join(__dirname, '..', 'uploads', oldMenuImage), async(err)=>{
                 if(err){
                     return next(new HttpError("Menu image could not be removes", 404))
                 }
             })
 
-            const {menuImage} = req.files;
-            if(menuImage.size > 200000){
+            const {menuPhoto} = req.files;
+            if(menuPhoto.size > 200000){
                 return next(new HttpError("Image size must not be more than 200KB", 422))
             }
             
-            const fileName = menuImage.name;
+            const fileName = menuPhoto.name;
             const splittedFileName = fileName.split('.')
             const newFileName = splittedFileName[0] + uuid() + '.' + splittedFileName[splittedFileName.length-1];
             
-            menuImage.mv(path.join(__dirname, '..', '/uploads', newFileName), async(err)=>{
+            menuPhoto.mv(path.join(__dirname, '..', '/uploads', newFileName), async(err)=>{
                 if(err){
                     return next(new HttpError("Could not upload image. Try again later", 422))
                 }
 
                 const menu = findRestaurant.menu.id(menuId);
-                    menu.menuName = menuName;
-                    menu.menuImage = menuImage;
-                    menu.menuDescription = menuDescription
-                    menu.menuPrice = menuPrice;
+                    menu.name = name;
+                    menu.menuPhoto = newFileName;
+                    menu.description = description
+                    menu.price = price;
                     menu.available = available;
                     await findRestaurant.save();
 
-                    res.status(200).json(findRestaurant);
+                    res.status(200).json({ message: "Updated Successfully", data: findRestaurant});
 
             })
-
+                    // findRestaurant
           } 
         
          }
@@ -478,7 +480,26 @@ const getMenu = async (req, res, next)=>{
         return next(new HttpError(error.message))
     }
 
+}
 
+// get s single menu
+
+const getAMenu = async (req, res, next)=>{
+    const { restaurantId, menuId } = req.params; 
+    try {
+         const restaurant = await Restaurant.findById(restaurantId)
+         const menu = restaurant.menu.id(menuId)
+         if(!menu){
+            return next(new HttpError("Menu could not be found", 404))
+         }
+
+        if(req.user.id === restaurant.claimedBy.toString()){        
+            res.status(200).json(menu)
+        }
+
+    } catch (error) {
+        return next(new HttpError("Could not load data", 404))
+    }
 }
 
 
@@ -487,9 +508,11 @@ const deleteRestaurantMenu = async (req, res, next)=>{
         const { restaurantId, menuId } = req.params;
         const restaurant = await Restaurant.findById(restaurantId)
         const menu = restaurant.menu.id(menuId);
-        const menuimage = menu?.menuImage
+        const menuimage = menu?.menuPhoto
+        
+        
     try {
-        if(req.user.id === restaurant.creator.toString() || req.user.role === 'admin'){
+        if(req.user.id === restaurant.creator.toString() || req.user.id === restaurant.claimedBy.toString() || req.user.role === 'admin'){
             if(!menu){
                 return next(new HttpError("Menu not found", 404))
             }
@@ -524,14 +547,14 @@ const uploadToGallary = async (req, res, next)=>{
     try {
         // find the restuarnt record using the id
         const { restaurantId } = req.params;
-        const restaurant = await Restaurant.findById(restaurantId)        
-        if(req.user.id === restaurant.creator.toString() || req.user.role === 'admin'){
+        const restaurant = await Restaurant.findById(restaurantId)         
+
+        if(req.user.id === restaurant.claimedBy.toString() || req.user.role === 'admin'){            
             
             if(!req.files){
                 return next(new HttpError("Please select an image", 422))
-            }
-            
-            const {galleryImage} = req.files;
+            }            
+            const{galleryImage} = req.files
             if(req.files){
                 if(galleryImage.size > 200000){
                     return next(new HttpError("Image size must not be more than 200KB", 422))
@@ -551,7 +574,7 @@ const uploadToGallary = async (req, res, next)=>{
                     }
                     // find the gallery array of objects n push.
                     const restaurant = await Restaurant.findByIdAndUpdate(restaurantId, {$push: {gallery:{galleryImage:newFileName}}}, { returnDocument:'after'}) 
-                    res.status(200).json(restaurant.gallery)
+                    res.status(200).json({message:"Successfully Uploaded", data:restaurant.gallery})
                 })               
 
             }
@@ -572,6 +595,7 @@ const changeGallery = async (req, res, next)=>{
         if(!restaurant){
             return next(new HttpError("Restaurant info can't be found", 422))
         }
+        
         const gallery = restaurant.gallery.id(galleryId)
         if(!gallery){
             return next(new HttpError("Gallery info can't be found", 422))
@@ -612,7 +636,7 @@ const changeGallery = async (req, res, next)=>{
                     const gallery = restaurant.gallery.id(galleryId);                    
                     gallery.galleryImage = newFileName;
                     await restaurant.save();
-                    res.status(200).json("Saved successfully", gallery)                    
+                    res.status(200).json({message: "Saved successfully", data: gallery})                    
                 }
             })
 
@@ -687,5 +711,5 @@ const adminAprovalPage = async (req, res, next)=>{
 
 }
 
-module.exports = { createRestaurant, editRestaurant, getAllApprovedRestaurants, getAllRestaurants, getRestaurant, getUserRestaurants, claimRequest, adminApproval, reject, uploadCoverPic, changeCoverPic, uploadResturantMenu, editRestaurantMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery,  deleteFromGalleryImage, deleteRestaurant, adminAprovalPage }
+module.exports = { createRestaurant, editRestaurant, getAllApprovedRestaurants, getAllRestaurants, getRestaurant, getUserRestaurants, claimRequest, adminApproval, reject, uploadCoverPic, changeCoverPic, uploadResturantMenu, editRestaurantMenu, getAMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery,  deleteFromGalleryImage, deleteRestaurant, adminAprovalPage }
 

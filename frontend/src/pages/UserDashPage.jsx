@@ -71,22 +71,22 @@ const UserDashPage = () => {
 
 //  ============================ edit process ===========================================
 
-const handleClickEdit=(selectedId)=>{
-  setSelectedId(selectedId)  
-  setConfirm(true)
-}
+// const handleClickEdit=(selectedId)=>{
+//   setSelectedId(selectedId)  
+//   setConfirm(true)
+// }
 
  
 
- const handleRedirection =(selectedId)=>{
-      navigate(`/editdetails/${selectedId}`)
-      setConfirm(false)
- }
+//  const handleRedirection =(selectedId)=>{
+//       navigate(`/editdetails/${selectedId}`)
+//       setConfirm(false)
+//  }
 
   return (
       
       <section className='admin-dashboard'>
-            {confirm && <DialogueBox clickYes={()=>handleRedirection(selectedId)}/>}
+            {/* {confirm && <DialogueBox clickYes={()=>handleRedirection(selectedId)}/>} */}
             <h2 className='heading'>Hi {firstname}, you're welcome to your Dashboard</h2>
             <div className="form-link">
               <Link to='/restaurant-form'><button >Click here to fill and submit</button></Link>              
@@ -119,7 +119,7 @@ const handleClickEdit=(selectedId)=>{
                   </div>
                 </div>
                 <div className="controls">                  
-                  <Link ><button className='deny' onClick={()=>handleClickEdit(item._id)}>Edit</button></Link>
+                  <Link to={`/editdetails/${item._id}`}><button className='deny'>Edit</button></Link>
                   <Link to='/userdashpage'><button className='deny'>Go Back</button></Link>
                   <button className='del'>Delete</button>
                 </div>          

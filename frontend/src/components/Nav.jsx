@@ -18,8 +18,7 @@ const Nav = () => {
   
   const token = currentUser?.token  
   const role = currentUser?.role
-
- 
+  
 
   return (
 
@@ -40,7 +39,7 @@ const Nav = () => {
                     <NavLink to='/services'>Services</NavLink>
                   </li>
                   <li onClick={()=>setMenuShowing(prev=>!prev)}>
-                    <NavLink to='/blog'>Blog/News</NavLink>
+                    <NavLink to='/blognews'>Blog/News</NavLink>
                   </li>
                   <li onClick={()=>setMenuShowing(prev=>!prev)}>
                     <NavLink to='/contact'>Contact</NavLink>
@@ -54,10 +53,10 @@ const Nav = () => {
                 </div>
               </div>
               <div className="login-container">
-                <Link to={token? "/LogOut" : "/login"}>{token? "Log out" :"Sign in"}</Link>
+                <Link className='only-desktop' to={token? "/LogOut" : "/login"}>{token? "Log out" :"Sign in"}</Link>
                 {token && <img className='profile-image' onClick='' src={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${currentUser?.profilePic}`}/>}
                 {token && <span className='arrowdn' onClick={()=>setShowProfileMenu(prev=>!prev)}><BiSolidDownArrow /></span>}
-                {showProfileMenu && <ProfileMenu click={()=>setShowProfileMenu(prev=>!prev)}/>}
+                {showProfileMenu && <ProfileMenu click={()=>setShowProfileMenu(prev=>!prev)} showProfileMenu={showProfileMenu} setShowProfileMenu={setShowProfileMenu}/>}
               </div>
               <div className="hamburger-btn" onClick={()=>setMenuShowing(prev => !prev)}>
                 <GiHamburgerMenu/>

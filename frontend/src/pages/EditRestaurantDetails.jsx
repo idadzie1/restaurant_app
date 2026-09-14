@@ -209,7 +209,7 @@ const EditRestaurantDetails = () => {
                 id='nor'
                 onChange={handleChanges}            
             />
-            <label htmlFor="file">upload cover photo</label>
+            <label className='form-restaurant' htmlFor="file">upload cover photo</label>
             <input 
                 type="file"
                 name='coverPhoto'

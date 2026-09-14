@@ -21,7 +21,8 @@ const Header = ({ searchItem, setSearchItem }) => {
             <img src={HeaderImage} alt="" />
             <div className="search-text">
               <form>
-              <input 
+              <input
+                className='' 
                 type="text" 
                 name='search'
                 value={searchItem} 

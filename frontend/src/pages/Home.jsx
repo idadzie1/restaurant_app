@@ -24,8 +24,8 @@ const [ showConfirmAndAck, setShowConfirmAndAck ] = useState(false);
 const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox ] = useState(false)
 const {currentUser} = useContext(UserContext);
 
-const [ confirm, setConfirm ] = useState("");
-const [ acknowledgement, setAcknowledgement ] = useState("");
+const [ confirm, setConfirm ] = useState(false);
+const [ acknowledgement, setAcknowledgement ] = useState(false);
 
 
 
@@ -126,7 +126,7 @@ const [ acknowledgement, setAcknowledgement ] = useState("");
         const claim = async ()=>{
           try {       
           
-            if(!confirm || !acknowledgement){
+            if(confirm ===false || acknowledgement === false){
               setShowConfirmAndAck(false)
               setErrorMessage("Check the boxes for confirmation and acknowlegdement")              
               setShowErrorAndResDialogueBox(true)

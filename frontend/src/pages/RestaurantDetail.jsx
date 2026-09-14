@@ -7,6 +7,10 @@ import { FaInstagram } from "react-icons/fa6";
 import { UserContext } from '../context/userContext';
 import { useParams } from 'react-router-dom';
 import Loader from '../components/Loader/Loader.jsx'
+import SuccessDialogueBox from '../components/modals/SuccessDialogueBox.jsx';
+import FailureDialogueBox from '../components/modals/FailureDialogueBox.jsx';
+import PromptYesNoDialogueBox from '../components/modals/PromptYesNoDialogueBox.jsx';
+import DialogueBox from '../components/modals/Dialoguebox.jsx';
 
 
 // on this page, has detailed information about restaurant.
@@ -15,13 +19,22 @@ import Loader from '../components/Loader/Loader.jsx'
 
 const RestaurantDetail = () => {
   const [ galleryInfo, setGalleryInfo ] = useState([]);
+  const [ notification, setNotification ] = useState("Do You want to delete")
   const [ restaurant, setRestaurant ] = useState({});  
   const { currentUser } = useContext(UserContext);
-  const [ errorMessage, setErrorMessage ]=useState("");
-  const [ loading, setLoading]  = useState(true)
+  const [ selectedMenuId, setSelectedMenuId ] =useState(null)
+  const [ errorMessage, setErrorMessage ] = useState("");
+  const [ showSuccess, setShowSuccess ] = useState(false);
+  const [ showPrompt, setShowPrompt ] = useState(false);
+  const [ showFailure, setShowFailure ] = useState("")
+  const [ deletionSuccessMessage, setDeletionSuccessMessage ] = useState("")
+  const [ galleryObjId, setGalleryObjId ] = useState("")  
+  const [ loading, setLoading ] = useState(true);
 
   const userId = currentUser?.id
-  const {restaurantId} = useParams()  
+  const token = currentUser?.token
+  const { restaurantId, menuId } = useParams()  
+  
   
 
   useEffect(()=>{
@@ -34,7 +47,8 @@ const RestaurantDetail = () => {
      
       
        if(!response.ok){         
-         setErrorMessage(data) 
+         setErrorMessage(data.message)
+         setShowFailure(true) 
          return                  
       }       
       
@@ -58,31 +72,127 @@ const RestaurantDetail = () => {
    if (loading) {    
      return  <Loader /> 
     
-    }
+    }   
+  
 
-  console.log(restaurant)
-  console.log("This is restaurant.creator", restaurant.creator)
-  console.log("This is restaurant.claimedBy", restaurant.claimedBy)
-  console.log("This is userId", userId)
-
-
+    // This menu change will have to link to a menu edit page to change photo or description or both
    const handleMenuChange =()=>{
 
    }
 
-   const handleMenuDelete = ()=>{
+   const clickToDeleteMenu=()=>{
+     setShow(true)
+   }
+
+  // This delete will just propmt a dialogue for confirmation to continue on this same page
+   const handleMenuDelete = async()=>{         
+    try {
+          const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/${restaurantId}/menu/${selectedMenuId}`, {
+            method: 'DELETE',
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          })
+
+          const data = await response.json()
+
+          if(!response.ok){
+            setShowFailure(true)
+             setShowPrompt(false)
+            setErrorMessage(data.message)
+            return
+          }
+
+          setShowSuccess(true)
+          setDeletionSuccessMessage(data.message)
+          setShowPrompt(false)
+          return 
+        
+       
+        } catch (error) {
+          setErrorMessage(error.message)
+          setShowFailure(true)
+           setShowPrompt(false)
+          return
+          }  
+    
+    }
+
+    const handlePopmptYesNo = (menuId)=>{
+      setSelectedMenuId(menuId) 
+      setShowPrompt(true)               
+      return
+    }
+  //  =============================================================================================
+  //  const handleCancel = ()=>{
+  //     setShowPrompt(true)
+  //     return
+  //  }
+
+   const handleOkClickDeletionDialogueBox =()=>{
+     setShow(false)
+     return
+   }
+
+  //  ============================ Delete Gallery image ==================================================
+
+   const handleRemove = (galleryObjId)=>{
+      setShowPrompt(true)
+      setGalleryObjId(galleryObjId)
+   }
+
+   const handleGalleryPhotoDelete = async()=>{
+     const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/${restaurantId}/gallery/${galleryObjId}`, {
+      method:"DELETE",
+      headers:{
+        Authorization:`Bearer ${token}`
+      }
+     })
+
+          
+      const data = await response.json()
+      console.log("This is data". data)
+
+      if(!response.ok){
+        setErrorMessage(data.message)
+        setShowFailure(true)
+        return
+      }
+      
+      setShowSuccess(true)
+      setDeletionSuccessMessage(data.message)
+      setShowPrompt(false)
+      return
 
    }
+
+     console.log("restaurant ID", restaurantId)
+      console.log("galleryObjID", galleryObjId)
   
   return (
-    <section className='detail-info'>
+    <section className='detail-info'>      
+      { showPrompt && <DialogueBox 
+        clickOnOk={handleMenuDelete}
+        clickOkOnDelOfGalleryImg={handleGalleryPhotoDelete}
+        notifyToProceedToDelGalleryImg={notification}  
+        notificationToProceedOrNot={notification} 
+        clickOnCancel={()=>setShowPrompt(false)} 
+        /> }
+
+      { showFailure && <FailureDialogueBox 
+        deletionErrorRes={errorMessage}
+        deletionErrorGalleryImg={errorMessage}
+        oKone={()=>setShowFailure(false)}
+      />}
+
+      { showSuccess && <SuccessDialogueBox 
+        deletionSuccessRes={deletionSuccessMessage}
+        galleryImgDelSuccess={deletionSuccessMessage}
+        oK={()=>setShowSuccess(false)} 
+        />}
+  
       <h2 className='restuarant-name'>{restaurant.name}</h2>
-      {/* {userId && restaurant.creator &&<div className="controls">        
-        <Link to={`/uploadgallery/${restaurantId}`}><button className='btn-gallery'>Add to Gallery</button></Link>
-        <Link to={`/menuupload/${restaurantId}`}><button className='btn-menu'>Add to Menu</button></Link>
-        <Link to={`/editdetails/${restaurantId}`}><button className='btn-edit'>Edit</button></Link>        
-        <Link to={`/ownerpage/${restaurantId}`}><button className='btn-dash'>Dashboard</button></Link>        
-      </div>} */}
+
       <div className="cover-image">
         <img
             src={`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${restaurant.coverPhoto}`}
@@ -135,8 +245,9 @@ const RestaurantDetail = () => {
                 <p>{description}</p>
               </div>
             </div>
-              {userId && restaurant.creator && <div className="button-class">
-                <button onChange={handleMenuChange}>Change</button><button onChange={handleMenuDelete}>Remove</button> 
+              {userId === restaurant.claimedBy && <div className="button-class">
+                <Link to={`/editmenu/${restaurantId}/${_id}`}><button onChange=''>Change</button></Link>
+                <button onClick={()=>handlePopmptYesNo(_id)}>Remove</button> 
               </div>}                       
           </div> })}         
         </div>
@@ -152,13 +263,14 @@ const RestaurantDetail = () => {
             <button className='add-gallery'>Add Gallery</button>
           </Link>}
           <div className="gallery">
-            {restaurant.gallery.map((item, id)=>(
+            {restaurant.gallery.map((galleryImage)=>(
               <div className='gallery-item'>
                 <div className="image">
-                  <img key={id} src={item} alt="" />                             
+                  <img key={galleryImage._id} src={`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${galleryImage.galleryImage}`} alt="gallery Image" />                             
                 </div>
                 {userId && <div className="button-class">
-                  <button>Change</button><button>Remove</button> 
+                  <Link to={`/${restaurantId}/gallery/${galleryImage._id}`}><button>Change</button></Link>
+                  <button onClick={()=>handleRemove(`${galleryImage._id}`)}>Remove</button> 
                 </div>}                
               </div>                      
             ))}  
@@ -169,7 +281,7 @@ const RestaurantDetail = () => {
           <iframe src={restaurant.googleMap} frameborder="0"></iframe>
         </div>
     </section>
-  
+    //  {`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${galleryImage}`}
   )
 }
 
