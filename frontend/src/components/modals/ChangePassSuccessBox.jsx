@@ -1,15 +1,15 @@
 import React from 'react'
 
-const ChangePassSuccessBox = () => {
+const ChangePassSuccessBox = ({ successResponse, clcikingOk }) => {
   return (
         <div className='confirmation-modal'>
       <div className="modal-information">
         <div className="confirmation-notice">
-            <p></p>
+            <p>{successResponse}</p>
         </div>
         <div className="buttons-controls">         
-              <button onClick=''>Yes</button>              
-              <button onClick=''>No</button>       
+              <button onClick={clcikingOk}>Ok</button>              
+                    
                    
         </div>
       </div>      

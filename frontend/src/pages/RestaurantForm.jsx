@@ -12,6 +12,7 @@ const RestaurantForm = () => {
     const [restaurantData, setRestaurantData] = useState({
          name: '',
          photo: '',
+         captionPhoto: '',
          priceRange:{min:'', max:''},       
          openingHours:{open:'', close:''},
          phone:'',         
@@ -78,6 +79,7 @@ const RestaurantForm = () => {
       setRestaurantData({
          name: '',
          coverPhoto: '',
+         captionPhoto: '',
          priceRange:{min:'', max:''},       
          openingHours:{open:'', close:''},
          phone:'',         
@@ -98,6 +100,7 @@ const RestaurantForm = () => {
     const formData = new FormData();
         formData.append("name", restaurantData.name);
         formData.append("coverPhoto", file);
+        formData.append("captionPhoto", restaurantData.captionPhoto)
         formData.append("min", restaurantData.priceRange.min);
         formData.append("max", restaurantData.priceRange.max);
         formData.append("open", restaurantData.openingHours.open);
@@ -196,7 +199,15 @@ const RestaurantForm = () => {
                 id='file'
                 onChange={handleFileChanges} 
             />
-            
+
+            <label htmlFor="SDMessage">Short Descriptive Message</label>
+            <textarea 
+                name="captionPhoto" 
+                id="SDMessage"
+                value={restaurantData.captionPhoto}
+                onChange={handleChanges}             
+            ></textarea>
+
             <label htmlFor="price">Price range</label>
             <div className="max-min">
                 <div className="min">min</div>

@@ -53,24 +53,18 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                         Opening Hours: {open} - {close}
                     </div>
                     <div className="contact text">
-                        <span className='telephone'><BsTelephone /> {phone}</span>
-                        <span className='whatsapp'><FaWhatsapp /> {whatsapp}</span>
-                        <span className='mail'><MdOutlineMail /> {email}</span>                  
-                                                  
-                        <span className='facebook'> <FaFacebook /> <FaFacebook /> <FaFacebook /> </span>           
+                        <span className='telephone'><BsTelephone /><a href={`tel:${phone}`}>Call</a></span>
+                        <span className='whatsapp'><FaWhatsapp /><a href={`https://wa.me${whatsapp}`}>Whatsapp</a></span>
+                        <span className='mail'><MdOutlineMail /><a href={`mailto:${email}`}>email</a></span>       
+                        
                         
                         <span>{location} : {area}</span> 
                     </div>
-                    <div className=" text">
+                    <div className="clicktext text">
                         <Link to={`restaurants/${restaurantId}`}>Click to see menu</Link>
                         
                     </div>
-                    <div className="reviews-ownership">
-                            <span className=''><IoIosStarOutline /></span>
-                            <span className=''><IoIosStarOutline /></span>
-                            <span className=''><IoIosStarOutline /></span>
-                            <span className=''><IoIosStarOutline /></span>
-                            <span className=''><IoIosStarOutline /></span>                                
+                    <div className="reviews-ownership">                        
                         
                         <div className="owner text">
                             <span onClick={onClick}>Claim ownership</span>
@@ -78,7 +72,7 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                         </div>
                     </div>
                     <div className="website">
-                        <span className='text'><a href={website}>website</a></span>
+                        <span className='text'><a href={website}>Visit website</a></span>
                     </div>
                     <hr />
                 </div>

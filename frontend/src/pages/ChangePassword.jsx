@@ -4,14 +4,17 @@ import { UserContext } from '../context/userContext';
 import { useNavigate } from 'react-router-dom' 
 import ChangePassErrorBox from '../components/modals/ChangePassErrorBox';
 import ChangePassSuccessBox from '../components/modals/ChangePassSuccessBox';
+import Loader from '../components/Loader/Loader';
 
 const ChangePassword = () => {
 
-  const [errorMsg, setErrorMessage] = useState('')
-  const [showError, setShowError] = useState(false)
-  const [ successResponse, setSuccessResponse ] = useState("")
+  const [ errorMsg, setErrorMessage ] = useState('');
+  const [ showSuccessModalModal, setShowSuccessModal ] = useState(false);
+  const [ successResponse, setSuccessResponse ] = useState("");
+  const [ showErrorModal, setShowErrorModal ] = useState(false)
+  const [ loading, setLoading ] = useState(false)
 
-  const [userInfo, setUserInfo ]=useState({
+  const [ userInfo, setUserInfo ]=useState({
     currentPassword: "",
     newPassword: "",
     cfmNewPassword: ""
@@ -37,38 +40,64 @@ const ChangePassword = () => {
 
     const handleSubmit= async (e)=>{
       e.preventDefault()
+      if(!userInfo.currentPassword || !userInfo.newPassword || !userInfo.cfmNewPassword){
+          setErrorMessage("Fill in all spaces")
+          setShowErrorModal(true)
+          return
+      }
+
       try {
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/users/${userId}/changePassword}`,{
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/users/${userId}/change-Password`,{
           method: 'PATCH',
           headers:{
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
           },
-          body: JSON.stringyfy(userInfo)
+          body: JSON.stringify(userInfo)
         })
 
-        data = response.json();
+          const data = await response.json();
 
-        if(response.ok){
+          console.log(data)
+
+        if(!response.ok){
           setErrorMessage(data.message)
-          setShowError(true)
+          setShowErrorModal(true)
           return
         }
 
         
-        setSuccessResponse(true)
-        setShowSucces(true)
-        setCurrentUser(null)
-        navigate('/login')
+        setSuccessResponse(data.message)
+        setShowSuccessModal(true)
+             
         return
         
       } catch (error) {
           setErrorMessage(error.message)
-          setShowError(true)
+          setShowErrorModal(true)
           return
       }
     }
 
+    const handleOkClickOnSuccess=()=>{
+        setCurrentUser(null)
+        navigate('/login')
+        setShowSuccessModal(false)       
+        return
+    }
+
+  
+
   return (
+    <>
+    {showSuccessModalModal && <ChangePassSuccessBox 
+    successResponse={successResponse} 
+    clcikingOk={handleOkClickOnSuccess}/>}
+
+    {showErrorModal && <ChangePassErrorBox 
+      errorMsg={errorMsg} 
+      clickingOk={()=>setShowErrorModal(false)}/>}
+
     <section className='change-password'>       
       <form className="changePasswordForm" onSubmit={handleSubmit}>
         <h2>Change Password</h2>
@@ -104,7 +133,7 @@ const ChangePassword = () => {
        </div>
       </form>
     </section>
-   
+   </>
   )
 }
 

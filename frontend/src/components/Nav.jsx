@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { useState, useContext } from 'react';
+import { useState, useRef, useContext } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import Logo from '../assets/logo2.png'
@@ -9,13 +9,14 @@ import ppic from '../assets/isu.jpg'
 import { BiSolidDownArrow } from "react-icons/bi";
 import { UserContext } from '../context/userContext';
 import ProfileMenu from '../pages/ProfileMenu';
+import avatar from '../assets/imageAvatar.jpg'
 
 
 const Nav = () => {
   const[menuShowing, setMenuShowing] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false)
    const { currentUser } = useContext(UserContext);
-  
+  const arrowRef = useRef(null)
   const token = currentUser?.token  
   const role = currentUser?.role
   
@@ -54,9 +55,9 @@ const Nav = () => {
               </div>
               <div className="login-container">
                 <Link className='only-desktop' to={token? "/LogOut" : "/login"}>{token? "Log out" :"Sign in"}</Link>
-                {token && <img className='profile-image' onClick='' src={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${currentUser?.profilePic}`}/>}
-                {token && <span className='arrowdn' onClick={()=>setShowProfileMenu(prev=>!prev)}><BiSolidDownArrow /></span>}
-                {showProfileMenu && <ProfileMenu click={()=>setShowProfileMenu(prev=>!prev)} showProfileMenu={showProfileMenu} setShowProfileMenu={setShowProfileMenu}/>}
+                {token && <img className='profile-image' ref={arrowRef} onClick={()=>setShowProfileMenu(prev=>!prev)} src={ currentUser?.profilePic ? `${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${currentUser?.profilePic}` : avatar} alt="profile photo"/>}
+                {/* {token && <span className='arrowdn' onClick={()=>setShowProfileMenu(prev=>!prev)}><BiSolidDownArrow /></span>} */}
+                {showProfileMenu && <ProfileMenu click={()=>setShowProfileMenu(prev=>!prev)} showProfileMenu={showProfileMenu} setShowProfileMenu={setShowProfileMenu} arrowRef={arrowRef}/>}
               </div>
               <div className="hamburger-btn" onClick={()=>setMenuShowing(prev => !prev)}>
                 <GiHamburgerMenu/>

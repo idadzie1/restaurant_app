@@ -2,14 +2,16 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react';
 
-const ProfileMenu = ({click, showProfileMenu, setShowProfileMenu}) => {
+const ProfileMenu = ({click, showProfileMenu, setShowProfileMenu, arrowRef}) => {
 
-        // const [showProfileMenu, setShowMenu] = useState(false);
+       
         const menuProfileRef = useRef(null);
+        // const arrowRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if ( menuProfileRef.current && !menuProfileRef.current.contains(e.target)){
+            if ( menuProfileRef.current && !menuProfileRef.current.contains(e.target) && arrowRef.current &&
+            !arrowRef.current.contains(e.target)){
                 setShowProfileMenu(false);
               }};
 
@@ -18,9 +20,7 @@ const ProfileMenu = ({click, showProfileMenu, setShowProfileMenu}) => {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
-
-
+    }, [setShowProfileMenu, arrowRef]);
 
 
   return (

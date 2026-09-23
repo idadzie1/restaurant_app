@@ -72,6 +72,7 @@ nav{
 .arrowdn{
     /* background-color: red; */
     cursor: pointer;
+    color: #3b43d6;    
 }
 
 .menu-items, .login-container{
@@ -158,6 +159,14 @@ textarea{
     font-family: "Montserrat", sans-serif;
     font-size: medium;
     background-color: #F5F5F5;
+}
+
+.only-desktop{
+    background-color: #3b43d6;
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 0.1rem;
+    box-shadow: 0 0.7em 1.5em -0.5em #3b43d6;
 }
 
 /* ============================================================================================== */
@@ -555,7 +564,7 @@ textarea{
 
 .restaurant-items{    
     margin-top: 1.5rem;
-    display: grid;
+    display: grid;    
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     
@@ -605,6 +614,11 @@ iframe{
     border-bottom-right-radius: 1rem;
 }
 
+.restaurant-photo{
+    width: 18rem;
+    height: 10rem;   
+}
+
 .restaurant-photo img{
     width: 18rem;
     height: 10rem;
@@ -617,8 +631,23 @@ iframe{
 .owner{
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content:space-between;   
 
+}
+
+.owner span{
+    background-color: #3b43d6;
+    color: #fff;
+    border-radius: 2rem;
+    padding: 0.17rem;
+}
+
+.website span a, .clicktext a{
+    /* background-color: #3b43d6; */
+    color: #3b43d6;
+    color: #22396F;
+    border-radius: 0.5rem;
+    padding: 0 0.17rem 0;
 }
 
 .reviews-ownership{
@@ -631,68 +660,62 @@ iframe{
 
 
 /* ================== Home Page Media query ====================== */
-@media screen and (max-width:1024px){
+@media screen and (min-width:320px) and (max-width:600px){
+    .restaurant-items{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .restaurant-item{   
+        width: 100%;
+    }
+  
+}
+
+
+
+ @media screen and (min-width:650px) and (max-width:1024px){
     .restaurant-items{
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 768px){
-   .restaurant-items{
-    gap: 3rem;
-   }
+/* ================================= About Page ============================= */
+section.about{
+    width: 100vw;   
+    margin-top: 5rem;
+}
 
-   iframe, .restaurant-photo img{
-     width: 15rem;
-   }
+.introduction{
+    width: 70%;
+    margin: 0 auto 1rem;
+}
+
+.introduction p:last-child{    
+    margin-top: 1rem;
+} 
+
+.how-it-works{
+    width: 100%;
+    margin: 0 auto 0;
+    /* background-color: #3CB371; */
 }
 
 
-@media (max-width: 600px){
-        .restaurant-items{
-        grid-template-columns: repeat(1, 1fr);
+.accordion-main{
+    width: 70%;
+    margin: 0 auto 0; 
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;  
+}
+
+/* ================================ About media query ================================== */
+@media screen and (min-width:320px) and (max-width:600px){
+    .app-intro{       
+        text-align: justify;
     }
-
-
-    .container{    
-        width: 50%;
-    }    
-
 }
-
-@media (max-width: 480px){
-        .container{    
-        width: 60%;
-        } 
-}
-
-
-@media screen and (max-width:400px){
-    .restaurant-item{       
-    border-radius: 2rem; 
-    border: none solid;
-    
-    
-    }
-
-}
-
-
-@media screen and (max-width:375px) {
-        .restaurant-items{
-            display: flex;
-            flex-direction: column;
-
-        }
-
-        .restaurant-item:hover {
-        border-color: transparent;
-        background-color: transparent;
-    }
-
-
-}
-
 
 /* ================================= register form ========================== */
 .register-form{
@@ -1067,7 +1090,7 @@ input[type='number']{
 }
 
 .cover-image{
-    width: 80%;
+    width: 100%;
     margin: 1.5rem auto 1rem;
 }
 
@@ -1115,6 +1138,20 @@ input[type='number']{
      gap: 3rem;     
      
 }
+.social-media span.whatsapp a{
+ color: #3CB371;
+ font-size: 1.5rem;
+}
+
+.social-media span.facebook a{
+ color: #3b43d6;
+ font-size: 1.5rem;
+}
+
+.social-media span.instagram a{
+    color: orange;
+    font-size: 1.5rem;    
+}
 
 .opening-closing-hours{
     width: 95%;
@@ -1143,26 +1180,30 @@ input[type='number']{
 
 .the-menu-items{
     width: 95%;
-     margin: 2rem auto 1rem;
+    margin: 2rem auto 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 .the-menu-item{
-    width: 100%;
-    border: 1px gray solid;
-    border-radius: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
     gap: 1rem;
-    padding: 0.25rem;
+    border-radius: 1rem;
+    outline: 1px solid gray;
 }
 
 .menu-photo-left-side{
     width: 20rem;
     height: 15rem;
+    display:flex; 
+    align-items: center;
+    justify-content: center;   
 }
 
 .menu-photo-left-side img{
+    display: block;
     width: 20rem;
     height: 15rem;
     border-radius: 0.5rem;
@@ -1171,7 +1212,12 @@ input[type='number']{
 
 .right-side{
     height: 15rem; 
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;    
 }
+
+
 
 .the-menu-item .button-class{
     display: flex;    
@@ -1179,19 +1225,29 @@ input[type='number']{
    
 }
 
-.right-side:hover{
-    background-color: lightgray;
+.right-side:hover{    
     transition: all 300ms ease;
     cursor: pointer;       
     
 }
 
 .menu-name-menu-price{
-    width: 50%;
+    width: 40rem;
+    width: 100%;    
     display: flex;
-    justify-content: space-around;
-    margin: 1rem auto;
+    justify-content:space-around;
+    margin: 1rem auto 0rem;
+    font-weight: 700;
+   
+}
 
+.menu-name-menu-price-description .menu-description{    
+    margin: 1rem auto 0rem;
+    
+}
+
+.right-side .button-class{
+    margin-top: -2rem;    
 }
 
 .dishes{
@@ -1258,7 +1314,8 @@ button.add-menu, button.add-gallery{
 .button-class{
     display: flex;
     justify-content: space-around;
-    margin-top: 0.5rem;
+    align-items: center;
+   
 }
 
 .image img{
@@ -1291,6 +1348,8 @@ button.add-menu, button.add-gallery{
     height: 10rem;
 }
 
+
+
 /* =================== Restaurant form page and edit restuarant form page ================  */
 
 .admin-form input[type="file"]{
@@ -1320,9 +1379,7 @@ label.form-restaurant{
         gap: 1rem;
     }
 
-    .the-menu-item{
-        padding: 0rem;
-    }
+  
 
     .description-text{
         width: 95vw;       
@@ -1336,19 +1393,17 @@ label.form-restaurant{
         height: 15rem;
     }
 
+    .right-side{
+        border-bottom: none
+    }
+
 
     .menu-photo-left-side{
-        width: 95vw;
-        margin-left: 2.5vw;
-        margin-right: 2.5vw;
+        width: 100%;       
     }
 
     .menu-photo-left-side img{
-        width: 95vw;
-   
-    /* height: 15rem;
-    border-radius: 0.5rem;
-    object-fit: cover; */
+        width: 100%;   
     }
 
     .menu-name-menu-price{
@@ -1370,19 +1425,30 @@ label.form-restaurant{
     }
 
 
-    .the-menu-item{
+     .the-menu-item{
+        display: flex;
         flex-direction: column;
         padding: 0rem;
-        
+        outline: none; 
+        border-bottom: 1px solid gray;
+        border-radius: 0;       
     }
 
     .menu-description{
         width: 95vw;       
-        text-align:justify;        
+        text-align:justify;
+        font-size: small;        
     }
 
     .dishes{
         width: 70%;
+    }
+
+    .button-class{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding-bottom: 0.5rem;
     }
 
     .gallery{
@@ -1518,6 +1584,10 @@ input.fileupload{
     height: 2rem;
 }
 
+.gallery-item .button-class{
+    margin-top: 0.5rem;
+}
+
 .filename-display{
     width: 100%;
     text-align: center;
@@ -1526,6 +1596,14 @@ input.fileupload{
 /* ======================================Edit gallery/change gallery photo page =============  */
 
 @media screen and (min-width:320px) and (max-width:600px){
+    .gallery-upload{
+        width: 95%;
+    }
+
+    .gallery-upload form{
+        width: 100%;
+    }
+    
     .edit-gallery form label{
         width: 70%;
     }
@@ -1635,6 +1713,7 @@ textarea{
 #edit-menu{
     position: relative; 
     margin-top: 5rem;
+    width: 100%;    
 }
 
 
@@ -1655,6 +1734,7 @@ input#img{
 #edit-menu form{
     position: relative;
     margin-top: 1rem;
+    
 }
 
 #edit-menu form label {
@@ -1699,12 +1779,35 @@ input#img{
         
 }
 
+#edit-menu form .description{
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
 
 #edit-menu form textarea{
-    width: 60%;
+    width: 60%; 
+    margin: 0 auto 0;
+}
+
+#edit-menu form .button-class{
     margin-top: 1rem;
-    margin-left: 20%;
-    margin-right: 20%;
+}
+
+/* ================================== edit Menu ================================== */
+@media screen and (min-width:320px) and (max-width:600px) {
+   .inputs{
+    width: 90%;
+   }
+
+   #edit-menu form textarea{
+    width: 90%;
+   }
+
+   #edit-menu form label{
+    width: 80%;
+
+   }
 }
 
 /* ==============================Error Page ====================================== */
@@ -1946,8 +2049,78 @@ input.profileInput-label{
 /* ========================= Footer CSS =============================================== */
 
 footer{
-    margin-top: 1rem;
-    width: 100vw;
-    height: 10rem;
+    margin-top: 5rem;
+    width: 100vw;   
     background-color: gray;
+}
+
+.footer-container{
+    margin: 1rem auto 1rem;
+    width: 95%;
+    color: #fff       
+}
+
+.footer-menus{
+    border-bottom: solid #F5F5F5;
+}
+
+.footer-menus ul a{
+   color: #fff;
+}
+
+.footer-menus ul{
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+
+.address-socials{
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+footer small{
+    display: block;
+    background-color:#fff;
+    width: 100%;
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+/* =================================== Media Queries footer ============================================= */
+@media screen and (min-width:320px) and (max-width:600px){
+    footer{
+        margin-top: 6rem;
+    }
+    .footer-menus ul{
+    flex-direction: column;
+    gap: 2rem;
+    height: fit-content;
+    } 
+    
+    .address-socials{
+        flex-direction: column;
+        justify-content:space-between;
+        /* align-items:center; */
+        text-align: justify;
+        gap: 2rem;
+        /* background-color: #3b43d6; */
+    }
+
+    .address, .contacts{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 }

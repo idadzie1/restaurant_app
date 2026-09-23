@@ -5,6 +5,7 @@ const {Schema, model} = require("mongoose");
 const restaurantSchema = new Schema({
     name: {type:String, required: true},
     coverPhoto: {type:String, required:true},
+    captionPhoto: {type:String, required:true},
     priceRange:{
         min:{type: Number, required: true},
         max:{type: Number, required: true}

@@ -32,6 +32,7 @@ const RestaurantDetail = () => {
   const [ loading, setLoading ] = useState(true);
 
   const userId = currentUser?.id
+  const userRole = currentUser?.role
   const token = currentUser?.token
   const { restaurantId, menuId } = useParams()  
   
@@ -201,33 +202,33 @@ const RestaurantDetail = () => {
       </div>
       <div className="description-text">
         <article>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis officiis, dolore molestiae excepturi laboriosam facere ratione at sit officia dolorum in consectetur est. 
+         {`${restaurant.captionPhoto}`}
         </article>
       </div>
       <div className="contact-details">
         <h3>Contact</h3>
         <div className="contact">
-          <div className="phone-contact">Phone: {restaurant.phone}</div>
-          <div className="website">{restaurant.website}</div>
-          <div className="email-contact">email: {restaurant.email}</div>
+          <div className="phone-contact"><a href={`tel:${restaurant.phone}`}>call</a></div>
+          <div className="website"><a href={`${restaurant.website}`}>website</a></div>
+          <div className="email-contact"><a href={`mailto:${restaurant.email}`}>email</a></div>
         </div>
         <div className="social-media">
-          <span><a href={restaurant.socials.whatsapp} target="_blank" rel="noreferrer"><FaWhatsapp /></a></span>
-          <span><a href={restaurant.socials.facebook} target="_blank" rel="noreferrer"><FaFacebook /></a></span>
-          <span><a href={restaurant.socials.instagram} target="_blank" rel="noreferrer"><FaInstagram /></a></span>
+          <span className='whatsapp'><a href={`https://wa.me/${restaurant.socials.whatsapp}`} target="_blank" rel="noreferrer"><FaWhatsapp /></a></span>
+          <span className='facebook'><a href={`${restaurant.socials.facebook}`} target="_blank" rel="noreferrer"><FaFacebook /></a></span>
+          <span className='instagram'><a href={`${restaurant.socials.instagram}`} target="_blank" rel="noreferrer"><FaInstagram /></a></span>
         </div>
         {/* {console.log(restaurant.whatsapp)} */}
       </div>
       <div className="opening-closing-hours">
         <h3>Opening Hours</h3>
         <div className="opening-closing">
-            <span className='open'> Open: {restaurant.openingHours.open}</span>
-            <span className='close'> Close: {restaurant.openingHours.close}</span>            
+            <span className='open'> Open: {`${restaurant.openingHours.open}`}</span>
+            <span className='close'> Close: {`${restaurant.openingHours.close}`}</span>            
         </div> 
       </div>
       <div className="menu-dishes">
         <h3 className='menu-heading'>Menu</h3>
-        {userId === restaurant.claimedBy && <Link to={`/menuupload/${restaurantId}`}>
+        {userId === restaurant.claimedBy || userRole === 'admin' && <Link to={`/menuupload/${restaurantId}`}>
          <button className='add-menu'>Add Menu</button>
         </Link>}       
         <div className="the-menu-items">          
@@ -237,29 +238,27 @@ const RestaurantDetail = () => {
               <img src={`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${menuPhoto}`} alt="menu image" />
             </div>
            <div className="right-side"> 
-             <div className="menu-name-menu-price">
-               <div className="menu-name">Name: {name}</div>
-               <div className="menu-price">Price: Ghs {price}</div>            
-              </div>
-              <div className="menu-description">
-                <p>{description}</p>
-              </div>
-            </div>
-              {userId === restaurant.claimedBy && <div className="button-class">
+              <div className="menu-name-menu-price-description">
+                <div className="menu-name-menu-price">
+                  <div className="menu-name">Name: {name}</div>
+                  <div className="menu-price">Price: Ghs {price}</div>            
+                </div>
+                <div className="menu-description">
+                  <p>{description}</p>
+                </div>
+              </div>              
+              {userId === restaurant.claimedBy || userRole === 'admin' && <div className="button-class">
                 <Link to={`/editmenu/${restaurantId}/${_id}`}><button onChange=''>Change</button></Link>
                 <button onClick={()=>handlePopmptYesNo(_id)}>Remove</button> 
-              </div>}                       
-          </div> })}         
+              </div>}
+              </div>                       
+          </div> })}                 
         </div>
-        {/* <ul className='dishes'>
-          {galleryInfo[0].menu.map((menu, id) =>(
-            <li key={id}>{menu}</li>
-          ))} 
-        </ul> */}
+
       </div>  
         <div className="gallery-section">
           <h3>Photo Gallery</h3>
-         {userId && restaurant.claimedBy && <Link to={`/uploadgallery/${restaurantId}`}>
+         {userId === restaurant.claimedBy || userRole==="admin" && <Link to={`/uploadgallery/${restaurantId}`}>
             <button className='add-gallery'>Add Gallery</button>
           </Link>}
           <div className="gallery">
@@ -268,7 +267,7 @@ const RestaurantDetail = () => {
                 <div className="image">
                   <img key={galleryImage._id} src={`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${galleryImage.galleryImage}`} alt="gallery Image" />                             
                 </div>
-                {userId && <div className="button-class">
+                {userId === restaurant.claimedBy || userRole==="admin" &&<div className="button-class">
                   <Link to={`/${restaurantId}/gallery/${galleryImage._id}`}><button>Change</button></Link>
                   <button onClick={()=>handleRemove(`${galleryImage._id}`)}>Remove</button> 
                 </div>}                

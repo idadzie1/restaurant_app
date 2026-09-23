@@ -1,15 +1,14 @@
 import React from 'react'
 
-const ChangePassErrorBox = () => {
+const ChangePassErrorBox = ({ errorMsg, clickingOk}) => {
   return (
         <div className='confirmation-modal'>
       <div className="modal-information">
         <div className="confirmation-notice">
-            <p></p>
+            <p>{errorMsg}</p>
         </div>
         <div className="buttons-controls">         
-              <button onClick=''>Yes</button>              
-              <button onClick=''>No</button>       
+              <button onClick={clickingOk}>Ok</button>       
                    
         </div>
       </div>      

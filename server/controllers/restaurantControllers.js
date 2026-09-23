@@ -10,7 +10,7 @@ const { userInfo } = require("os");
 const createRestaurant = async (req, res, next)=>{
     try {
           
-        const {name, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;        
+        const {name, captionPhoto, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;        
   
         
 
@@ -60,7 +60,7 @@ const createRestaurant = async (req, res, next)=>{
                     return next(new HttpError("Could not upload file", 422))
                 }
 
-                const newRestauant = await Restaurant.create({name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, approvalStatus:"approved", creator:req.user.id})
+                const newRestauant = await Restaurant.create({name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, approvalStatus:"approved", creator:req.user.id})
                 res.status(201).json("Success. Pending verification and approval")
             })
             }else{
@@ -69,7 +69,7 @@ const createRestaurant = async (req, res, next)=>{
                     return next(new HttpError("Could not upload file", 422))
                 }
 
-                const newRestauant = await Restaurant.create({name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, claimed:true, approvalStatus:"pending", claimer:req.user.firstName, claimedBy:req.user.id, creator:req.user.id})
+                const newRestauant = await Restaurant.create({name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, claimed:true, approvalStatus:"pending", claimer:req.user.firstName, claimedBy:req.user.id, creator:req.user.id})
                 res.status(201).json("Success. Pending verification and approval")
             })
         }        
@@ -90,7 +90,7 @@ const editRestaurant = async (req, res, next)=>{
         const {restaurantId} = req.params;
         const findRestaurant = await Restaurant.findById(restaurantId);
 
-        const {name, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;
+        const {name, captionPhoto, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;
        
 
         if(!name || min == null || max == null || !open || !close || !phone || !email || !whatsapp || !facebook || !instagram || !location || !area || !website || !googleMap){
@@ -104,7 +104,7 @@ const editRestaurant = async (req, res, next)=>{
 
         if((req.user.id === findRestaurant.creator.toString()) || (req.user.role === 'user' && findRestaurant.approved)){
             if(!req.files){
-                const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap}, {returnDocument:'after'});
+                const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap}, {returnDocument:'after'});
                 res.status(201).json({message:"Success", data:updated})
 
             }else if(req.files){
@@ -125,7 +125,7 @@ const editRestaurant = async (req, res, next)=>{
                     if(err){
                         return next(new HttpError(err.message))
                     }else{
-                        const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto:newFileName}, {returnDocument:'after'});
+                        const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto:newFileName}, {returnDocument:'after'});
                         res.status(201).json({message:"Success", data:updated}) 
                     }
 
@@ -493,7 +493,7 @@ const getAMenu = async (req, res, next)=>{
             return next(new HttpError("Menu could not be found", 404))
          }
 
-        if(req.user.id === restaurant.claimedBy.toString()){        
+        if(req.user.id === restaurant.claimedBy || req.user.role === "admin"){        
             res.status(200).json(menu)
         }
 
@@ -549,7 +549,7 @@ const uploadToGallary = async (req, res, next)=>{
         const { restaurantId } = req.params;
         const restaurant = await Restaurant.findById(restaurantId)         
 
-        if(req.user.id === restaurant.claimedBy.toString() || req.user.role === 'admin'){            
+        if(req.user.id === restaurant.claimedBy || req.user.role === 'admin'){            
             
             if(!req.files){
                 return next(new HttpError("Please select an image", 422))

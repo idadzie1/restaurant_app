@@ -276,7 +276,8 @@ const changePassword = async (req, res, next)=>{
         if(!loggedInUser){
             return next(new HttpError("User does not exist", 422))
         }
-        const {currentPassword, newPassword, cfmNewPassword } = req.body;
+        
+        const { currentPassword, newPassword, cfmNewPassword } = req.body;
 
         if(!currentPassword || !newPassword || !cfmNewPassword){
             return next(new HttpError("Fill in all the fields", 422))
@@ -305,7 +306,7 @@ const changePassword = async (req, res, next)=>{
             return next(new HttpError("Password Change unsuccessful", 422))
         }
 
-        res.status(200).json("Password Change successful")        
+        res.status(200).json({message: "Password Change successful"})        
                         
     } catch (error) {
         return next(new HttpError(error.message))

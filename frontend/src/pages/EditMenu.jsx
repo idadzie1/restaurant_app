@@ -53,8 +53,7 @@ const EditMenu = () => {
           setErrorMessage(data.message)
         }
 
-        setMenuData(data)
-     
+        setMenuData(data)     
 
 
       } catch (error) {
@@ -66,6 +65,7 @@ const EditMenu = () => {
 
   }, [restaurantId, menuId])
  
+    console.log("menu Data", menuData)
  
   const handleChanges=(e)=>{
     const name = e.target.name    

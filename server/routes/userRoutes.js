@@ -8,7 +8,7 @@ router.post('/login', loginUser);
 router.get('/:id', getUser);
 router.get('/', allUsers);
 router.patch("/:userId/change-avatar", authMiddleWare, changeAvatar);
-router.patch("/:userId/changePassword", authMiddleWare, changePassword)
+router.patch("/:userId/change-Password", authMiddleWare, changePassword)
 router.patch("/:userId/edit-user", authMiddleWare, editUser);
 
 

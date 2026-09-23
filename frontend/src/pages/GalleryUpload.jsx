@@ -42,7 +42,7 @@ const GalleryUpload = () => {
         })
 
         const data = await response.json()
-            console.log(data.data)
+            
 
         if(!response.ok){
             setErrorMessage(data.message)
@@ -80,7 +80,7 @@ const handleClear =()=>{
  const okOnSuccess =()=>{
     navigate(`/restaurants/${restaurantId}`)
     setShowSuccess(false)
-    setLoader(true)
+    
   }
 
 
