@@ -778,6 +778,14 @@ section.about{
     .app-intro{       
         text-align: justify;
     }
+
+    .introduction{
+        width: 90%;
+    }
+
+    .accordion-main{
+       width: 90%; 
+    }
 }
 
 /* ================================= register form ========================== */
