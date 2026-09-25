@@ -94,7 +94,7 @@ nav{
     display: flex;   
     align-items: center;
     gap: 0.5rem;
-    width: 7rem;
+    width: 15rem;
     padding: 0.25rem;
     
 }
@@ -144,6 +144,11 @@ img.profile-image{
     align-items: center;
     /* background-color: #FF6B35; */
     border-bottom: solid 1px green;
+    transition: all 200ms ease-in;   
+}
+
+.profile ul li:hover{
+    background-color: #F3F4F4;
 }
 
 .closeprofile{
@@ -161,7 +166,7 @@ textarea{
     background-color: #F5F5F5;
 }
 
-.only-desktop{
+.only-desktop, .sign-up{
     background-color: #3b43d6;
     color: #fff;
     border-radius: 0.5rem;
@@ -169,19 +174,29 @@ textarea{
     box-shadow: 0 0.7em 1.5em -0.5em #3b43d6;
 }
 
+.only-desktop:hover, .sign-up:hover{
+    background-color: #363199  ;
+}
+
+/* 363199 */
+
 /* ============================================================================================== */
 /* =============================== Nav Media Queries ============================================*/
 /* ============================================================================================== */
 
-/* arrowdn */
 
-/* @media screen and (min-width:320px) and (max-width:1024px) {
- .login-container{
-   
-   
-    
- }
-} */
+
+@media screen and (min-width:320px) and (max-width:1024px) {
+
+    .login-container{
+        justify-content: center;
+    }
+
+    .sign-up{
+      display: none;   
+             
+    }
+}
 
 @media screen and (min-width:1024px){
   
@@ -415,6 +430,27 @@ textarea{
     width: 100%;
 }
 
+.header-sign-up{
+    position: absolute;
+    background-color:#FF6B35;
+    background-color: #76C0EC;
+    background-color: #2373F4;
+    color: #fff;
+    width: 50%;
+    height: 3rem;  
+    top: 20rem;
+    left: 25%;
+    right: 25%;
+    bottom: 0rem;    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1.5rem;
+    display: none;    
+    /* font-weight: 700;    */
+   
+}
+
 .banner-text{
     position: absolute;
     left: 2rem;
@@ -503,6 +539,17 @@ textarea{
         font-size: 2rem;
         width: 15rem;
     }
+
+ 
+}
+
+@media(max-width: 960px){
+       .header-sign-up{
+           display: flex;
+           width: 30%;
+           left: 35%;
+           right: 35%;      
+        }
 }
 
 
@@ -511,6 +558,13 @@ textarea{
             font-size: 2rem;
             width: 10rem;
     }
+
+     .header-sign-up{
+           display: flex;
+           width: 40%;
+           left: 30%;
+           right: 30%;      
+        }
 }
 
 
@@ -525,12 +579,21 @@ textarea{
             top: 3.5rem;
         }
 
-        @media (max-width: 480px){
+
+        .header-sign-up{
+           display: flex;
+                
+        }
+      
+}
+
+
+
+@media (max-width: 480px){
             .banner-text{
                 font-size: 1.5rem;
             }
         }
-}
 
 @media (max-width: 360px){
     .search-text{

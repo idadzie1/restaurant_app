@@ -10,10 +10,10 @@ const TermsAndConditions = () => {
         <header className="legal-header">
           <h1>Terms &amp; Conditions</h1>
           <p>
-            <strong>Effective Date:</strong> [DATE]
+            <strong>Effective Date:</strong> 23rd September, 2026
           </p>
           <p>
-            <strong>Last Updated:</strong> [DATE]
+            <strong>Last Updated:</strong> 23rd September, 2026
           </p>
         </header>
 
@@ -21,7 +21,7 @@ const TermsAndConditions = () => {
           <h2>1. Acceptance of These Terms</h2>
           <p>
             These Terms &amp; Conditions govern your use of{" "}
-            <strong>[RESTAURANT DIRECTORY NAME]</strong> ("Platform").
+            <strong>Dine Finder</strong> "Platform".
           </p>
 
           <p>
@@ -235,7 +235,7 @@ const TermsAndConditions = () => {
           <h2>11. Intellectual Property</h2>
           <p>
             The Platform's software, branding, design, logos and original
-            content belong to [LEGAL NAME] or its licensors unless otherwise
+            content belong to Astrolyncs Systems or its licensors unless otherwise
             stated.
           </p>
 
@@ -289,7 +289,7 @@ const TermsAndConditions = () => {
         <section>
           <h2>14. Limitation of Liability</h2>
           <p>
-            To the maximum extent permitted by applicable law, [LEGAL NAME]
+            To the maximum extent permitted by applicable law, Astrolyncs Systems
             shall not be liable for indirect, incidental or consequential
             losses arising from use of the Platform.
           </p>
@@ -354,22 +354,22 @@ const TermsAndConditions = () => {
 
           <div className="legal-details">
             <p>
-              <strong>[RESTAURANT DIRECTORY NAME]</strong>
+              <strong>Dine Finder</strong>
             </p>
             <p>
-              <strong>Email:</strong> [EMAIL]
+              <strong>Email:</strong> dimustapha@gmail.com
             </p>
             <p>
-              <strong>Address:</strong> [ADDRESS]
+              <strong>Address:</strong> Fan Milk Junction, Temple Street, Ablekumam Accra.
             </p>
             <p>
-              <strong>Telephone:</strong> [PHONE]
+              <strong>Telephone:</strong> +233209453410
             </p>
           </div>
         </section>
 
         <p className="legal-updated">
-          Last updated: [DATE]
+          Last updated: 23rd September, 2026
         </p>
       </div>
     </main>

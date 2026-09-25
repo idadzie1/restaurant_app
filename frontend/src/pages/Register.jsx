@@ -148,7 +148,7 @@ const Register = () => {
             value={userData.cfmpassword}
             onChange={handleChange}
         />
-        <label htmlFor='termsConditions'>I have read and agreed to the <Link>Terms & Conditions</Link> and acknowledge the <Link>Privacy Policy</Link></label>
+        <label htmlFor='termsConditions'>I have read and agreed to the <Link to='/terms-and-conditions'>Terms & Conditions</Link> and acknowledge the <Link to='/privacy-policy'>Privacy Policy</Link></label>
         <input 
           type="checkbox"
           name='agree'

@@ -9,10 +9,10 @@ const CookiePolicy = () => {
         <header className="legal-header">
           <h1>Cookie Policy</h1>
           <p>
-            <strong>Effective Date:</strong> [DATE]
+            <strong>Effective Date:</strong> 23rd September, 2026
           </p>
           <p>
-            <strong>Last Updated:</strong> [DATE]
+            <strong>Last Updated:</strong> 23rd September, 2026
           </p>
         </header>
 
@@ -127,22 +127,22 @@ const CookiePolicy = () => {
 
           <div className="legal-details">
             <p>
-              <strong>[RESTAURANT DIRECTORY NAME]</strong>
+              <strong>Dine Finder</strong>
             </p>
             <p>
-              <strong>Email:</strong> [PRIVACY EMAIL]
+              <strong>Email:</strong> dimustapha@gmail.com
             </p>
             <p>
-              <strong>Address:</strong> [BUSINESS ADDRESS]
+              <strong>Address:</strong> Fan Milk Junction, Temple Street, Ablekuma, Accra.
             </p>
             <p>
-              <strong>Telephone:</strong> [TELEPHONE NUMBER]
+              <strong>Telephone:</strong> +233209453410
             </p>
           </div>
         </section>
 
         <p className="legal-updated">
-          Last updated: [DATE]
+          Last updated: 23rd September, 2026
         </p>
       </div>
     </main>

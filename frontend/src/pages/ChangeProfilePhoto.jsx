@@ -60,16 +60,16 @@ const ChangeProfilePhoto = () => {
          return
    }  
 
-        console.log(profilePhotoObj)
+       console.log("CURRENT USER IN PROFILE:", currentUser);
+        console.log("PROFILE PIC:", currentUser?.profilePic);
 
-  return (
+  return (    
     <section className='profile-photo'>        
             <h2>Profile Photo</h2>
             <p>{errorMsg}</p>
             <div className="profile-pic">
-                <img htmlFor="photo" src={ currentUser?.profilePic ? `${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${currentUser?.profilePic}` : avatar} alt="profile photo"/>
+                <img src={ currentUser?.profilePic ? `${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${currentUser?.profilePic}` : avatar} alt="profile photo"/>
             </div>
-
 
             <form className='form-photo' onSubmit={handleSubmit}>
                 <label className='profilePage-label' htmlFor="photo">Click To Select New Photo</label>

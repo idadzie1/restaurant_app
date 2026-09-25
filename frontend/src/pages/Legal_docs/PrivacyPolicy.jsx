@@ -1,7 +1,7 @@
 import React from 'react'
 
 import './PrivacyPolicy.css'
-
+import { Link } from 'react-router-dom';
 const PrivacyPolicy = () => {
   return (
     <main className="legal-page">
@@ -9,17 +9,17 @@ const PrivacyPolicy = () => {
         <header className="legal-header">
           <h1>Privacy Policy</h1>
           <p>
-            <strong>Effective Date:</strong> [DATE]
+            <strong>Effective Date:</strong> 23 September, 2026
           </p>
           <p>
-            <strong>Last Updated:</strong> [DATE]
+            <strong>Last Updated:</strong> 23 September, 2026
           </p>
         </header>
 
         <section>
           <h2>1. Introduction</h2>
           <p>
-            Welcome to <strong>[RESTAURANT DIRECTORY NAME]</strong> ("we",
+            Welcome to <strong>Dine Finder</strong> ("we",
             "us", "our" or the "Platform").
           </p>
           <p>
@@ -48,25 +48,25 @@ const PrivacyPolicy = () => {
 
           <div className="legal-details">
             <p>
-              <strong>Data Controller:</strong> [LEGAL BUSINESS/OWNER NAME]
+              <strong>Data Controller:</strong> dimustapha@gmail.com
             </p>
             <p>
-              <strong>Trading Name:</strong> [RESTAURANT DIRECTORY NAME]
+              <strong>Trading Name:</strong> Dine Finder
             </p>
             <p>
-              <strong>Address:</strong> [BUSINESS ADDRESS]
+              <strong>Address:</strong> Fan Milk Junction, Temple Street, Ablekuma, Accra
             </p>
             <p>
-              <strong>Email:</strong> [PRIVACY EMAIL]
+              <strong>Email:</strong> dimustapha@gmail.com
             </p>
             <p>
-              <strong>Telephone:</strong> [TELEPHONE NUMBER]
+              <strong>Telephone:</strong> +233 209453410
             </p>
             <p>
-              <strong>Data Protection Supervisor:</strong> [NAME]
+              <strong>Data Protection Supervisor:</strong> I.M.Dadzie
             </p>
             <p>
-              <strong>DPS Email:</strong> [EMAIL]
+              <strong>DPS Email:</strong> dimustapha@gmail.com
             </p>
           </div>
         </section>
@@ -367,7 +367,7 @@ const PrivacyPolicy = () => {
                 </tr>
                 <tr>
                   <td>Deleted account</td>
-                  <td>[30/60/90 days]</td>
+                  <td>90 days</td>
                 </tr>
                 <tr>
                   <td>Restaurant listing</td>
@@ -375,15 +375,15 @@ const PrivacyPolicy = () => {
                 </tr>
                 <tr>
                   <td>Claim verification records</td>
-                  <td>[PERIOD]</td>
+                  <td>14 working days</td>
                 </tr>
                 <tr>
                   <td>Security logs</td>
-                  <td>[PERIOD]</td>
+                  <td>90 days</td>
                 </tr>
                 <tr>
                   <td>Customer communications</td>
-                  <td>[PERIOD]</td>
+                  <td>12 working days</td>
                 </tr>
               </tbody>
             </table>
@@ -418,10 +418,10 @@ const PrivacyPolicy = () => {
 
           <div className="legal-details">
             <p>
-              <strong>Email:</strong> [PRIVACY EMAIL]
+              <strong>Email:</strong> dimustapha@gmail.com
             </p>
             <p>
-              <strong>Address:</strong> [BUSINESS ADDRESS]
+              <strong>Address:</strong> Fan Milk Junction, Temple Street, Ablekuma, Accra.
             </p>
           </div>
 
@@ -446,7 +446,7 @@ const PrivacyPolicy = () => {
 
           <p>
             Further information is provided in our{" "}
-            <a href="/cookie-policy">Cookie Policy</a>.
+            <Link to="/cookies-policy">Cookie Policy</Link>.
           </p>
         </section>
 
@@ -498,7 +498,7 @@ const PrivacyPolicy = () => {
           </p>
 
           <p>
-            <strong>Privacy Email:</strong> [PRIVACY EMAIL]
+            <strong>Privacy Email:</strong> dimustapha@gmail.com
           </p>
 
           <p>
@@ -512,25 +512,25 @@ const PrivacyPolicy = () => {
 
           <div className="legal-details">
             <p>
-              <strong>[RESTAURANT DIRECTORY NAME]</strong>
+              <strong>Dine Finder</strong>
             </p>
             <p>
-              <strong>Data Controller:</strong> [LEGAL NAME]
+              <strong>Data Controller:</strong> I. M. Dadzie
             </p>
             <p>
-              <strong>Email:</strong> [EMAIL]
+              <strong>Email:</strong> dimustapha@gmail.com
             </p>
             <p>
-              <strong>Telephone:</strong> [PHONE]
+              <strong>Telephone:</strong> +233209453410
             </p>
             <p>
-              <strong>Address:</strong> [ADDRESS]
+              <strong>Address:</strong> Fan Milk Junction, Temple Street, Ablekuma, Accra
             </p>
           </div>
         </section>
 
         <p className="legal-updated">
-          Last updated: [DATE]
+          Last updated: 23rd September, 2026
         </p>
       </div>
     </main>

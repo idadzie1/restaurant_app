@@ -15,14 +15,16 @@ import avatar from '../assets/imageAvatar.jpg'
 const Nav = () => {
   const[menuShowing, setMenuShowing] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false)
-   const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
   const arrowRef = useRef(null)
   const token = currentUser?.token  
   const role = currentUser?.role
   
 
+  console.log("CURRENT USER IN NAV:", currentUser);
+  console.log("PROFILE PIC:", currentUser?.profilePic);
+  
   return (
-
           <nav>
             <div className="nav-container">
               <div className="logo-container">
@@ -53,16 +55,18 @@ const Nav = () => {
                   <IoMdClose />
                 </div>
               </div>
-              <div className="login-container">
+              <div className="login-container">                
                 <Link className='only-desktop' to={token? "/LogOut" : "/login"}>{token? "Log out" :"Sign in"}</Link>
+                <Link to='/register' className='sign-up'>Sign Up For Free</Link>
                 {token && <img className='profile-image' ref={arrowRef} onClick={()=>setShowProfileMenu(prev=>!prev)} src={ currentUser?.profilePic ? `${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${currentUser?.profilePic}` : avatar} alt="profile photo"/>}
-                {/* {token && <span className='arrowdn' onClick={()=>setShowProfileMenu(prev=>!prev)}><BiSolidDownArrow /></span>} */}
+               
                 {showProfileMenu && <ProfileMenu click={()=>setShowProfileMenu(prev=>!prev)} showProfileMenu={showProfileMenu} setShowProfileMenu={setShowProfileMenu} arrowRef={arrowRef}/>}
               </div>
               <div className="hamburger-btn" onClick={()=>setMenuShowing(prev => !prev)}>
                 <GiHamburgerMenu/>
               </div>
-            </div>
+              
+            </div>            
           </nav>   
   )
 }
