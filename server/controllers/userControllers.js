@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const path = require("path");
 const { v4: uuid } = require("uuid");
+const { v2: cloudinary } = require("cloudinary");
 
 // ========= Register new user ============
 // POST: api/users/register
@@ -162,6 +163,28 @@ const changeAvatar = async (req, res, next) => {
         return next(new HttpError(error.message));
     }
 }
+
+// =============== Saving profile photo in Cloudinary ========================================
+// ===========================================================================================
+
+const editAvataToCoudinary = async(req, res, next)=>{    
+    try {
+        const userId = req.params
+        const currentUserId = req.user.id
+        if(!currentUserId){
+            return next(new HttpError("Unauthorized. Not logged in", 422))
+        }        
+        if(currentUserId === userId){
+            const { profilePic } = req.files
+        } else{
+            return next(new HttpError("User could not be found", 404))
+        }        
+      
+    } catch (error) {
+        
+    }
+}
+
 
 // ===========================================================================================
 // ======================= change avatar another way to do=======================================

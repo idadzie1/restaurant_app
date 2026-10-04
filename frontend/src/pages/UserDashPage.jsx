@@ -97,7 +97,7 @@ const UserDashPage = () => {
             userInfo.map(item => (             
               <div className="admin-dash-board-item" key={item._id}>
                 <div className="image">
-                  <img src={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${item.coverPhoto}`} alt="picture here" />
+                  <img src={`${item.coverPhoto}`} alt="picture here" />
                 </div>
                 <div className="restaurant-information">
                   <div className="restaurant-name">

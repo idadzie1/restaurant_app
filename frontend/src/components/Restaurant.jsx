@@ -42,7 +42,7 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
             
                 <div className="restuarant-detail">
                     <div className="restaurant-photo">
-                        <img src={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${coverPhoto}`} alt={name} />
+                        <img src={`${coverPhoto}`} alt={name} />
                     </div>
                     <hr />
                 <div className='details'>

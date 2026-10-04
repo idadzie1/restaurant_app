@@ -23,13 +23,13 @@ const EditRestaurantDetails = () => {
          googleMap: ''
 
     })
-    const [file, setFile] = useState(null)
+    const [ file, setFile ] = useState(null)
     const [ response, setResponse ] = useState("")
     const [ errorMessage, setErrorMessage ] = useState('')
     const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox ] = useState(false)
     const [ loading, setLoading ] = useState(true)
 
-    const {currentUser} = useContext(UserContext)
+    const { currentUser } = useContext(UserContext)
     const token = currentUser?.token
     const navigate = useNavigate()
     const { restaurantId } = useParams()
@@ -127,14 +127,11 @@ const EditRestaurantDetails = () => {
 
     }, [restaurantId, token])
 
-        if(loading){
-            return <Loader />
-        }
-
-    
+   
 
     const handleSubmitForm= async (e)=>{
         e.preventDefault()
+        setLoading(true)
         try {
             if(!restaurantData.name || !restaurantData.priceRange.min || !restaurantData.priceRange.max || !restaurantData.openingHours.open || !restaurantData.openingHours.close || !restaurantData.phone || !restaurantData.email || !restaurantData.socials.whatsapp || !restaurantData.socials.facebook || !restaurantData.socials.instagram || !restaurantData.location || !restaurantData.area || !restaurantData.website || !restaurantData.googleMap){
                 setErrorMessage("Fill all fields")
@@ -174,28 +171,33 @@ const EditRestaurantDetails = () => {
 
             if(!response.ok){
                 setErrorMessage(data.message)
-                setShowErrorAndResDialogueBox(true)
+                setShowErrorAndResDialogueBox(true)                
                 return
             }
 
             
                 setRestaurantData(data.data)
                 setResponse(data.message)
-                setShowErrorAndResDialogueBox(true)
+                setShowErrorAndResDialogueBox(true)                
+                return
 
 
         } catch (error) {
             setErrorMessage(error.message)
             return
+        } finally{
+             setLoading(false)
         }
     }
     
-        
+        if (loading) {    
+        return  <Loader />    
+        }
+    
+        console.log(file)
 
-
-  return (
-    <section className='admin-page'>
-
+  return (    
+    <section className='admin-page'>        
         {showErrorAndResDialogueBox && <ErrorAndResDialogueBox
             response={response}  
             errorMessage={errorMessage} 
@@ -213,6 +215,7 @@ const EditRestaurantDetails = () => {
                 onChange={handleChanges}            
             />
             <label className='form-restaurant' htmlFor="file">upload cover photo</label>
+                 <p>{file ? file.name : "No file selected"}</p>
             <input 
                 type="file"
                 name='coverPhoto'

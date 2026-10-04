@@ -625,7 +625,8 @@ textarea{
 }
 
 
-.restaurant-items{    
+.restaurant-items{
+    width: 100%;    
     margin-top: 1.5rem;
     display: grid;    
     grid-template-columns: repeat(3, 1fr);
@@ -726,10 +727,25 @@ iframe{
 @media screen and (min-width:320px) and (max-width:600px){
     .restaurant-items{
         display: flex;
-        flex-direction: column;
+        flex-direction: column;        
+        align-items: center;
+    }
+
+    .container{
+        width: 100%;
+        
     }
 
     .restaurant-item{   
+       
+    }
+
+    .restaurant-photo{
+        width: 20rem;
+    }
+
+    .restaurant-photo img{
+        /* width: 80vw; */
         width: 100%;
     }
   
@@ -1103,7 +1119,10 @@ input[type='number']{
     background-color: #FF6B35;
 }
 
-
+.admin-dashboard .notification{
+    width: 100%;
+    text-align: center;    
+}
 /* ========================= media queries for Admin dashboard Page ================== */
 @media screen and (min-width: 320px) and (max-width: 760px){
     .admin-dash-board-item{

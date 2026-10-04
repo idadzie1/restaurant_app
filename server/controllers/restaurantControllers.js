@@ -5,15 +5,46 @@ const fs = require("fs");
 const HttpError = require("../models/errorModel");
 const { v4: uuid } = require("uuid");
 const { userInfo } = require("os");
+const cloudinary = require('../config/cloudinary')
+const mongoose = require('mongoose');
+
+
+// ========helper function to extract Public_Id of photo stored in Cloudinary=============
+
+const getCloudinaryPublicId = (cloudinaryUrl) => {
+
+    const url = new URL(cloudinaryUrl);
+
+    const pathParts = url.pathname.split("/");
+
+    // Remove:
+    // /mhzhitye/image/upload/
+    // and possible version such as v1759000000
+
+    const uploadIndex = pathParts.indexOf("upload");
+
+    let publicIdParts = pathParts.slice(uploadIndex + 1);
+
+    // Remove version if present
+    if (publicIdParts[0]?.startsWith("v")) {
+        publicIdParts.shift();
+    }
+
+    const publicIdWithExtension = publicIdParts.join("/");
+
+    // Remove file extension
+    return publicIdWithExtension.replace(/\.[^/.]+$/, "");
+};
+
+// ==================================================================================
 
 
 const createRestaurant = async (req, res, next)=>{
-    try {
-          
+
+    try {          
         const {name, captionPhoto, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;        
   
         
-
         if(!name || min == null || max == null || !open || !close || !phone || !email || !whatsapp || !facebook || !instagram || !location || !area || !website || !googleMap){
             return next(new HttpError("Please fill in the fields. Type in NA if requested info is not available", 422))
         }      
@@ -38,41 +69,57 @@ const createRestaurant = async (req, res, next)=>{
         if (!emailRegex.test(decapEmail)) {
             return next(new HttpError("Invalid email", 422))
         }
-
-
         
-        if(!req.files){
+        if(!req.files || !req.files.coverPhoto){
             return next(new HttpError("Please select a picture for the cover photo", 422))
         }
 
         const {coverPhoto} = req.files;
         if(coverPhoto.size > 200000){
             return next(new HttpError("Size of cover photo is too big. It must be less than 200KB", 422))
-        }
+        }  
         
-        let fileName = coverPhoto.name;
-        let splittedFileName = fileName.split('.');
-        let newFileName = splittedFileName[0] + uuid() + "." + splittedFileName[splittedFileName.length-1];
+        
+        const restaurantId = new mongoose.Types.ObjectId();
+        if(!restaurantId){
+            return next(new HttpError("Could not generate id. try again later", 422))
+        }                       
 
-        if(req.user.role === 'admin'){
-            coverPhoto.mv(path.join(__dirname, '..', 'uploads', newFileName), async(err)=>{
-                if(err){
-                    return next(new HttpError("Could not upload file", 422))
-                }
+        if(req.user.role === 'admin'){          
 
-                const newRestauant = await Restaurant.create({name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, approvalStatus:"approved", creator:req.user.id})
+                const result = await cloudinary.uploader.upload(
+                    `data:${coverPhoto.mimetype};base64,${coverPhoto.data.toString("base64")}`,
+                        {
+                            folder: `restaurant-app/restaurants/${restaurantId}/cover`
+                        }
+                    );
+
+                const url = result.secure_url;
+                if(!url){
+                    return next(new HttpError("Could not update, a possible network issues, try again later", 422))
+                }           
+
+                const newRestauant = await Restaurant.create({_id:restaurantId, name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: url, approvalStatus:"approved", creator:req.user.id})
                 res.status(201).json("Success. Pending verification and approval")
-            })
+            
             }else{
-            coverPhoto.mv(path.join(__dirname, '..', 'uploads', newFileName), async(err)=>{
-                if(err){
-                    return next(new HttpError("Could not upload file", 422))
-                }
 
-                const newRestauant = await Restaurant.create({name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: newFileName, claimed:true, approvalStatus:"pending", claimer:req.user.firstName, claimedBy:req.user.id, creator:req.user.id})
+                const result = await cloudinary.uploader.upload(
+                    `data:${coverPhoto.mimetype};base64,${coverPhoto.data.toString("base64")}`,
+                        {
+                            folder: `restaurant-app/restaurants/${restaurantId}/cover`
+                        }
+                    );
+
+                const url = result.secure_url;
+                if(!url){
+                    return next(new HttpError("Could not update, a possible network issues, try again later", 422))
+                }            
+
+                const newRestauant = await Restaurant.create({_id:restaurantId, name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: url, claimed:true, approvalStatus:"pending", claimer:req.user.firstName, claimedBy:req.user.id, creator:req.user.id})
                 res.status(201).json("Success. Pending verification and approval")
-            })
-        }        
+            
+            }        
         
       } catch (error) {
             return next(new HttpError(error.message))
@@ -84,65 +131,146 @@ const createRestaurant = async (req, res, next)=>{
 // api/restaurants/edit-restaurant
 // patch
 // protected
-const editRestaurant = async (req, res, next)=>{
-    try {
-        // find restaurant by id and edit
-        const {restaurantId} = req.params;
-        const findRestaurant = await Restaurant.findById(restaurantId);
+// const editRestaurant = async (req, res, next)=>{
+//     try {
+//         // find restaurant by id and edit
+//         const {restaurantId} = req.params;
+//         const findRestaurant = await Restaurant.findById(restaurantId);
 
-        const {name, captionPhoto, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;
+//         const {name, captionPhoto, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;
        
 
-        if(!name || min == null || max == null || !open || !close || !phone || !email || !whatsapp || !facebook || !instagram || !location || !area || !website || !googleMap){
+//         if(!name || min == null || max == null || !open || !close || !phone || !email || !whatsapp || !facebook || !instagram || !location || !area || !website || !googleMap){
             
-            return next(new HttpError("Fill all fields", 422))
-        }
+//             return next(new HttpError("Fill all fields", 422))
+//         }
     
 
-        const minNum = parseInt(min);
-        const maxNum = parseInt(max);       
+//         const minNum = parseInt(min);
+//         const maxNum = parseInt(max);       
 
-        if((req.user.id === findRestaurant.creator.toString()) || (req.user.role === 'user' && findRestaurant.approved)){
-            if(!req.files){
-                const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap}, {returnDocument:'after'});
-                res.status(201).json({message:"Success", data:updated})
+//         if((req.user.id === findRestaurant.creator.toString()) || (req.user.role === 'user' && findRestaurant.approved)){
+//             if(!req.files){
+//                 const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap}, {returnDocument:'after'});
+//                 res.status(201).json({message:"Success", data:updated})
 
-            }else if(req.files){
-                // find old cover photo and remove it
-                fs.unlink(path.join(__dirname, '..', 'uploads', findRestaurant.coverPhoto), (err)=>{
-                    if(err){
-                        return next(new HttpError("The file you want replaced does not exit", 422))
-                    }
+//             }else if(req.files){
+//                 // find old cover photo and remove it
+//                 fs.unlink(path.join(__dirname, '..', 'uploads', findRestaurant.coverPhoto), (err)=>{
+//                     if(err){
+//                         return next(new HttpError("The file you want replaced does not exit", 422))
+//                     }
 
-                    // =================
+//                     // =================
 
-                const {coverPhoto} = req.files;                
-                let fileName = coverPhoto.name;
-                let splittedName = fileName.split('.');
-                let newFileName = splittedName[0] + uuid() + '.' + splittedName[splittedName.length - 1];
+//                 const {coverPhoto} = req.files;                
+//                 let fileName = coverPhoto.name;
+//                 let splittedName = fileName.split('.');
+//                 let newFileName = splittedName[0] + uuid() + '.' + splittedName[splittedName.length - 1];
 
-                coverPhoto.mv(path.join(__dirname, '..', 'uploads', newFileName), async(err)=>{
-                    if(err){
-                        return next(new HttpError(err.message))
-                    }else{
-                        const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto:newFileName}, {returnDocument:'after'});
-                        res.status(201).json({message:"Success", data:updated}) 
-                    }
+//                 coverPhoto.mv(path.join(__dirname, '..', 'uploads', newFileName), async(err)=>{
+//                     if(err){
+//                         return next(new HttpError(err.message))
+//                     }else{
+//                         const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto:newFileName}, {returnDocument:'after'});
+//                         res.status(201).json({message:"Success", data:updated}) 
+//                     }
 
-                })
-                    // =================
+//                 })
+//                     // =================
 
-                })
+//                 })
  
+//             }
+//         }else{
+//             return next(new HttpError("Unauthorized operation", 422))
+//         }        
+        
+//     } catch (error) {
+//         return next(new HttpError(error.message))
+//     }
+// }
+
+
+// =========================== editing: uplsod cover photo to Cloudinary=================
+//  find the mongoDB record
+
+const editRestaurant = async (req, res, next)=>{
+    try {
+        const { restaurantId } = req.params;
+        const restaurant = await Restaurant.findById(restaurantId);
+        const oldCoverPhotoUrl = restaurant.coverPhoto
+        if(!restaurant){ 
+            return next(new HttpError("Could not find resturant", 422))
+        }
+        if(req.user.id === restaurant.creator?.toString() || req.user.role === 'admin'){
+           
+
+            const {name, captionPhoto, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;       
+
+            if(!name || min == null || max == null || !open || !close || !phone || !email || !whatsapp || !facebook || !instagram || !location || !area || !website || !googleMap){
+                
+                return next(new HttpError("Fill all fields", 422))
             }
+            const minNum = parseInt(min);
+            const maxNum = parseInt(max);
+
+          
+
+            if(!req.files || !req.files.coverPhoto){
+
+                const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap}, {returnDocument:'after'});
+
+                if(!updated){
+                    return next(new HttpError("Update was not succcessful, try next time", 422))
+                }
+
+                res.status(201).json({message:"Success", data:updated})                                  
+
+            }else{
+                     const { coverPhoto } = req.files;                        
+                    if(coverPhoto.size > 200000){
+                        return next(new HttpError("Size of cover photo is too big. It must be less than 200KB", 422))
+                    } 
+                    const result = await cloudinary.uploader.upload(
+                    `data:${coverPhoto.mimetype};base64,${coverPhoto.data.toString("base64")}`,
+                        {
+                            folder: `restaurant-app/restaurants/${restaurantId}/cover`
+                        }
+                    );
+
+                    const newUrl = result.secure_url;
+                    if(!url){
+                        return next(new HttpError("Could not update, a possible network issues, try again later", 422))
+                    }
+
+                        const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto:newUrl}, {returnDocument:'after'});
+                        
+                        if(!updated){
+                            return next(new HttpError("Update failed, try again later", 422))
+                        }
+
+                        res.status(201).json({message:"Success", data:updated})                        
+
+                        // using the helper funtion to extract the public_id from the photo url 
+                        const oldPublicId = getCloudinaryPublicId(oldCoverPhotoUrl);
+                        await cloudinary.uploader.destroy(oldPublicId);
+
+                }
+        
         }else{
-            return next(new HttpError("Unauthorized operation", 422))
-        }        
+
+            return next(new HttpError("You are not authorized to do this operation", 422))
+        }
         
     } catch (error) {
         return next(new HttpError(error.message))
     }
 }
+
+
+
+// =====================================================================================
 
 
 
@@ -362,24 +490,29 @@ const uploadResturantMenu = async (req, res, next)=>{
              const {menuPhoto} = req.files
              if(menuPhoto.size > 200000){
                 return next(new HttpError("File size should be less than 2KB", 422))
-             }
-             
-            let fileName = menuPhoto.name;
-            let splittedFileName = fileName.split('.')
-            let newFileName = fileName.split('.')[0] + uuid() +'.' + splittedFileName[splittedFileName.length-1]                         
+             }                               
 
             const { restaurantId } = req.params;
             // firmd the restaurant
             const findRestaurant = await Restaurant.findById(restaurantId)                      
-            if(req.user.id === findRestaurant.creator.toString() || req.user.role === 'admin' && findRestaurant.approved){                
-                     menuPhoto.mv(path.join(__dirname, '..', '/uploads', newFileName), async(err)=>{
-                if(err){
-                    return next(new HttpError("Could not upload file", 422))
-                }            
+            if(req.user.id === findRestaurant.creator.toString() || req.user.role === 'admin' && findRestaurant.approved){
+                
+                 const result = await cloudinary.uploader.upload(
+                    `data:${menuPhoto.mimetype};base64,${menuPhoto.data.toString("base64")}`,
+                        {
+                            folder: `restaurant-app/restaurants/${restaurantId}/menu`
+                        }
+                    );
 
-                const restaurant = await Restaurant.findByIdAndUpdate(restaurantId, {$push: {menu: {name, price, description, menuPhoto:newFileName, available}}}, { returnDocument: 'after'});
+                const url = result.secure_url;
+
+                if(!url){
+                    return next(new HttpError("Could not update, a possible network issues, try again later", 422))
+                }   
+
+                const restaurant = await Restaurant.findByIdAndUpdate(restaurantId, {$push: {menu: {name, price, description, menuPhoto:url, available}}}, { returnDocument: 'after'});
                 res.status(200).json({message:"Menu successfully added", restaurant})
-                })    
+                    
 
             }else{
                 return next( new HttpError("Unauthorized", 403));
@@ -395,19 +528,25 @@ const uploadResturantMenu = async (req, res, next)=>{
 // protected
 const editRestaurantMenu = async (req, res, next)=>{
     // find the restaurant id
-    const { restaurantId, menuId } = req.params;   
-    const findRestaurant = await Restaurant.findById(restaurantId);
-    const findMenu = findRestaurant.menu.id(menuId);
-    try {          
-         
-         if(req.user.id === findRestaurant.creator.toString() || req.user.role === 'admin'){
+    const { restaurantId, menuId } = req.params;    
+    
+    try {
+            const findRestaurant = await Restaurant.findById(restaurantId);
             if(!findRestaurant){
                 return next(new HttpError("No records of resturant found", 404))
             }
 
+            const findMenu = findRestaurant.menu.id(menuId);
             if(!findMenu){
                 return next(new HttpError("No records of menu found", 404))
             }
+            
+            const oldMenuImageUrl = findRestaurant.menu.id(menuId)?.menuPhoto
+            if(!oldMenuImageUrl){
+                return next(new HttpError("Could not locate image", 422))
+            }
+         
+         if(req.user.id === findRestaurant.creator.toString() || req.user.role === 'admin'){
      
             const {name, description, price, available} = req.body;
             if(!name || !description || !price || available === false){
@@ -421,47 +560,51 @@ const editRestaurantMenu = async (req, res, next)=>{
                 menu.available = available;
                 await findRestaurant.save();
                 res.status(200).json({ message: "Updated Successfully", data: findRestaurant});
-          }else{
+          }else if(req.files){
             // check if there an existig menu image and remove
-            const oldMenuImage = findRestaurant.menu.id(menuId)?.menuPhoto
-            fs.unlink(path.join(__dirname, '..', 'uploads', oldMenuImage), async(err)=>{
-                if(err){
-                    return next(new HttpError("Menu image could not be removes", 404))
-                }
-            })
-
-            const {menuPhoto} = req.files;
+            // const {menuPhoto} = req.files;
+            const menuPhoto = req.files?.menuPhoto;
             if(menuPhoto.size > 200000){
                 return next(new HttpError("Image size must not be more than 200KB", 422))
             }
             
-            const fileName = menuPhoto.name;
-            const splittedFileName = fileName.split('.')
-            const newFileName = splittedFileName[0] + uuid() + '.' + splittedFileName[splittedFileName.length-1];
-            
-            menuPhoto.mv(path.join(__dirname, '..', '/uploads', newFileName), async(err)=>{
-                if(err){
-                    return next(new HttpError("Could not upload image. Try again later", 422))
-                }
+             const result = await cloudinary.uploader.upload(
+                    `data:${menuPhoto.mimetype};base64,${menuPhoto.data.toString("base64")}`,
+                        {
+                            folder: `restaurant-app/restaurants/${restaurantId}/menu`
+                        }
+                    );
+
+                const newUrl = result.secure_url;
+
+                if(!newUrl){
+                    return next(new HttpError("Could not update, a possible network issues, try again later", 422))
+                }         
 
                 const menu = findRestaurant.menu.id(menuId);
                     menu.name = name;
-                    menu.menuPhoto = newFileName;
+                    menu.menuPhoto = newUrl;
                     menu.description = description
                     menu.price = price;
                     menu.available = available;
-                    await findRestaurant.save();
+                    const updated = await findRestaurant.save();
 
-                    res.status(200).json({ message: "Updated Successfully", data: findRestaurant});
-
-            })
-                    // findRestaurant
+                    if(!updated){
+                        return next(new HttpError("Update was unsuccessful. try again later", 422))
+                    }
+                                               
+                    const oldPublicId = getCloudinaryPublicId(oldMenuImageUrl);
+                        await cloudinary.uploader.destroy(oldPublicId);
+                    
+                    res.status(200).json({ message: "Updated Successfully", data: findRestaurant});    
           } 
         
+         }else{
+            return next(new HttpError("You are not authorized to do this operation", 422))
          }
         
     } catch (error) {
-        return next(error.message)
+        return next(error)
     }
    
 }
@@ -503,33 +646,41 @@ const getAMenu = async (req, res, next)=>{
 }
 
 
-const deleteRestaurantMenu = async (req, res, next)=>{  
-              // find restuaramt    
-        const { restaurantId, menuId } = req.params;
-        const restaurant = await Restaurant.findById(restaurantId)
-        const menu = restaurant.menu.id(menuId);
-        const menuimage = menu?.menuPhoto
-        
-        
+const deleteRestaurantMenu = async (req, res, next)=>{                
+          
     try {
+        const { restaurantId, menuId } = req.params; 
+        const restaurant = await Restaurant.findById(restaurantId)
+        if(!restaurant){
+            return next(new HttpError("Restaurant could not be found", 404))
+        }
+        
         if(req.user.id === restaurant.creator.toString() || req.user.id === restaurant.claimedBy.toString() || req.user.role === 'admin'){
+
+            const menu = restaurant.menu.id(menuId);
             if(!menu){
                 return next(new HttpError("Menu not found", 404))
             }
 
-            if(!menuimage){
-                return next(new HttpError("Image of imgae not found", 404))
+            const menuimageUrl = menu?.menuPhoto 
+            if(!menuimageUrl){
+                return next(new HttpError("Image of imgae not found", 404))            
             }
-            // remove the image from the uploads folder
-            fs.unlink(path.join(__dirname, '..', '/uploads', menuimage), async(err)=>{
-                if(err){
-                    return next(new HttpError("could not remove menu image", 422))
-                }
-            })
+            
+             const menuImagePublicId = getCloudinaryPublicId(menuimageUrl);
+             
+             if(!menuImagePublicId){
+                return next(new HttpError("Could not proceed with deletion. Try again later", 422))
+             }
+                await cloudinary.uploader.destroy(menuImagePublicId);
+            
             // remove the menu object subrecord from the restaurant record
             // uodate the restuarnt record with deleted menu object 
             menu.deleteOne();
-            await restaurant.save();
+            const deleted = await restaurant.save();
+            if(!deleted){
+                return next(new HttpError("deletion is not successful. Try again", 422))
+            }
             res.status(200).json({message: "Menu deleted successfully", restaurant });  
         }        
         

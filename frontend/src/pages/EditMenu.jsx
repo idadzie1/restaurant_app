@@ -40,6 +40,7 @@ const EditMenu = () => {
   useEffect(()=>{
     const fetchData = async()=>{
       try {
+        setLoader(true)
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/${restaurantId}/menu/${menuId}`, {
           method: 'GET',
           headers:{
@@ -58,6 +59,8 @@ const EditMenu = () => {
 
       } catch (error) {
         setErrorMessage(error.message)
+      } finally{
+        setLoader(false)
       }
     }
 
@@ -65,7 +68,7 @@ const EditMenu = () => {
 
   }, [restaurantId, menuId])
  
-    console.log("menu Data", menuData)
+    
  
   const handleChanges=(e)=>{
     const name = e.target.name    
@@ -100,7 +103,7 @@ const EditMenu = () => {
 
   const handleSubmit = async (e)=>{
     e.preventDefault()
-
+    setLoader(true)
     try {
 
         if(!menuData.name || !menuData.price || !menuData.description || !menuData.available){
@@ -144,18 +147,19 @@ const EditMenu = () => {
       setErrorMessage(error.messsage)
       setShowError(true)
       return
+    } finally{
+      setLoader(false)
     }       
 
   }
     
   const okOnSuccess =()=>{
     navigate(`/restaurants/${restaurantId}`)
-    setShowSuccess(false)
-    setLoader(true)
+    setShowSuccess(false)    
   }
 
   if(loader){
-    <Loader />
+    return <Loader />
   }
     
   return (    

@@ -27,6 +27,7 @@ const RestaurantDetail = () => {
   const [ showSuccess, setShowSuccess ] = useState(false);
   const [ showPrompt, setShowPrompt ] = useState(false);
   const [ showFailure, setShowFailure ] = useState("")
+  const [ deletionType, setDeletionType ] = useState(null);
   const [ deletionSuccessMessage, setDeletionSuccessMessage ] = useState("")
   const [ galleryObjId, setGalleryObjId ] = useState("")  
   const [ loading, setLoading ] = useState(true);
@@ -119,7 +120,7 @@ const RestaurantDetail = () => {
     
     }
 
-    const handlePopmptYesNo = (menuId)=>{
+    const handlePopmptYesNo = (menuId)=>{      
       setSelectedMenuId(menuId) 
       setShowPrompt(true)               
       return
@@ -167,17 +168,19 @@ const RestaurantDetail = () => {
 
    }
 
-     console.log("restaurant ID", restaurantId)
-      console.log("galleryObjID", galleryObjId)
-  
+    //  console.log("restaurant ID", restaurantId)
+    //   console.log("galleryObjID", galleryObjId)
+      console.log(deletionType)
   return (
     <section className='detail-info'>      
       { showPrompt && <DialogueBox 
-        clickOnOk={handleMenuDelete}
-        clickOkOnDelOfGalleryImg={handleGalleryPhotoDelete}
+        clickYes={deletionType === 'menu' ? handleMenuDelete : handleGalleryPhotoDelete}
+        // clickOkOnDelOfGalleryImg={deletionType === 'menu'? handleGalleryPhotoDelete : ''}
         notifyToProceedToDelGalleryImg={notification}  
         notificationToProceedOrNot={notification} 
-        clickOnCancel={()=>setShowPrompt(false)} 
+        clickOnCancel={()=>{
+          setShowPrompt(false) 
+          setDeletionType(null)}} 
         /> }
 
       { showFailure && <FailureDialogueBox 
@@ -193,10 +196,10 @@ const RestaurantDetail = () => {
         />}
   
       <h2 className='restuarant-name'>{restaurant.name}</h2>
-
+        {/* ${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${restaurant.coverPhoto} */}
       <div className="cover-image">
         <img
-            src={`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${restaurant.coverPhoto}`}
+            src={`${restaurant.coverPhoto}`}
             alt={restaurant.name}
           />
       </div>
@@ -235,7 +238,8 @@ const RestaurantDetail = () => {
           {restaurant.menu.map(({_id, name, menuPhoto, price, description})=>{
           return <div className="the-menu-item" key={_id}>
             <div className="menu-photo-left-side">
-              <img src={`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${menuPhoto}`} alt="menu image" />
+              {/* ${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${menuPhoto} */}
+              <img src={`${menuPhoto}`} alt="menu image" />
             </div>
            <div className="right-side"> 
               <div className="menu-name-menu-price-description">
@@ -249,7 +253,8 @@ const RestaurantDetail = () => {
               </div>              
               {userId === restaurant.claimedBy || userRole === 'admin' && <div className="button-class">
                 <Link to={`/editmenu/${restaurantId}/${_id}`}><button onChange=''>Change</button></Link>
-                <button onClick={()=>handlePopmptYesNo(_id)}>Remove</button> 
+                <button onClick={()=>{handlePopmptYesNo(_id) 
+                  setDeletionType('menu')}}>Remove</button> 
               </div>}
               </div>                       
           </div> })}                 
@@ -264,8 +269,8 @@ const RestaurantDetail = () => {
           <div className="gallery">
             {restaurant.gallery.map((galleryImage)=>(
               <div className='gallery-item'>
-                <div className="image">
-                  <img key={galleryImage._id} src={`${import.meta.env.VITE_REACT_APP_BASE_URL.replace("/api", "")}/uploads/${galleryImage.galleryImage}`} alt="gallery Image" />                             
+                <div className="image">                
+                  <img key={galleryImage._id} src={`${galleryImage.galleryImage}`} alt="gallery Image" />                             
                 </div>
                 {userId === restaurant.claimedBy || userRole==="admin" &&<div className="button-class">
                   <Link to={`/${restaurantId}/gallery/${galleryImage._id}`}><button>Change</button></Link>

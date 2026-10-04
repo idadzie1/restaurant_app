@@ -22,8 +22,8 @@ const [ selectRestaurantId, setSelectRestaurantId ] = useState(null)
 const [ showDialogueBox, setShowDialogueBox ] = useState(false);
 const [ showConfirmAndAck, setShowConfirmAndAck ] = useState(false);
 const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox ] = useState(false)
+const [ actionType, setActionType ] = useState(null)
 const {currentUser} = useContext(UserContext);
-
 const [ confirm, setConfirm ] = useState(false);
 const [ acknowledgement, setAcknowledgement ] = useState(false);
 
@@ -86,12 +86,14 @@ const [ acknowledgement, setAcknowledgement ] = useState(false);
 
       const handleDialogueBox = (restaurantId)=>{       
         setSelectRestaurantId(restaurantId)                       
-        setShowDialogueBox(true)        
+        setShowDialogueBox(true)
+        setActionType('claim')        
       }
       
         const handleNo = ()=>{
         setShowConfirmAndAck(false)
         setShowDialogueBox(false)
+        setActionType(null)
         return
       }
 
@@ -101,8 +103,7 @@ const [ acknowledgement, setAcknowledgement ] = useState(false);
             // redirect to login page
             navigate('/login')
             return;
-            }else{
-
+            }else{             
             clickToCklaimOwnerShip()              
              return
             }
@@ -116,7 +117,7 @@ const [ acknowledgement, setAcknowledgement ] = useState(false);
               // redirect to login page
               navigate('/login')
               return;
-            }else{
+            }else{              
               setShowConfirmAndAck(true)
               setShowDialogueBox(false)
               return
@@ -184,7 +185,7 @@ const [ acknowledgement, setAcknowledgement ] = useState(false);
        
         {showConfirmAndAck && <ConfirmAndAckBox onChangeCfm={handleUserConfirm} onChangeAck={handleUserAck} clickYes={claim} clickNo={handleNo} />}
 
-        {showDialogueBox && <DialogueBox confirmationMessage={confirmationMessage} clickYes={handleClickYesOnDialogueBox} clickNo={handleNo} />}  
+        {showDialogueBox && <DialogueBox confirmationMessage={confirmationMessage} clickYes={actionType === 'claim'? handleClickYesOnDialogueBox :''} clickNo={handleNo} />}  
 
         {showErrorAndResDialogueBox && <ErrorAndResDialogueBox errorMessage={errorMessage} response={response} clickOk={()=>setShowErrorAndResDialogueBox(false)} />}     
       <Header

@@ -243,7 +243,7 @@ const AdminDashBoard = () => {
         {userInfo.map(item => (                                  
         <div className="admin-dash-board-item" key={item.restaurantId}>          
           <div className="image">
-            <img src={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/uploads/${item.restaurantCoverPhoto}`} alt="picture here" />
+            <img src={`${item.restaurantCoverPhoto}`} alt="picture here" />
           </div>
           <div className="restaurant-information">
             <div className="restaurant-name">

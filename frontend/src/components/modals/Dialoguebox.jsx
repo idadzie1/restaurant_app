@@ -11,11 +11,11 @@ const DialogueBox = ({
   notifyToProceedToDelGalleryImg
 }) => { 
   const notificationMsg = confirmationMessage || notificationToProceedOrNot || notifyToProceedToDelGalleryImg
-  // const yesOnlick = clickYes || clickOnOk || clickOkOnDelOfGalleryImg
+  const yesOnlick = clickYes || clickOnOk || clickOkOnDelOfGalleryImg
 
-    const yesOnClick = notifyToProceedToDelGalleryImg
-    ? clickOkOnDelOfGalleryImg
-    : clickYes || clickOnOk
+    // const yesOnClick = notifyToProceedToDelGalleryImg
+    // ? clickOkOnDelOfGalleryImg
+    // : clickYes || clickOnOk
 
   const noOnClick = clickNo || clickOnCancel
   
@@ -26,7 +26,7 @@ const DialogueBox = ({
             <p>{notificationMsg}</p>
         </div>
         <div className="buttons-controls">         
-              <button onClick={yesOnClick}>Yes</button>
+              <button onClick={clickYes}>Yes</button>
               <button onClick={noOnClick}>No</button>     
                    
         </div>
