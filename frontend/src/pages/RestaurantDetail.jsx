@@ -138,12 +138,14 @@ const RestaurantDetail = () => {
 
   //  ============================ Delete Gallery image ==================================================
 
-   const handleRemove = (galleryObjId)=>{
+   const handleRemove = (galleryObjId)=>{     
       setShowPrompt(true)
       setGalleryObjId(galleryObjId)
    }
 
    const handleGalleryPhotoDelete = async()=>{
+    setLoading(true)
+    try {   
      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/${restaurantId}/gallery/${galleryObjId}`, {
       method:"DELETE",
       headers:{
@@ -166,11 +168,20 @@ const RestaurantDetail = () => {
       setShowPrompt(false)
       return
 
-   }
+    } catch (error) {
+      setErrorMessage(error.message)
+      setShowFailure(true)
+      return
+    } finally{
+      setLoading(false)
+    }
 
-    //  console.log("restaurant ID", restaurantId)
-    //   console.log("galleryObjID", galleryObjId)
-      console.log(deletionType)
+  }
+ 
+  if(loading){
+    return <Loader />
+  }
+      
   return (
     <section className='detail-info'>      
       { showPrompt && <DialogueBox 
@@ -212,7 +223,7 @@ const RestaurantDetail = () => {
         <h3>Contact</h3>
         <div className="contact">
           <div className="phone-contact"><a href={`tel:${restaurant.phone}`}>call</a></div>
-          <div className="website"><a href={`${restaurant.website}`}>website</a></div>
+          <div className="website"><a href={`${restaurant.website}`} target='_blank'>website</a></div>
           <div className="email-contact"><a href={`mailto:${restaurant.email}`}>email</a></div>
         </div>
         <div className="social-media">
@@ -231,7 +242,7 @@ const RestaurantDetail = () => {
       </div>
       <div className="menu-dishes">
         <h3 className='menu-heading'>Menu</h3>
-        {userId === restaurant.claimedBy || userRole === 'admin' && <Link to={`/menuupload/${restaurantId}`}>
+        {(userId === restaurant.claimedBy || userRole === 'admin') && <Link to={`/menuupload/${restaurantId}`}>
          <button className='add-menu'>Add Menu</button>
         </Link>}       
         <div className="the-menu-items">          
@@ -251,7 +262,7 @@ const RestaurantDetail = () => {
                   <p>{description}</p>
                 </div>
               </div>              
-              {userId === restaurant.claimedBy || userRole === 'admin' && <div className="button-class">
+              {(userId === restaurant.claimedBy || userRole === 'admin') && <div className="button-class">
                 <Link to={`/editmenu/${restaurantId}/${_id}`}><button onChange=''>Change</button></Link>
                 <button onClick={()=>{handlePopmptYesNo(_id) 
                   setDeletionType('menu')}}>Remove</button> 
@@ -263,7 +274,7 @@ const RestaurantDetail = () => {
       </div>  
         <div className="gallery-section">
           <h3>Photo Gallery</h3>
-         {userId === restaurant.claimedBy || userRole==="admin" && <Link to={`/uploadgallery/${restaurantId}`}>
+         {(userId === restaurant.claimedBy || userRole==="admin") && <Link to={`/uploadgallery/${restaurantId}`}>
             <button className='add-gallery'>Add Gallery</button>
           </Link>}
           <div className="gallery">
@@ -272,7 +283,7 @@ const RestaurantDetail = () => {
                 <div className="image">                
                   <img key={galleryImage._id} src={`${galleryImage.galleryImage}`} alt="gallery Image" />                             
                 </div>
-                {userId === restaurant.claimedBy || userRole==="admin" &&<div className="button-class">
+                {(userId === restaurant.claimedBy || userRole==="admin") &&<div className="button-class">
                   <Link to={`/${restaurantId}/gallery/${galleryImage._id}`}><button>Change</button></Link>
                   <button onClick={()=>handleRemove(`${galleryImage._id}`)}>Remove</button> 
                 </div>}                

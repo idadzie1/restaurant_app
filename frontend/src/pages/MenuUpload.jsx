@@ -5,6 +5,7 @@ import { UserContext } from '../context/userContext';
 import { useParams } from 'react-router-dom';
 import ErrorAndResDialogueBox from '../components/modals/ErrorAndResDialogueBox';
 import ErrorAndResDialogueBoxTwo from '../components/modals/ErrorAndResDialogueBoxTwo';
+import Loader from '../components/Loader/Loader'
 
 // To upload both menu image and description
 // =================================================================
@@ -19,8 +20,8 @@ const MenuUpload = () => {
     const [ available, setAvailable ] = useState(false);
     const [ errorMessage, setErrorMessage ] = useState("");
     const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox ] = useState(false);
-
-     const fileInputRef = useRef(null);
+    const [ loading, setLoading ] = useState(false)
+    const fileInputRef = useRef(null);
 
      const {currentUser} = useContext(UserContext)
      const token = currentUser?.token
@@ -82,6 +83,7 @@ const MenuUpload = () => {
 
 
     const handleSubmit = async (e)=>{
+      setLoading(true)      
       e.preventDefault()
       setErrorMessage('')
       
@@ -121,8 +123,14 @@ const MenuUpload = () => {
       } catch (error) {
           setErrorMessage(error.message);
           setShowErrorAndResDialogueBox(true);
+      } finally{
+        setLoading(false)
       }                
                 
+    }
+
+    if(loading){
+      return <Loader />
     }
 
   return (

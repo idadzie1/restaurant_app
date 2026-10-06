@@ -5,6 +5,7 @@ import { UserContext } from '../context/userContext';
 import { useNavigate } from 'react-router-dom';
 import FailureDialogueBox from '../components/modals/FailureDialogueBox'
 import SuccessDialogueBox from '../components/modals/SuccessDialogueBox'
+import Loader from '../components/Loader/Loader'
 
 // This is for replace of change a gallery photo
 // =========================================================
@@ -15,7 +16,7 @@ const EditGallery = () => {
     const [ successMessage, setSuccessMessage ] = useState("")
     const [ showError, setShowError ]=useState(false)
     const [ showSuccess, setShowSuccess ] = useState(false)
-
+    const [ loading, setLoading ] = useState(false)
     const {currentUser} = useContext(UserContext);
     const navigate = useNavigate()
     const token = currentUser?.token;
@@ -48,7 +49,7 @@ const EditGallery = () => {
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
-
+    setLoading(true)
     const formData = new FormData()
         formData.append('galleryImage', imageFile)
 
@@ -75,8 +76,14 @@ const EditGallery = () => {
 
     } catch (error) {
         setErrorMessage(error.message)
+    }finally{
+        setLoading(false)
     }
 
+  }
+
+  if(loading){
+    return <Loader />
   }
     
   return (

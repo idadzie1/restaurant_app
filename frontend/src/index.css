@@ -184,8 +184,8 @@ textarea{
 /* =============================== Nav Media Queries ============================================*/
 /* ============================================================================================== */
 
-
-
+/* 1032px */
+/* 1024px */
 @media screen and (min-width:320px) and (max-width:1024px) {
 
     .login-container{
@@ -393,7 +393,10 @@ textarea{
     }
 }
 
+@media(min-width:1032px){
 
+  
+}
 
 /* ================================= Header ===================================================== */
 .header-container{
@@ -602,6 +605,16 @@ textarea{
 }
 
 
+@media (max-width: 320px){
+        .header-sign-up{
+           display: flex;
+           width: 50%;
+           left: 25%;
+           right: 25%;                
+        }
+}
+
+
 /* ================================  Home Page =============================*/
 
 .container{
@@ -724,29 +737,38 @@ iframe{
 
 
 /* ================== Home Page Media query ====================== */
-@media screen and (min-width:320px) and (max-width:600px){
+@media screen and (min-width:360px) and (max-width:600px){
+      
+    .container{
+        width: 100%;        
+    }
+    
     .restaurant-items{
         display: flex;
         flex-direction: column;        
         align-items: center;
+        justify-content: center;
+        width: 100%;        
     }
-
-    .container{
-        width: 100%;
-        
-    }
+ 
 
     .restaurant-item{   
-       
+       width: 100%;
     }
 
     .restaurant-photo{
         width: 20rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: block;
+
     }
 
     .restaurant-photo img{
         /* width: 80vw; */
         width: 100%;
+        display: block;
     }
   
 }
@@ -757,6 +779,33 @@ iframe{
     .restaurant-items{
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+@media(max-width:320px){
+        .restaurant-items{
+        /* width: 100%;     */
+        display: flex;
+        flex-direction: column;        
+        align-items: center;        
+        
+    }
+
+    .restaurant-item{
+        width: 100%;
+        
+    }
+
+      .restaurant-photo{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: block;
+    }
+}
+
+@media(min-width:1032px){
+
 }
 
 /* ================================= About Page ============================= */
@@ -919,6 +968,8 @@ button{
     }
 
 }
+
+
 
 /* ===================================Admin page=============================================== */
 

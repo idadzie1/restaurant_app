@@ -14,6 +14,7 @@ const GalleryUpload = () => {
     const [ showError, setShowError] = useState(false)
     const [ successMessage, setSuccessMessage] = useState("")
     const [ showSuccess, setShowSuccess ] = useState(false)
+    const [ loading, setLoading ] = useState(false)
     const {currentUser} = useContext(UserContext)
     const token = currentUser?.token
     const navigate = useNavigate()
@@ -27,9 +28,10 @@ const GalleryUpload = () => {
 
      
     const handleSubmit = async (e)=>{
-    e.preventDefault()
-    const formData = new FormData();
-    formData.append('galleryImage', imageFile)
+        setLoading(true)
+        e.preventDefault()
+        const formData = new FormData();
+        formData.append('galleryImage', imageFile)
 
     try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/${restaurantId}/gallery`, {
@@ -60,9 +62,14 @@ const GalleryUpload = () => {
           setErrorMessage(data.message)
           setShowError(true)
           return
+    }finally{
+        setLoading(false)
     }
 }
-    
+ 
+    if(loading){
+        return <Loader />
+    }
 
 const handleFiles = (e) => {
     // const newFiles = Array.from(e.target.files);

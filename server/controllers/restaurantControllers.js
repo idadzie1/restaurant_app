@@ -435,27 +435,7 @@ const reject = async (req, res, next)=>{
 // api/restaurants/delete
 // post
 // protected
-const deleteRestaurant = async (req, res, next)=>{
-    try {
-        const {restaurantId} = req.params;
-        const findRestaurant = await Restaurant.findById(restaurantId);
-        if(!findRestaurant){
-            return next(new HttpError("Resource cannot be found", 404));
-        }
 
-        if(req.user.role === "admin" && findRestaurant.approvalStatus === "rejected"){
-            
-            await Restaurant.findByIdAndDelete(restaurantId)
-            res.status(400).json("Resource has been deleted successfully")
-        }else{
-            return next(new HttpError("Approval status not rejected yet", 422))
-        }
-        
-    } catch (error) {
-        return next(new HttpError(error.message))
-    }
-
-}
 
 
 // api/restaurants/upload-cover-pic
@@ -702,7 +682,7 @@ const uploadToGallary = async (req, res, next)=>{
 
         if(req.user.id === restaurant.claimedBy || req.user.role === 'admin'){            
             
-            if(!req.files){
+            if(!req.files || !req.files.galleryImage){
                 return next(new HttpError("Please select an image", 422))
             }            
             const{galleryImage} = req.files
@@ -715,18 +695,25 @@ const uploadToGallary = async (req, res, next)=>{
                     return next(new HttpError("Not an image file", 422));
                 }
 
-                const fileName = galleryImage.name;
-                const splittedFileName = fileName.split('.')
-                const newFileName = splittedFileName[0] + uuid() + '.' + splittedFileName[splittedFileName.length-1]
+                      const result = await cloudinary.uploader.upload(
+                    `data:${galleryImage.mimetype};base64,${galleryImage.data.toString("base64")}`,
+                        {
+                            folder: `restaurant-app/restaurants/${restaurantId}/gallery`
+                        }
+                    );
 
-                galleryImage.mv(path.join(__dirname, '..', '/uploads', newFileName), async (err)=>{
-                    if(err){
-                        return next(new HttpError("Could not upload image, try aagin next time", 422))
-                    }
+                const newUrl = result.secure_url;
+
+                if(!newUrl){
+                    return next(new HttpError("Could not update, a possible network issues, try again later", 422))
+                }            
                     // find the gallery array of objects n push.
-                    const restaurant = await Restaurant.findByIdAndUpdate(restaurantId, {$push: {gallery:{galleryImage:newFileName}}}, { returnDocument:'after'}) 
-                    res.status(200).json({message:"Successfully Uploaded", data:restaurant.gallery})
-                })               
+                    const restaurant = await Restaurant.findByIdAndUpdate(restaurantId, {$push: {gallery:{galleryImage:newUrl}}}, { returnDocument:'after'})
+                    
+                    if(!restaurant){
+                        return next(new HttpError("Upload to db not successful, Try again later", 422))
+                    }
+                    res.status(200).json({message:"Successfully Uploaded", data:restaurant.gallery})                             
 
             }
 
@@ -742,12 +729,13 @@ const uploadToGallary = async (req, res, next)=>{
 const changeGallery = async (req, res, next)=>{
     try {
         const {restaurantId, galleryId} = req.params;
-        const restaurant = await Restaurant.findById(restaurantId)
+        const restaurant = await Restaurant.findById(restaurantId)        
+        const gallery = restaurant.gallery.id(galleryId)
+        const oldImageUrl = gallery?.galleryImage
         if(!restaurant){
             return next(new HttpError("Restaurant info can't be found", 422))
-        }
+        }        
         
-        const gallery = restaurant.gallery.id(galleryId)
         if(!gallery){
             return next(new HttpError("Gallery info can't be found", 422))
         }
@@ -766,31 +754,33 @@ const changeGallery = async (req, res, next)=>{
 
             if (!galleryImage.mimetype.startsWith("image/")) {
                     return next(new HttpError("Not an image file", 422));
-            }
+            }                
 
-            const oldImage = gallery?.galleryImage
-            fs.unlink(path.join(__dirname, '..', '/uploads', oldImage), async (err)=>{
-                if(err){
-                    return next(new HttpError("Image could not be removed", 422))
+                    const result = await cloudinary.uploader.upload(
+                    `data:${galleryImage.mimetype};base64,${galleryImage.data.toString("base64")}`,
+                        {
+                            folder: `restaurant-app/restaurants/${restaurantId}/gallery`
+                        }
+                    );
+
+                const newUrl = result.secure_url;
+
+                if(!newUrl){
+                    return next(new HttpError("Could not update, a possible network issues, try again later", 422))
+                }           
+                // find the gallery object and populate
+                const oldImagePublicId = getCloudinaryPublicId(oldImageUrl);
+                if(!oldImagePublicId){
+                    return next(new HttpError("Could not remove the old image. Try again next time", 422))
                 }
-            })
-
-            const fileName = galleryImage.name
-            const splittedFileName = fileName.split('.')
-            const newFileName = splittedFileName[0] + uuid() + '.' + splittedFileName[splittedFileName.length-1]
-
-            galleryImage.mv(path.join(__dirname, '..', '/uploads', newFileName), async(err)=>{
-                if(err){
-                    return next(new HttpError("Could not upload image", 422))
-                }else{
-                    // find the gallery object and populate
-                    const gallery = restaurant.gallery.id(galleryId);                    
-                    gallery.galleryImage = newFileName;
-                    await restaurant.save();
-                    res.status(200).json({message: "Saved successfully", data: gallery})                    
-                }
-            })
-
+                const gallery = restaurant.gallery.id(galleryId);
+                if(!gallery){
+                    return next(new HttpError("Couldn't find gallery", 422))
+                }                    
+                gallery.galleryImage = newUrl;
+                await restaurant.save();                
+                await cloudinary.uploader.destroy(oldImagePublicId);
+                res.status(200).json({message: "Saved successfully", data: gallery})
         }
         
         
@@ -813,18 +803,32 @@ const deleteFromGalleryImage = async (req, res, next)=>{
         
         if(req.user.id === restaurant.creator.toString() || req.user.role === 'admin'){
             if(!galleryObj){
-                return next(new HttpError("Image not found", 404))
-            }else{
-                fs.unlink(path.join(__dirname, '..', '/uploads', galleryObj.galleryImage), async(err)=>{
-                    if(err){
-                        return next(new HttpError('Image coould not be removed', 422))
-                    }
-                })
-                
-                    galleryObj.deleteOne();
-                    await restaurant.save();
-                    res.status(200).json({message: "Photo deleted successfully"});
+                return next(new HttpError("Gallery record  not found", 404))              
+               
             }
+
+            if(!galleryObj?.galleryImage){
+                return next(new HttpError("Gallery image could not be found", 500))
+            }
+
+            // extract the publicId from the url
+            const url = galleryObj?.galleryImage
+            // extract public_id using the helper function
+            const publicId = getCloudinaryPublicId(url);
+            
+            galleryObj.deleteOne()           
+            const deletion = await restaurant.save();
+             if(!deletion){
+                return next(new HttpError("Deletion process failed. Try again later", 500))
+            }
+
+             const deletionFronCloud = await cloudinary.uploader.destroy(publicId);
+             if(!deletionFronCloud){
+                return next(new HttpError("Deletion of image from cloudinary not successful", 422))
+             }
+
+             res.status(200).json({message: "Photo deleted successfully"})            
+   
         }
 
         
@@ -861,6 +865,65 @@ const adminAprovalPage = async (req, res, next)=>{
     }    
 
 }
+
+
+const deleteRestaurant = async (req, res, next)=>{
+    try {
+        const {restaurantId} = req.params;
+        const findRestaurant = await Restaurant.findById(restaurantId);
+        if(!findRestaurant){
+            return next(new HttpError("Resource cannot be found", 404));
+        }
+
+        if(req.user.role === "admin" && findRestaurant.approvalStatus === "rejected"){
+            
+            await Restaurant.findByIdAndDelete(restaurantId)
+            res.status(400).json("Resource has been deleted successfully")
+        }else{
+            return next(new HttpError("Approval status not rejected yet", 422))
+        }
+        
+    } catch (error) {
+        return next(new HttpError(error.message))
+    }
+
+}
+
+
+const userRestaurantDelet = async(req, res, next)=>{
+    // find the restuarnt
+    try {   
+        
+            const { restaurantId } = req.params;
+            const restaurant = await Restaurant.findById(restaurantId)
+            if(req.user.id === restaurant.creator.toString()){
+                if(!restaurant){
+                    return next(HttpError("Restaurant resourve not found", 404))
+                }
+
+                const prefix = `restaurant-app/restaurants/${restaurantId}/`;
+                const deleteFromCloud = await cloudinary.api.delete_resources_by_prefix(prefix);
+
+                if(!deleteFromCloud){
+                    return next(new HttpError("Could not delete records", 500))
+                }
+
+                const deletion = await restaurant.deleteOne()
+                if(deletion.deletedCount !== 1){
+                    return next(new HttpError("Deletion was not successful", 500))
+                }
+
+                // how to get the restaurant's publicId from cloudinary??
+                // restuarntId in this case matches the public id 
+            } 
+            
+            
+    } catch (error) {
+        
+    }
+}
+
+
 
 module.exports = { createRestaurant, editRestaurant, getAllApprovedRestaurants, getAllRestaurants, getRestaurant, getUserRestaurants, claimRequest, adminApproval, reject, uploadCoverPic, changeCoverPic, uploadResturantMenu, editRestaurantMenu, getAMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery,  deleteFromGalleryImage, deleteRestaurant, adminAprovalPage }
 

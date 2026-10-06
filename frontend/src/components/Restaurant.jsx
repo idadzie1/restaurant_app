@@ -53,9 +53,9 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                         Opening Hours: {open} - {close}
                     </div>
                     <div className="contact text">
-                        <span className='telephone'><BsTelephone /><a href={`tel:${phone}`}>Call</a></span>
-                        <span className='whatsapp'><FaWhatsapp /><a href={`https://wa.me${whatsapp}`}>Whatsapp</a></span>
-                        <span className='mail'><MdOutlineMail /><a href={`mailto:${email}`}>email</a></span>       
+                        <span className='telephone'><BsTelephone /><a href={`tel:${phone}`} target='_blank'>Call</a></span>
+                        <span className='whatsapp'><FaWhatsapp /><a href={`https://wa.me/${whatsapp}`} target='_blank'>Whatsapp</a></span>
+                        <span className='mail'><MdOutlineMail /><a href={`mailto:${email}`} target='_blank'>email</a></span>       
                         
                         
                         <span>{location} : {area}</span> 
@@ -72,7 +72,7 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                         </div>
                     </div>
                     <div className="website">
-                        <span className='text'><a href={website}>Visit website</a></span>
+                        <span className='text'><a href={website} target='_blank'>Visit website</a></span>
                     </div>
                     <hr />
                 </div>
