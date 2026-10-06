@@ -867,36 +867,36 @@ const adminAprovalPage = async (req, res, next)=>{
 }
 
 
-const deleteRestaurant = async (req, res, next)=>{
-    try {
-        const {restaurantId} = req.params;
-        const findRestaurant = await Restaurant.findById(restaurantId);
-        if(!findRestaurant){
-            return next(new HttpError("Resource cannot be found", 404));
-        }
+// const deleteRestaurant = async (req, res, next)=>{
+//     try {
+//         const {restaurantId} = req.params;
+//         const findRestaurant = await Restaurant.findById(restaurantId);
+//         if(!findRestaurant){
+//             return next(new HttpError("Resource cannot be found", 404));
+//         }
 
-        if(req.user.role === "admin" && findRestaurant.approvalStatus === "rejected"){
+//         if(req.user.role === "admin" && findRestaurant.approvalStatus === "rejected"){
             
-            await Restaurant.findByIdAndDelete(restaurantId)
-            res.status(400).json("Resource has been deleted successfully")
-        }else{
-            return next(new HttpError("Approval status not rejected yet", 422))
-        }
+//             await Restaurant.findByIdAndDelete(restaurantId)
+//             res.status(400).json("Resource has been deleted successfully")
+//         }else{
+//             return next(new HttpError("Approval status not rejected yet", 422))
+//         }
         
-    } catch (error) {
-        return next(new HttpError(error.message))
-    }
+//     } catch (error) {
+//         return next(new HttpError(error.message))
+//     }
 
-}
+// }
 
 
-const userRestaurantDelet = async(req, res, next)=>{
+const deleteRestaurant = async(req, res, next)=>{
     // find the restuarnt
     try {   
         
             const { restaurantId } = req.params;
             const restaurant = await Restaurant.findById(restaurantId)
-            if(req.user.id === restaurant.creator.toString()){
+            if((req.user.id === restaurant.creator.toString() && req.user.role === 'user') || req.user.role === 'admin'){
                 if(!restaurant){
                     return next(HttpError("Restaurant resourve not found", 404))
                 }
@@ -913,17 +913,17 @@ const userRestaurantDelet = async(req, res, next)=>{
                     return next(new HttpError("Deletion was not successful", 500))
                 }
 
-                // how to get the restaurant's publicId from cloudinary??
-                // restuarntId in this case matches the public id 
+                res.status(200).json("Resource has been deleted successfully")
+                
             } 
             
             
     } catch (error) {
-        
+        return next(new HttpError(error.message))
     }
 }
 
 
 
-module.exports = { createRestaurant, editRestaurant, getAllApprovedRestaurants, getAllRestaurants, getRestaurant, getUserRestaurants, claimRequest, adminApproval, reject, uploadCoverPic, changeCoverPic, uploadResturantMenu, editRestaurantMenu, getAMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery,  deleteFromGalleryImage, deleteRestaurant, adminAprovalPage }
+module.exports = { createRestaurant, editRestaurant, getAllApprovedRestaurants, getAllRestaurants, getRestaurant, getUserRestaurants, claimRequest, adminApproval, reject, uploadCoverPic, changeCoverPic, uploadResturantMenu, editRestaurantMenu, getAMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery,  deleteFromGalleryImage, deleteRestaurant, adminAprovalPage}
 

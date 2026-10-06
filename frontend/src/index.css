@@ -186,6 +186,19 @@ textarea{
 
 /* 1032px */
 /* 1024px */
+@media screen and (min-width:1032px){
+    .login-container{
+        /* background-color: red; */
+        justify-content: end;
+        margin-right: 0rem;
+    }
+
+    .nav-container{
+        /* background-color: #2373F4; */
+    }
+}
+
+
 @media screen and (min-width:320px) and (max-width:1024px) {
 
     .login-container{
@@ -461,8 +474,7 @@ textarea{
     width: 23rem;
     height: 22rem;
     z-index: 10;
-    /* background-color: red; */
-    color: #FF6B35;
+    /* background-color: red; */    
     color: #fff;
     font-family: "Playfair Display", serif;
     font-weight: 500;
@@ -533,6 +545,22 @@ textarea{
 }
 
 /* ====================== Header Media Queries ========================= */
+@media screen and (width:1032px){
+
+     .banner-text{ 
+        position: absolute;       
+        font-size: 2rem;
+        width: 90%;
+        left: 5%;
+        right: 5%;       
+        margin-top: -2rem;
+        height: 9rem;        
+       
+    }
+
+}
+
+
 @media screen and (max-width:1024px){
     .search-text{
         width: 20rem;
@@ -737,6 +765,22 @@ iframe{
 
 
 /* ================== Home Page Media query ====================== */
+@media screen and (width:1032px){
+    .container{      
+       width: 90%;
+    }
+
+        .restaurant-items{
+        width: 100%;    
+        margin-top: 1.5rem;
+        display: grid;    
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        
+    }
+}
+
+
 @media screen and (min-width:360px) and (max-width:600px){
       
     .container{
