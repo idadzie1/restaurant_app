@@ -20,8 +20,8 @@ const AdminDashBoard = () => {
 
   const [ userInfo, setUserInfo]=useState([])
   const [ errorMessage, setErrorMessage ] = useState("");
-  const [ loading, setLoading ]=useState(true)
-  // const [ confirmationMessage, setconfirmationMessage ] = useState(false);
+  const [ loading, setLoading ] = useState(true)
+  // const [ confirmationMessage, setconfirmationMessage ] = useState(false);  
   const [ response, setResponse ] = useState("")
   const [ showNotificationBox, setShowNotificationBox] = useState(false)
   const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox] = useState(false)
@@ -60,6 +60,7 @@ const AdminDashBoard = () => {
 
         
         setUserInfo(data)
+        
 
       } catch (error) {
       setErrorMessage(error.message)
@@ -183,7 +184,8 @@ const AdminDashBoard = () => {
     }
 
   const handleDelete= async (selectRestaurantId)=>{
-    setShowDeleteConfrimationDialogueBo(false)
+    setShowDeleteConfrimationDialogueBox(false)
+    setLoading(true)
     try {
       const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/delete/${selectRestaurantId}`, {
         method:'DELETE',
@@ -199,17 +201,24 @@ const AdminDashBoard = () => {
         setShowErrorAndResDialogueBox(true);
         return
       }
-
-        setShowNotificationBox(true)
         setResponse(data.message)
+        setShowNotificationBox(true)        
         return
 
     } catch (error) {
       setErrorMessage(error.message)
       setShowErrorAndResDialogueBox(true);
       return
+    }finally{
+      setLoading(false)
     }
   }
+
+  if(loading){
+    return <Loader />
+  }
+
+  console.log("Restuarant Id for deletion", selectRestaurantId)
   
   return (
     <>
@@ -232,9 +241,9 @@ const AdminDashBoard = () => {
      clickNo={handleNoDeny}/>}
 
     {showDeleteConfrimationDialogueBox && <ActionConfirmationDialogueBox
-     confirmationMessage = "Proceed with deletion?" 
+     confirmationMessage = "Proceed with deletion?"  
      clickYes={()=>handleDelete(selectRestaurantId)} 
-     clickNo={handleNoDelete}/>}
+     clickNo={handleNoDelete}/>} 
 
     <section className='admin-dashboard'>
       <h2 className='heading'>Administrator Dashboard</h2>

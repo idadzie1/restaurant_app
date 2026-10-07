@@ -7,15 +7,24 @@ import restaurantInfo from '../data/restaurantData'
 import { UserContext } from '../context/userContext'
 import { IoIosHeartEmpty } from 'react-icons/io'
 import DialogueBox from '../components/modals/Dialoguebox.jsx'
+import ActionConfirmationDialogueBox from '../components/modals/ActionConfirmationDialogueBox.jsx'
+
+import NotificationBox from '../components/modals/NotificationBox.jsx'
 import ErrorAndResDialogueBox from '../components/modals/ErrorAndResDialogueBox.jsx';
 
 const UserDashPage = () => {
-  const[ userInfo, setUserInfo ] = useState([]);
-  const [ confirm, setConfirm ] = useState(false);
-  const [ selectedId, setSelectedId ] = useState(null)
-  const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox ] = useState(false);  
-  const [ errorMessage, setErrorMessage ] = useState('')
-  const [ loading, setLoading ]=useState(true);
+  const [ userInfo, setUserInfo]=useState([])
+  const [ errorMessage, setErrorMessage ] = useState("");
+  const [ loading, setLoading ] = useState(true)
+  // const [ confirmationMessage, setconfirmationMessage ] = useState(false);  
+  const [ response, setResponse ] = useState("")
+  const [ showNotificationBox, setShowNotificationBox] = useState(false)
+  const [ showErrorAndResDialogueBox, setShowErrorAndResDialogueBox] = useState(false)
+  // const [ statusVisibility, setStatusVisibility ] = useState(false) 
+  const [ showApproveConfirmationDialogueBox, setShowApproveConfirmationDialogueBox ] = useState(false)
+  const [ showDenyConfirmationDialogueBox, setShowDenyConfirmationDialogueBox ] = useState(false);
+  const [ showDeleteConfrimationDialogueBox, setShowDeleteConfrimationDialogueBox ] = useState(false)
+  const [ selectRestaurantId, setSelectRestaurantId ] = useState(null)
   const {currentUser} = useContext(UserContext);
   const token = currentUser?.token
   const userId = currentUser?.id
@@ -68,23 +77,74 @@ const UserDashPage = () => {
     return <Loader />
   } 
      
+const handleErrorBox=()=>{
+    setShowErrorAndResDialogueBox(false)
+    // navigate('/')
+  }
+//  ============================ delete process ===========================================
 
-//  ============================ edit process ===========================================
-
-// const handleClickEdit=(selectedId)=>{
-//   setSelectedId(selectedId)  
-//   setConfirm(true)
-// }
-
+       const handleDeleteActionConfirmation =(selectRestaurantId)=>{        
+       setShowDeleteConfrimationDialogueBox(true)
+       setSelectRestaurantId(selectRestaurantId)         
+     }
  
+   const handleNoDelete = ()=>{
+      setShowDeleteConfrimationDialogueBox(false)
+     return
+     }
+ 
+   const handleDelete = async (selectRestaurantId)=>{
+     setShowDeleteConfrimationDialogueBox(false)
+     setLoading(true)
+     try {
+       const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/delete/${selectRestaurantId}`, {
+         method:'DELETE',
+         headers:{
+           Authorization:`Bearer ${token}`
+         }
+       })
+       
+       const data = await response.json();
+ 
+       if(!response.ok){
+         setErrorMessage(data.message);
+         setShowErrorAndResDialogueBox(true);
+         return
+       }
+         setResponse(data.message)
+         setShowNotificationBox(true)        
+         return
+ 
+     } catch (error) {
+       setErrorMessage(error.message)
+       setShowErrorAndResDialogueBox(true);
+       return
+     }finally{
+       setLoading(false)
+     }
+   }
+ 
+   if(loading){
+     return <Loader />
+   }
 
-//  const handleRedirection =(selectedId)=>{
-//       navigate(`/editdetails/${selectedId}`)
-//       setConfirm(false)
-//  }
+      
 
   return (
+         <>
+          {showErrorAndResDialogueBox && <ErrorAndResDialogueBox 
+          errorMessage={errorMessage} 
+          clickOk={handleErrorBox} />}
       
+          {showNotificationBox && <NotificationBox 
+          response={response} 
+          clickok={()=>{setShowNotificationBox(false)}}/>}
+
+          {showDeleteConfrimationDialogueBox && <ActionConfirmationDialogueBox
+           confirmationMessage = "Proceed with deletion?"  
+           clickYes={()=>handleDelete(selectRestaurantId)} 
+           clickNo={handleNoDelete}/>}
+
       <section className='admin-dashboard'>
             {/* {confirm && <DialogueBox clickYes={()=>handleRedirection(selectedId)}/>} */}
             <h2 className='heading'>Hi {firstname}, you're welcome to your Dashboard</h2>
@@ -121,7 +181,7 @@ const UserDashPage = () => {
                 <div className="controls">                  
                   <Link to={`/editdetails/${item._id}`}><button className='deny'>Edit</button></Link>
                   <Link to='/userdashpage'><button className='deny'>Go Back</button></Link>
-                  <button className='del'>Delete</button>
+                  <button className='del' onClick={()=>handleDeleteActionConfirmation(item._id)}>Delete</button>
                 </div>          
               </div> ))
                  
@@ -130,8 +190,8 @@ const UserDashPage = () => {
             </div>
       
           </section>
-
-  
+        </>      
+              
   )
 }
 

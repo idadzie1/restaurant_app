@@ -128,69 +128,6 @@ const createRestaurant = async (req, res, next)=>{
 }
 
 
-// api/restaurants/edit-restaurant
-// patch
-// protected
-// const editRestaurant = async (req, res, next)=>{
-//     try {
-//         // find restaurant by id and edit
-//         const {restaurantId} = req.params;
-//         const findRestaurant = await Restaurant.findById(restaurantId);
-
-//         const {name, captionPhoto, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;
-       
-
-//         if(!name || min == null || max == null || !open || !close || !phone || !email || !whatsapp || !facebook || !instagram || !location || !area || !website || !googleMap){
-            
-//             return next(new HttpError("Fill all fields", 422))
-//         }
-    
-
-//         const minNum = parseInt(min);
-//         const maxNum = parseInt(max);       
-
-//         if((req.user.id === findRestaurant.creator.toString()) || (req.user.role === 'user' && findRestaurant.approved)){
-//             if(!req.files){
-//                 const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap}, {returnDocument:'after'});
-//                 res.status(201).json({message:"Success", data:updated})
-
-//             }else if(req.files){
-//                 // find old cover photo and remove it
-//                 fs.unlink(path.join(__dirname, '..', 'uploads', findRestaurant.coverPhoto), (err)=>{
-//                     if(err){
-//                         return next(new HttpError("The file you want replaced does not exit", 422))
-//                     }
-
-//                     // =================
-
-//                 const {coverPhoto} = req.files;                
-//                 let fileName = coverPhoto.name;
-//                 let splittedName = fileName.split('.');
-//                 let newFileName = splittedName[0] + uuid() + '.' + splittedName[splittedName.length - 1];
-
-//                 coverPhoto.mv(path.join(__dirname, '..', 'uploads', newFileName), async(err)=>{
-//                     if(err){
-//                         return next(new HttpError(err.message))
-//                     }else{
-//                         const updated = await Restaurant.findByIdAndUpdate(restaurantId, {name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto:newFileName}, {returnDocument:'after'});
-//                         res.status(201).json({message:"Success", data:updated}) 
-//                     }
-
-//                 })
-//                     // =================
-
-//                 })
- 
-//             }
-//         }else{
-//             return next(new HttpError("Unauthorized operation", 422))
-//         }        
-        
-//     } catch (error) {
-//         return next(new HttpError(error.message))
-//     }
-// }
-
 
 // =========================== editing: uplsod cover photo to Cloudinary=================
 //  find the mongoDB record
@@ -441,16 +378,16 @@ const reject = async (req, res, next)=>{
 // api/restaurants/upload-cover-pic
 // post
 // protected
-const uploadCoverPic = (req, res, next)=>{
-    res.json("upload cover pic")
-}
+// const uploadCoverPic = (req, res, next)=>{
+//     res.json("upload cover pic")
+// }
 
-// api/restaurants/change-cover-pic
-// post
-// protected
-const changeCoverPic = (req, res, next)=>{
-    res.json("change cover pic")
-}
+// // api/restaurants/change-cover-pic
+// // post
+// // protected
+// const changeCoverPic = (req, res, next)=>{
+//     res.json("change cover pic")
+// }
 
 
 // api/restaurants/upload-to-menu
@@ -867,28 +804,6 @@ const adminAprovalPage = async (req, res, next)=>{
 }
 
 
-// const deleteRestaurant = async (req, res, next)=>{
-//     try {
-//         const {restaurantId} = req.params;
-//         const findRestaurant = await Restaurant.findById(restaurantId);
-//         if(!findRestaurant){
-//             return next(new HttpError("Resource cannot be found", 404));
-//         }
-
-//         if(req.user.role === "admin" && findRestaurant.approvalStatus === "rejected"){
-            
-//             await Restaurant.findByIdAndDelete(restaurantId)
-//             res.status(400).json("Resource has been deleted successfully")
-//         }else{
-//             return next(new HttpError("Approval status not rejected yet", 422))
-//         }
-        
-//     } catch (error) {
-//         return next(new HttpError(error.message))
-//     }
-
-// }
-
 
 const deleteRestaurant = async(req, res, next)=>{
     // find the restuarnt
@@ -913,9 +828,11 @@ const deleteRestaurant = async(req, res, next)=>{
                     return next(new HttpError("Deletion was not successful", 500))
                 }
 
-                res.status(200).json("Resource has been deleted successfully")
+                res.status(200).json({message: "Resource has been deleted successfully"})
                 
-            } 
+            }else{
+                return next(new HttpError("You are not authorized. Log out", 422))
+            }
             
             
     } catch (error) {
@@ -925,5 +842,5 @@ const deleteRestaurant = async(req, res, next)=>{
 
 
 
-module.exports = { createRestaurant, editRestaurant, getAllApprovedRestaurants, getAllRestaurants, getRestaurant, getUserRestaurants, claimRequest, adminApproval, reject, uploadCoverPic, changeCoverPic, uploadResturantMenu, editRestaurantMenu, getAMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery,  deleteFromGalleryImage, deleteRestaurant, adminAprovalPage}
+module.exports = { createRestaurant, editRestaurant, getAllApprovedRestaurants, getAllRestaurants, getRestaurant, getUserRestaurants, claimRequest, adminApproval, reject, uploadResturantMenu, editRestaurantMenu, getAMenu, getMenu, deleteRestaurantMenu, uploadToGallary, changeGallery,  deleteFromGalleryImage, deleteRestaurant, adminAprovalPage}
 
