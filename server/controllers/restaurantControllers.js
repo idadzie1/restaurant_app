@@ -7,34 +7,8 @@ const { v4: uuid } = require("uuid");
 const { userInfo } = require("os");
 const cloudinary = require('../config/cloudinary')
 const mongoose = require('mongoose');
+const { getCloudinaryPublicId } = require("../utils/cloudinaryUtils");
 
-
-// ========helper function to extract Public_Id of photo stored in Cloudinary=============
-
-const getCloudinaryPublicId = (cloudinaryUrl) => {
-
-    const url = new URL(cloudinaryUrl);
-
-    const pathParts = url.pathname.split("/");
-
-    // Remove:
-    // /mhzhitye/image/upload/
-    // and possible version such as v1759000000
-
-    const uploadIndex = pathParts.indexOf("upload");
-
-    let publicIdParts = pathParts.slice(uploadIndex + 1);
-
-    // Remove version if present
-    if (publicIdParts[0]?.startsWith("v")) {
-        publicIdParts.shift();
-    }
-
-    const publicIdWithExtension = publicIdParts.join("/");
-
-    // Remove file extension
-    return publicIdWithExtension.replace(/\.[^/.]+$/, "");
-};
 
 // ==================================================================================
 
@@ -177,7 +151,7 @@ const editRestaurant = async (req, res, next)=>{
                     );
 
                     const newUrl = result.secure_url;
-                    if(!url){
+                    if(!newUrl){
                         return next(new HttpError("Could not update, a possible network issues, try again later", 422))
                     }
 

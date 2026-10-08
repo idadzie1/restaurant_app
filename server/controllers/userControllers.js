@@ -6,6 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const { v4: uuid } = require("uuid");
 const { v2: cloudinary } = require("cloudinary");
+const { getCloudinaryPublicId } = require("../utils/cloudinaryUtils");
 
 // ========= Register new user ============
 // POST: api/users/register
@@ -110,128 +111,102 @@ const getUser = async (req, res, next) => {
 }
 
 // ========== change user avatat ===========
-// POST: api/users/:id
-// potected
-const changeAvatar = async (req, res, next) => {
-    try {
-        if (!req.files || !req.files.profilePic) {
-            return next(new HttpError("Please choose photo", 422));
-        }
-
-        const { profilePic } = req.files;
-        if(profilePic.size > 200000){
-            return next(new HttpError("File size is must be not be more than 200KB"))
-        }
-
-        if (!profilePic.mimetype.startsWith('image/')) {
-            return next(new HttpError("Please select an image file", 422));
-        }
-
-        const fileName = profilePic.name;
-        const splittedFileName = fileName.split('.')
-        const newFileName = splittedFileName[0] + uuid() + '.' + splittedFileName[splittedFileName.length-1]
-
-        const findUser = await User.findById(req.user.id)
-        // delete old avatar if it exists
-        // associate the new file name to the photo and move it into the uploads folder and save name in the database
-        profilePic.mv(path.join(__dirname, '..', '/uploads', newFileName), async (err)=>{
-            if(err){
-                return next(new HttpError("Could not move the file into the folder", 422))
-            }
-            
-             const updatedUser = await User.findByIdAndUpdate(req.user.id, {profilePic:newFileName}, { returnDocument: 'after' })
-             
-             if(!updatedUser){
-                return next(new HttpError("Could not save phto to DB", 422))                
-             }
-
-             const oldProfilePic = findUser.profilePic
-            if(oldProfilePic){
-            fs.unlink(path.join(__dirname, '..', '/uploads', oldProfilePic), async(err)=>{
-                if(err){
-                    return next(new HttpError("Could not remove old photo", 422))
-                    
-                }
-            })
-        }
-
-             res.status(200).json(updatedUser) 
-        })      
-   
-
-    } catch (error) {
-        return next(new HttpError(error.message));
-    }
-}
 
 // =============== Saving profile photo in Cloudinary ========================================
 // ===========================================================================================
 
-const editAvataToCoudinary = async(req, res, next)=>{    
+const changeAvatar = async (req, res, next) => {
     try {
-        const userId = req.params
-        const currentUserId = req.user.id
-        if(!currentUserId){
-            return next(new HttpError("Unauthorized. Not logged in", 422))
-        }        
-        if(currentUserId === userId){
-            const { profilePic } = req.files
-        } else{
-            return next(new HttpError("User could not be found", 404))
-        }        
-      
+        if (!req.user?.id) {
+            return next(
+                new HttpError("Unauthorized. Not logged in", 401)
+            );
+        }
+
+        const currentUserId = req.user.id;
+
+        const user = await User.findById(currentUserId);
+
+        if (!user) {
+            return next(
+                new HttpError("User not found", 404)
+            );
+        }
+
+        if (!req.files || !req.files.profilePic) {
+            return next(
+                new HttpError("Select an image", 422)
+            );
+        }
+
+        const { profilePic } = req.files;
+
+        if (profilePic.size > 200000) {
+            return next(
+                new HttpError(
+                    "Image size must not be more than 200kB",
+                    422
+                )
+            );
+        }
+
+        // Keep the old Cloudinary URL before replacing it
+        const oldProfilePicUrl = user.profilePic;
+
+        // Upload new profile photo
+        const result = await cloudinary.uploader.upload(
+            `data:${profilePic.mimetype};base64,${profilePic.data.toString("base64")}`,
+            {
+                folder: `restaurant-app/users/${currentUserId}/profile`
+            }
+        );
+
+        const url = result.secure_url;
+
+        if (!url) {
+            return next(
+                new HttpError(
+                    "Could not upload the profile photo. Try again later",
+                    422
+                )
+            );
+        }
+
+        // Update user's profile photo in MongoDB
+        const updatedUser = await User.findByIdAndUpdate(
+            currentUserId,
+            { profilePic: url },
+            { returnDocument: 'after' }
+        );
+
+        if (!updatedUser) {
+            return next(
+                new HttpError(
+                    "Could not save photo into database",
+                    422
+                )
+            );
+        }
+
+        // Delete old photo from Cloudinary
+        if (oldProfilePicUrl) {
+            const oldPublicId =
+                getCloudinaryPublicId(oldProfilePicUrl);
+
+            if (oldPublicId) {
+                await cloudinary.uploader.destroy(oldPublicId);
+            }
+        }
+
+        res.status(200).json(updatedUser);
+
     } catch (error) {
-        
+        return next(new HttpError(error.message));
     }
-}
+};
 
 
-// ===========================================================================================
-// ======================= change avatar another way to do=======================================
-//     profilePic.mv(
-//     path.join(__dirname, '..', 'uploads', newFileName),
-//     async (err) => {
-
-//         if (err) {
-//             return next(
-//                 new HttpError(
-//                     "Could not move the file into the folder",
-//                     422
-//                 )
-//             );
-//         }
-
-//         const updatedUser = await User.findByIdAndUpdate(
-//             req.user.id,
-//             { profilePic: newFileName },
-//             { returnDocument: 'after' }
-//         );
-
-//         if (!updatedUser) {
-//             return next(
-//                 new HttpError("Could not update profile photo", 422)
-//             );
-//         }
-
-//         if (oldProfilePic) {
-//             fs.unlink(
-//                 path.join(__dirname, '..', 'uploads', oldProfilePic),
-//                 (err) => {
-//                     if (err) {
-//                         console.log(
-//                             "Could not remove old photo:",
-//                             err.message
-//                         );
-//                     }
-//                 }
-//             );
-//         }
-
-//         res.status(200).json(updatedUser);
-//     }
-// );
-
-// ==========================================================================================
+// ====================================================================================================================================================================================
 
 // ============edit user deatails==============
 // Patch api/users/:id

@@ -2170,6 +2170,12 @@ input.profileInput-label{
     justify-content: space-between;
 }
 
+.profilePic-error{
+    color: red;
+    font-size: larger;
+    font-weight: 700;
+}
+
 /* ========================= Profile Page Media Queris =========================================== */
 
 @media screen and (min-width:320px) and (max-width:600px) {
