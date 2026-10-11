@@ -26,7 +26,7 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000;
 
-connect(process.env.MONGO_URI).then(app.listen(PORT, ()=>console.log(`Server running on port ${PORT}`))).catch(error => {console.log(error)});
+connect(process.env.MONGO_URI).then(app.listen(PORT, ()=>console.log(`Server running on port ${PORT}`))).catch(error => {console.log("MongoDB connection failed:", error)});
 
 
 
