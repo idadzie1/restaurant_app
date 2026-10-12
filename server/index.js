@@ -7,10 +7,11 @@ const upload = require("express-fileupload")
 
 const app = express();
 
+const allowedOrigins = [ "http://localhost:5173", "https://restaurant-app-1-rvx6.onrender.com" ];
 
 app.use(express.json({extended: true}))
 app.use(express.urlencoded({extended: true}))
-app.use(cors({credentials:true, origin:'http://localhost:5173'}));
+app.use(cors({credentials:true, origin: allowedOrigins}));
 app.use(upload());
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
