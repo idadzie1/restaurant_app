@@ -49,8 +49,8 @@ const createRestaurant = async (req, res, next)=>{
         }
 
         const {coverPhoto} = req.files;
-        if(coverPhoto.size > 200000){
-            return next(new HttpError("Size of cover photo is too big. It must be less than 200KB", 422))
+        if(coverPhoto.size > 2000000){
+            return next(new HttpError("Size of cover photo is too big. It must not be more than 2MB", 422))
         }  
         
         
@@ -140,8 +140,8 @@ const editRestaurant = async (req, res, next)=>{
 
             }else{
                      const { coverPhoto } = req.files;                        
-                    if(coverPhoto.size > 200000){
-                        return next(new HttpError("Size of cover photo is too big. It must be less than 200KB", 422))
+                    if(coverPhoto.size > 2000000){
+                        return next(new HttpError("Size of cover photo is too big. It must not be more than 2MB", 422))
                     } 
                     const result = await cloudinary.uploader.upload(
                     `data:${coverPhoto.mimetype};base64,${coverPhoto.data.toString("base64")}`,
@@ -343,25 +343,6 @@ const reject = async (req, res, next)=>{
     }
 }
 
-// api/restaurants/delete
-// post
-// protected
-
-
-
-// api/restaurants/upload-cover-pic
-// post
-// protected
-// const uploadCoverPic = (req, res, next)=>{
-//     res.json("upload cover pic")
-// }
-
-// // api/restaurants/change-cover-pic
-// // post
-// // protected
-// const changeCoverPic = (req, res, next)=>{
-//     res.json("change cover pic")
-// }
 
 
 // api/restaurants/upload-to-menu
@@ -379,8 +360,8 @@ const uploadResturantMenu = async (req, res, next)=>{
              }
 
              const {menuPhoto} = req.files
-             if(menuPhoto.size > 200000){
-                return next(new HttpError("File size should be less than 2KB", 422))
+             if(menuPhoto.size > 2000000){
+                return next(new HttpError("File size should not be more than 2MB", 422))
              }                               
 
             const { restaurantId } = req.params;
@@ -455,8 +436,8 @@ const editRestaurantMenu = async (req, res, next)=>{
             // check if there an existig menu image and remove
             // const {menuPhoto} = req.files;
             const menuPhoto = req.files?.menuPhoto;
-            if(menuPhoto.size > 200000){
-                return next(new HttpError("Image size must not be more than 200KB", 422))
+            if(menuPhoto.size > 2000000){
+                return next(new HttpError("Image size must not be more than 2MB", 422))
             }
             
              const result = await cloudinary.uploader.upload(
@@ -598,8 +579,8 @@ const uploadToGallary = async (req, res, next)=>{
             }            
             const{galleryImage} = req.files
             if(req.files){
-                if(galleryImage.size > 200000){
-                    return next(new HttpError("Image size must not be more than 200KB", 422))
+                if(galleryImage.size > 2000000){
+                    return next(new HttpError("Image size must not be more than 2MB", 422))
                 }
 
                 if (!galleryImage.mimetype.startsWith("image/")) {
@@ -658,8 +639,8 @@ const changeGallery = async (req, res, next)=>{
             }
 
             if(req.files){
-                if(galleryImage.size > 200000){
-                    return next(HttpError("Image should not be more than 200KB", 422))
+                if(galleryImage.size > 2000000){
+                    return next(HttpError("Image should not be more than 2MB", 422))
                 }
             }
 
