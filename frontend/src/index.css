@@ -42,8 +42,8 @@ nav{
     top: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.15); /* translucency */
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important; 
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important; 
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     z-index:999;
     
