@@ -656,22 +656,20 @@ textarea{
     text-align: center;
 }
 
-
-
-
 .text{
     font-size: 0.7rem;
-    font-weight: 600;
-    
+    font-weight: 600;    
 }
 
 
 .restaurant-items{
     width: 100%;    
-    margin-top: 1.5rem;
-    display: grid;    
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    margin-top: 1.5rem;   
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
     
 }
 
@@ -681,17 +679,50 @@ textarea{
 }
 
 
-.restaurant-item{   
+.restaurant-item{
+    width: 18rem;   
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;    
-    border-radius: 2rem; 
+    border-radius: 2rem;     
     border: 1px solid transparent;
-    transition: border-color 300ms ease; 
+    transition: border-color 300ms ease;       
     
 }
 
+   .restaurant-photo{
+    width: 18rem;
+    height: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     
+}
+
+.restaurant-photo img{    
+    width:100%;
+    height: 10rem;
+    object-fit: cover;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    
+}
+
+.prices, .opening-hours, span.loc-area{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.restuarant-detail{
+    width: 100%;
+    display: flex;
+    flex-direction: column; 
+    
+    
+}
+ 
 
 .restaurant-item:hover{
      border-color: #EFE9E3;
@@ -711,27 +742,22 @@ textarea{
     color: blue;
 }
 
-iframe{
+iframe {
     margin-top: 0.5rem;
-    width: 18rem;
+    width: 100%;
     height: 8rem;
     border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-.restaurant-photo{
-    width: 18rem;
-    height: 10rem;   
+iframe::-webkit-scrollbar {
+    display: none;
 }
 
-.restaurant-photo img{
-    width: 18rem;
-    height: 10rem;
-    object-fit: cover;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
-    
-}
+
 
 .owner{
     width: 100%;
@@ -747,8 +773,7 @@ iframe{
     padding: 0.17rem;
 }
 
-.website span a, .clicktext a{
-    /* background-color: #3b43d6; */
+.website span a, .clicktext a{    
     color: #3b43d6;
     color: #22396F;
     border-radius: 0.5rem;
@@ -756,7 +781,7 @@ iframe{
 }
 
 .reviews-ownership{
-    cursor: pointer;
+   
 }
 
 .star-color{   
@@ -772,51 +797,44 @@ iframe{
 
         .restaurant-items{
         width: 100%;    
-        margin-top: 1.5rem;
-        display: grid;    
-        grid-template-columns: repeat(2, 1fr);
+        margin-top: 1.5rem;  
         gap: 2rem;
         
     }
 }
 
 
-@media screen and (min-width:360px) and (max-width:600px){
+@media screen and (min-width:320px) and (max-width:600px){
       
     .container{
         width: 100%;        
     }
     
-    .restaurant-items{
-        display: flex;
-        flex-direction: column;        
-        align-items: center;
-        justify-content: center;
+    .restaurant-items{    
         width: 100%;        
     }
  
 
     .restaurant-item{   
-       width: 100%;
+       width: 98%;
     }
 
+ 
+
     .restaurant-photo{
-        width: 20rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        width: 100%;     
         display: block;
 
     }
 
     .restaurant-photo img{
         /* width: 80vw; */
-        width: 100%;
+        width: 100%;       
         display: block;
     }
 
     iframe{
-        width: 20rem;       
+       
     }
   
 }
@@ -824,22 +842,43 @@ iframe{
 
 
  @media screen and (min-width:650px) and (max-width:1024px){
-    .restaurant-items{
-        grid-template-columns: repeat(2, 1fr);
+    .restaurant-items{       
+        
     }
+
+      .restaurant-item{       
+        width: 98%;       
+            
+    }
+
+
+    .restuarant-detail{
+        width: 100%;
+    }
+
+        .restaurant-photo{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: block;
+    }
+
+     .restaurant-photo img{        
+        width: 100%;
+        display: block;
+    }
+
 }
 
 @media(max-width:320px){
-        .restaurant-items{
-        /* width: 100%;     */
-        display: flex;
-        flex-direction: column;        
-        align-items: center;        
+
+    .restaurant-items{   
         
     }
 
     .restaurant-item{
-        width: 100%;
+         width: 100%;
         
     }
 

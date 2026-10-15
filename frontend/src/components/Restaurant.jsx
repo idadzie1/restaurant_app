@@ -45,42 +45,46 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                         <img src={`${coverPhoto}`} alt={name} />
                     </div>
                     <hr />
-                <div className='details'>
-                    <div className="prices text">
-                        Price Range: GHS {min} - {max}
-                    </div>
-                    <div className="opening-hours text">
-                        Opening Hours: {open} - {close}
-                    </div>
-                    <div className="contact text">
-                        <span className='telephone'><BsTelephone /><a href={`tel:${phone}`} target='_blank'>Call</a></span>
-                        <span className='whatsapp'><FaWhatsapp /><a href={`https://wa.me/${whatsapp}`} target='_blank'>Whatsapp</a></span>
-                        <span className='mail'><MdOutlineMail /><a href={`mailto:${email}`} target='_blank'>email</a></span>       
-                        
-                        
-                        <span>{location} : {area}</span> 
-                    </div>
-                    <div className="clicktext text">
-                        <Link to={`restaurants/${restaurantId}`}>Click to see menu</Link>
-                        
-                    </div>
-                    <div className="reviews-ownership">                        
-                        
-                        <div className="owner text">
-                            <span onClick={onClick}>Claim ownership</span>
-                            <Link to={`restaurants/${restaurantId}`}><span>View</span></Link>
+                    <div className='details'>
+                        <div className="prices text">
+                            <span>Price Range:</span> <span>GHS {min} - {max}</span>
                         </div>
+                        <div className="opening-hours text">
+                            <span>Opening Hours:</span> <span>{open} - {close}</span>
+                        </div>
+                        <div className="contact text">
+                            <span className='telephone'><BsTelephone /><a href={`tel:${phone}`} target='_blank'>Call</a></span>
+                            <span className='whatsapp'><FaWhatsapp /><a href={`https://wa.me/${whatsapp}`} target='_blank'>Whatsapp</a></span>
+                            <span className='mail'><MdOutlineMail /><a href={`mailto:${email}`} target='_blank'>email</a></span>       
+                            
+                            
+                            <span className='loc-area'><span>{location}:</span> <span>{area}</span></span> 
+                        </div>
+                        <div className="clicktext text">
+                            <Link to={`restaurants/${restaurantId}`}>Click to see menu</Link>
+                            
+                        </div>
+                        <div className="reviews-ownership">                        
+                            
+                            <div className="owner text">
+                                <span onClick={onClick}>Claim ownership</span>
+                                <Link to={`restaurants/${restaurantId}`}><span>View</span></Link>
+                            </div>
+                        </div>
+                        <div className="website">
+                            <span className='text'><a href={website} target='_blank'>Visit website</a></span>
+                        </div>
+                        <hr />
                     </div>
-                    <div className="website">
-                        <span className='text'><a href={website} target='_blank'>Visit website</a></span>
-                    </div>
-                    <hr />
-                </div>
-                </div>
-                <hr />
+                                    <hr />
                 <div className="googlemap-location">
                     <iframe src={googleMap} frameborder="0"></iframe>
                 </div>
+                </div>
+                {/* <hr />
+                <div className="googlemap-location">
+                    <iframe src={googleMap} frameborder="0"></iframe>
+                </div> */}
             </div>
             
   )
