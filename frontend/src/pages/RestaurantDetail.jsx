@@ -38,9 +38,7 @@ const RestaurantDetail = () => {
   const { restaurantId, menuId } = useParams()  
   
   
-
-  useEffect(()=>{
-    const fectchRestaurantDetail = async ()=>{    
+   const fectchRestaurantDetail = async ()=>{    
     try {
        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/get-restaurant/${restaurantId}`);
 
@@ -65,6 +63,10 @@ const RestaurantDetail = () => {
 
     }
 
+
+
+  useEffect(()=>{   
+
     fectchRestaurantDetail()
     
   }, [`${restaurantId}`])
@@ -87,7 +89,8 @@ const RestaurantDetail = () => {
    }
 
   // This delete will just propmt a dialogue for confirmation to continue on this same page
-   const handleMenuDelete = async()=>{         
+   const handleMenuDelete = async()=>{
+    setLoading(true)         
     try {
           const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/${restaurantId}/menu/${selectedMenuId}`, {
             method: 'DELETE',
@@ -108,6 +111,7 @@ const RestaurantDetail = () => {
           setShowSuccess(true)
           setDeletionSuccessMessage(data.message)
           setShowPrompt(false)
+          await fectchRestaurantDetail()          
           return 
         
        
@@ -116,8 +120,14 @@ const RestaurantDetail = () => {
           setShowFailure(true)
            setShowPrompt(false)
           return
+          } finally{
+            setLoading(false)
           }  
     
+    }
+
+    if(loading){
+      return < Loader />
     }
 
     const handlePopmptYesNo = (menuId)=>{      
@@ -154,8 +164,7 @@ const RestaurantDetail = () => {
      })
 
           
-      const data = await response.json()
-      console.log("This is data". data)
+      const data = await response.json()      
 
       if(!response.ok){
         setErrorMessage(data.message)
@@ -166,6 +175,7 @@ const RestaurantDetail = () => {
       setShowSuccess(true)
       setDeletionSuccessMessage(data.message)
       setShowPrompt(false)
+      await fectchRestaurantDetail() 
       return
 
     } catch (error) {
