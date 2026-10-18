@@ -20,6 +20,7 @@ import EditMenu from './pages/EditMenu';
 import ForgottenPassword from './pages/ForgottenPassword';
 import ChangePassword from './pages/ChangePassword';
 import About from './pages/About';
+import Services from './pages/Services';
 import BlogPage from './pages/Blog/BlogPage';
 import ChangeProfilePhoto from './pages/ChangeProfilePhoto';
 import Message from './pages/Message'
@@ -40,7 +41,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {index: true, element: <Home />},
-      {path: "about", element: <About />}, 
+      {path: "about", element: <About />},
+      {path: "services", element: <Services />}, 
       {path: "blognews", element: <BlogPage />},
       {path: "register", element: <Register />},
       {path: "forgottenpassword", element: <ForgottenPassword />},

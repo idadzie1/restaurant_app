@@ -293,16 +293,11 @@ textarea{
         cursor: pointer;
        
         
-    }
-
-   
-    
-    /* .hide{
-        display: none;
-    } */
+    }    
+  
 }
 
-/*  */
+
 
 @media screen and (max-width:992px){
        .login-container{
@@ -463,7 +458,7 @@ textarea{
     align-items: center;
     border-radius: 1.5rem;
     display: none;    
-    /* font-weight: 700;    */
+   
    
 }
 
@@ -485,10 +480,7 @@ textarea{
     text-align: center;       
 }
 
-/*   font-family: "Playfair Display", serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal; */
+
 
 .search-icon{    
     height: 1.5rem;
@@ -944,6 +936,59 @@ section.about{
     }
 }
 
+
+/* =================================Services========================================= */
+
+section.services{   
+    width: 95%;
+    margin: 5rem auto 0;
+}
+
+h2.services-heading{
+    width: 100;
+    text-align: center;
+}
+
+section.services main{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: start;
+    gap: 3rem;
+}
+
+.card{
+  color: #fff;  
+}
+
+.card h3{
+    width: 100%;
+    margin: 2rem 0 0rem;
+    background-color: #5882E8;
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;    
+}
+
+.card ul{
+    background-color: #1F06AC;
+    display: flex;
+    flex-direction: column;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    padding: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.card ul li{
+    list-style-type: disc;
+    margin-left: 2rem;
+}
+
 /* ================================= register form ========================== */
 .register-form{
     position: relative;
@@ -980,8 +1025,7 @@ label{
     transition: border 300ms ease
 }
 
-/*    border-color: #EFE9E3;
-     background-color: #EFE9E3; */
+
 
 .register:hover{
     border: 1px solid gray;
