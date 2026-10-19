@@ -29,6 +29,22 @@ const Services = () => {
             </ul>
         </div>        
         </main>
+
+        <main className='services-demos'>
+            <h3>Demo Section</h3>
+            <div className="demos">
+                <div className="demo">
+                    <div className="image">
+                        <img src="" alt="image" />
+                    </div>
+                    <h5>Title of demo</h5>
+                    <div className="buttons">
+                        <a href="" target='_blank'>GitHub</a>
+                        <a href="" target='_blank'>Live Demo</a>
+                    </div>
+                </div>
+            </div>
+        </main>
     </section>    
     </>
    
