@@ -989,6 +989,93 @@ section.services main{
     margin-left: 2rem;
 }
 
+.services-demos{
+    width: 95%;
+    margin: 5rem auto 0;
+}
+
+.services-demos h3{
+    width: 100%;
+    text-align: center;
+}
+
+.demos{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    align-items:center;
+    gap: 2rem;
+    
+}
+
+.demo{
+    width: 20rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;   
+    background-color:#fff; 
+    padding-bottom: 1rem;
+    /* outline: solid 5px #1F06AC;   */
+    transition: all 300ms ease-in-out;
+    cursor: pointer;
+    border-radius: 1rem;
+    
+}
+
+.demo:hover{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: all 300ms ease-in-out;
+}
+
+.demo-image{
+    width: 100%;
+    height: 15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: #1F06AC; */
+}
+
+.demo-image img{
+    width: 100%;
+    height: 100%;
+    object-fit:cover;
+    display: block;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+.demo h5{
+    width: 100%;
+    text-align: center;
+}
+
+.anchor-buttons{
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.anchor-buttons a{
+    font-size: small;    
+    background-color: #5882E8;
+    color: #fff;
+    width: 5.5rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.25rem;
+    transition: all 300ms ease-in-out;
+}
+
+.anchor-buttons a:hover{
+    background-color: #1F06AC;
+    transition: all 300ms ease-in-out;
+}
+
 /* ================================= register form ========================== */
 .register-form{
     position: relative;

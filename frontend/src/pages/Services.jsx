@@ -1,4 +1,10 @@
 import React from 'react'
+import mobile1 from '../assets/mobile-iPhone_Air-full (1).png';
+import mobile2 from '../assets/mobile-iPhone_17_Pro_Max-full.png';
+import mobile3 from '../assets/mobile-iPhone_Air-full.png';
+import mobile4 from '../assets/mobile-iPhone_Air-full (2).png'
+import mobile5 from '../assets/mobile-iPhone_Air-full (3).png'
+import mobile6 from '../assets/mobile-WQXGA_16_10.png'
 
 const Services = () => {
   return (
@@ -29,23 +35,80 @@ const Services = () => {
             </ul>
         </div>        
         </main>
+    </section>
 
-        <main className='services-demos'>
-            <h3>Demo Section</h3>
-            <div className="demos">
-                <div className="demo">
-                    <div className="image">
-                        <img src="" alt="image" />
-                    </div>
-                    <h5>Title of demo</h5>
-                    <div className="buttons">
-                        <a href="" target='_blank'>GitHub</a>
-                        <a href="" target='_blank'>Live Demo</a>
-                    </div>
+    <section className='services-demos'>
+        <h3>Demo Section</h3>
+        <div className="demos">
+            <div className="demo">
+                <div className="demo-image">
+                    <img src={mobile1} alt="image" />
+                </div>
+                <h5>Personal portfolio websites</h5>
+                <div className="anchor-buttons">
+                    <a href="" target='_blank'>GitHub</a>
+                    <a href="" target='_blank'>Live Demo</a>
                 </div>
             </div>
-        </main>
-    </section>    
+
+            <div className="demo">
+                <div className="demo-image">
+                    <img src={mobile2} alt="image" />
+                </div>
+                <h5>Business and corporate websites</h5>
+                <div className="anchor-buttons">
+                    <a href="" target='_blank'>GitHub</a>
+                    <a href="" target='_blank'>Live Demo</a>
+                </div>
+            </div>
+
+            <div className="demo">
+                <div className="demo-image">
+                    <img src={mobile3} alt="image" />
+                </div>
+                <h5>Non-profit and NGO websites</h5>
+                <div className="anchor-buttons">
+                    <a href="" target='_blank'>GitHub</a>
+                    <a href="" target='_blank'>Live Demo</a>
+                </div>
+            </div>
+
+            <div className="demo">
+                <div className="demo-image">
+                    <img src={mobile4} alt="image" />
+                </div>
+                <h5>Business and corporate websites</h5>
+                <div className="anchor-buttons">
+                    <a href="" target='_blank'>GitHub</a>
+                    <a href="" target='_blank'>Live Demo</a>
+                </div>
+            </div>
+
+            <div className="demo">
+                <div className="demo-image">
+                    <img src={mobile5} alt="image" />
+                </div>
+                <h5>Personal portfolio websites</h5>
+                <div className="anchor-buttons">
+                    <a href="" target='_blank'>GitHub</a>
+                    <a href="" target='_blank'>Live Demo</a>
+                </div>
+            </div>
+
+            <div className="demo">
+                <div className="demo-image">
+                    <img src={mobile6} alt="image" />
+                </div>
+                <h5>Business directory and listing applications</h5>
+                <div className="anchor-buttons">
+                    <a href="" target='_blank'>GitHub</a>
+                    <a href="" target='_blank'>Live Demo</a>
+                </div>
+            </div>
+
+
+        </div>
+        </section>    
     </>
    
   )
