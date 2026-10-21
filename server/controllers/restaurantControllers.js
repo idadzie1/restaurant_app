@@ -8,8 +8,17 @@ const { userInfo } = require("os");
 const cloudinary = require('../config/cloudinary')
 const mongoose = require('mongoose');
 const { getCloudinaryPublicId } = require("../utils/cloudinaryUtils");
+const nodemailer = require('nodemailer')
 
 
+
+const tranporter = nodemailer.createTransport({
+    service:'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    }
+})
 // ==================================================================================
 
 
@@ -75,6 +84,35 @@ const createRestaurant = async (req, res, next)=>{
 
                 const newRestauant = await Restaurant.create({_id:restaurantId, name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: url, approvalStatus:"approved", creator:req.user.id})
                 res.status(201).json("Success. Pending verification and approval")
+
+                const sendAdminNotification = async (subject, text, html)=>{
+                    if(!newRestauant){
+                        console.log(" could not send mail to admin")
+                    }
+
+                    try {
+                        await tranporter.sendMail({
+                            from: "Ghana Restaurants Hub",
+                            to: process.env.EMAIL_ADMIN,
+                            subject:'New Restaurant Posted',
+
+                            text: `Please check your admin dashboard if needed.`,
+
+                            html: `
+                                <h2>New Post Restaurant Post</h2>
+                                <p>A new restaurant has posted on Ghana Restaurants Hub.</p>
+
+                            `                            
+                        })
+                            sendAdminNotification()
+
+                            console.log(sendAdminNotification())
+
+                    } catch (error) {
+                        console.error("Admin email failed:", error.message)
+                    }
+                    
+                }
             
             }else{
 

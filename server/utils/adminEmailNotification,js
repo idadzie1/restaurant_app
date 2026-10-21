@@ -1,0 +1,37 @@
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+    service:'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    }
+})
+
+
+const sendAdminEmail = async({subject, text, html})=>{
+    if (!process.env.ADMIN_EMAIL ||
+        !process.env.EMAIL_USER ||
+        !process.env.EMAIL_APP_PASSWORD) {
+        console.error("Admin email notification skipped: email environment variables are missing.");
+        return;
+    }
+
+    try {
+        await transporter.sendMail({
+            from: `"Ghana Restaurants Hub" <${process.env.EMAIL_USER}>`,
+            to: process.env.ADMIN_EMAIL,
+            subject,
+            text,
+            html,
+        });
+
+        console.log(`Admin email sent: ${subject}`);
+    } catch (error) {
+        // Email failure should not undo a successful database operation.
+        console.error("Admin email failed:", error.message);
+    }
+
+}
+
+module.exports = { sendAdminEmail };
