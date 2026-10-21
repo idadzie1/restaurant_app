@@ -92,7 +92,7 @@ const createRestaurant = async (req, res, next)=>{
 
                     try {
                         await transporter.sendMail({
-                            from: "Ghana Restaurants Hub",
+                            from: `auntiegradma69@gmail.com`,
                             to: process.env.EMAIL_ADMIN,
                             subject:'New Restaurant Posted',
 
