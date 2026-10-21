@@ -112,7 +112,7 @@ const createRestaurant = async (req, res, next)=>{
                 }
 
                  sendAdminNotification()
-                 console.log(sendAdminNotification())                    
+                                    
             
             }else{
 
