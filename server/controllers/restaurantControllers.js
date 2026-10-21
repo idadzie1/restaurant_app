@@ -12,7 +12,7 @@ const nodemailer = require('nodemailer')
 
 
 
-const tranporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
     service:'gmail',
     auth: {
         user: process.env.EMAIL_USER,
@@ -91,7 +91,7 @@ const createRestaurant = async (req, res, next)=>{
                     }
 
                     try {
-                        await tranporter.sendMail({
+                        await transporter.sendMail({
                             from: "Ghana Restaurants Hub",
                             to: process.env.EMAIL_ADMIN,
                             subject:'New Restaurant Posted',
@@ -103,16 +103,16 @@ const createRestaurant = async (req, res, next)=>{
                                 <p>A new restaurant has posted on Ghana Restaurants Hub.</p>
 
                             `                            
-                        })
-                            sendAdminNotification()
-
-                            console.log(sendAdminNotification())
+                        })                           
 
                     } catch (error) {
                         console.error("Admin email failed:", error.message)
                     }
                     
                 }
+
+                 sendAdminNotification()
+                 console.log(sendAdminNotification())                    
             
             }else{
 
