@@ -8,30 +8,23 @@ const { userInfo } = require("os");
 const cloudinary = require('../config/cloudinary')
 const mongoose = require('mongoose');
 const { getCloudinaryPublicId } = require("../utils/cloudinaryUtils");
-const nodemailer = require('nodemailer')
+// const nodemailer = require('nodemailer');
 
+  
 
-
-const transporter = nodemailer.createTransport({
-    service:'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    }
-})
+                 
 // ==================================================================================
 
 
 const createRestaurant = async (req, res, next)=>{
 
     try {          
-        const {name, captionPhoto, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;        
-  
-        
+        const {name, captionPhoto, min, max, open, close, phone, email, whatsapp, facebook, instagram, location, area, website, googleMap} = req.body;  
+                
         if(!name || min == null || max == null || !open || !close || !phone || !email || !whatsapp || !facebook || !instagram || !location || !area || !website || !googleMap){
             return next(new HttpError("Please fill in the fields. Type in NA if requested info is not available", 422))
-        }      
-
+        } 
+        
         const minNum = parseInt(min);
         const maxNum = parseInt(max);          
 
@@ -56,8 +49,9 @@ const createRestaurant = async (req, res, next)=>{
         if(!req.files || !req.files.coverPhoto){
             return next(new HttpError("Please select a picture for the cover photo", 422))
         }
-
+           
         const {coverPhoto} = req.files;
+        console.log(coverPhoto)
         if(coverPhoto.size > 2000000){
             return next(new HttpError("Size of cover photo is too big. It must not be more than 2MB", 422))
         }  
@@ -76,6 +70,7 @@ const createRestaurant = async (req, res, next)=>{
                             folder: `restaurant-app/restaurants/${restaurantId}/cover`
                         }
                     );
+                
 
                 const url = result.secure_url;
                 if(!url){
@@ -83,37 +78,9 @@ const createRestaurant = async (req, res, next)=>{
                 }           
 
                 const newRestauant = await Restaurant.create({_id:restaurantId, name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: url, approvalStatus:"approved", creator:req.user.id})
-                res.status(201).json("Success. Pending verification and approval")
-
-                const sendAdminNotification = async (subject, text, html)=>{
-                    if(!newRestauant){
-                        console.log(" could not send mail to admin")
-                    }
-
-                    try {
-                        await transporter.sendMail({
-                            from: `auntiegradma69@gmail.com`,
-                            to: process.env.EMAIL_ADMIN,
-                            subject:'New Restaurant Posted',
-
-                            text: `Please check your admin dashboard if needed.`,
-
-                            html: `
-                                <h2>New Post Restaurant Post</h2>
-                                <p>A new restaurant has posted on Ghana Restaurants Hub.</p>
-
-                            `                            
-                        })                           
-
-                    } catch (error) {
-                        console.error("Admin email failed:", error.message)
-                    }
-                    
-                }
-
-                 sendAdminNotification()
-                                    
-            
+                res.status(201).json("Success. Pending verification and approval");
+                                   
+                
             }else{
 
                 const result = await cloudinary.uploader.upload(
@@ -130,8 +97,8 @@ const createRestaurant = async (req, res, next)=>{
 
                 const newRestauant = await Restaurant.create({_id:restaurantId, name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: url, claimed:true, approvalStatus:"pending", claimer:req.user.firstName, claimedBy:req.user.id, creator:req.user.id})
                 res.status(201).json("Success. Pending verification and approval")
-            
-            }        
+                
+        }        
         
       } catch (error) {
             return next(new HttpError(error.message))
@@ -821,8 +788,10 @@ const deleteRestaurant = async(req, res, next)=>{
                     return next(new HttpError("Deletion was not successful", 500))
                 }
 
-                res.status(200).json({message: "Resource has been deleted successfully"})
+                res.status(200).json({message: "Resource has been deleted successfully"})             
                 
+                               
+              
             }else{
                 return next(new HttpError("You are not authorized. Log out", 422))
             }

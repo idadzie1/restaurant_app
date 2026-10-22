@@ -63,9 +63,10 @@ const registerUser = async (req, res, next) => {
 // POST: api/users/login
 // uprotected
 const loginUser = async (req, res, next) => {
+    console.log("user logging in")
     try {
         const { email, password } = req.body;
-        if (!email || !password) {
+        if (!email || !password) {            
             return next(new HttpError("Fill in all fields", 422));
         }
 
@@ -212,6 +213,7 @@ const changeAvatar = async (req, res, next) => {
 // Patch api/users/:id
 // protected
 const editUser = async (req, res, next) => {
+    
     try {
         const { firstName, lastName, email, currentPassword, newPassword, cfmNewPassword } = req.body;
         if (!firstName || !lastName || !email || !currentPassword || !newPassword || !cfmNewPassword) {
