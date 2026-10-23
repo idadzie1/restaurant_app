@@ -39,6 +39,7 @@ const UserDashPage = () => {
 
   // ==================== fetch all restuarnts by the crrently logged in user ==================== ======================================
   const fetchUserRestaurants = async()=>{
+    setLoading(true)
       try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/restaurants-by-user/${userId}`, {
           method: 'GET',
@@ -69,14 +70,18 @@ const UserDashPage = () => {
       }
     }
 
+ 
+
   useEffect(()=>{
 
       fetchUserRestaurants()
   }, [userId])
 
-  if(loading){
+      if(loading){
     return <Loader />
   } 
+
+ 
      
 const handleErrorBox=()=>{
     setShowErrorAndResDialogueBox(false)
@@ -139,10 +144,13 @@ const handleErrorBox=()=>{
       
           {showNotificationBox && <NotificationBox 
           response={response} 
-          clickok={()=>{setShowNotificationBox(false)
-            fetchUserRestaurants()
-          }}/>}
-
+          clickok={()=>{
+            setShowNotificationBox(false);            
+            fetchUserRestaurants();
+            
+            }}/>  
+          }
+                 
           {showDeleteConfrimationDialogueBox && <ActionConfirmationDialogueBox
            confirmationMessage = "Proceed with deletion?"  
            clickYes={()=>handleDelete(selectRestaurantId)} 
