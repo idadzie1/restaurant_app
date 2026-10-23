@@ -140,7 +140,9 @@ const handleErrorBox=()=>{
       
           {showNotificationBox && <NotificationBox 
           response={response} 
-          clickok={()=>{setShowNotificationBox(false)}}/>}
+          clickok={()=>{setShowNotificationBox(false)
+            fetchUserRestaurants()
+          }}/>}
 
           {showDeleteConfrimationDialogueBox && <ActionConfirmationDialogueBox
            confirmationMessage = "Proceed with deletion?"  
