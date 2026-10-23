@@ -108,12 +108,12 @@ const handleErrorBox=()=>{
        const data = await response.json();
  
        if(!response.ok){
-         setErrorMessage(data.message);
-         fetchUserRestaurants()
+         setErrorMessage(data.message);         
          setShowErrorAndResDialogueBox(true);
          return
        }
          setResponse(data.message)
+         fetchUserRestaurants()         
          setShowNotificationBox(true)        
          return
  
