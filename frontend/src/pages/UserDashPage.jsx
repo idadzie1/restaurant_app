@@ -38,9 +38,7 @@ const UserDashPage = () => {
   }, [])
 
   // ==================== fetch all restuarnts by the crrently logged in user ==================== ======================================
-
-  useEffect(()=>{
-    const fetchUserRestaurants = async()=>{
+  const fetchUserRestaurants = async()=>{
       try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_URL}/restaurants/restaurants-by-user/${userId}`, {
           method: 'GET',
@@ -70,6 +68,9 @@ const UserDashPage = () => {
 
       }
     }
+
+  useEffect(()=>{
+
       fetchUserRestaurants()
   }, [userId])
 
@@ -108,6 +109,7 @@ const handleErrorBox=()=>{
  
        if(!response.ok){
          setErrorMessage(data.message);
+         fetchUserRestaurants()
          setShowErrorAndResDialogueBox(true);
          return
        }
