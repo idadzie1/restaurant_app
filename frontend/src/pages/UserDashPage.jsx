@@ -112,8 +112,7 @@ const handleErrorBox=()=>{
          setShowErrorAndResDialogueBox(true);
          return
        }
-         setResponse(data.message)
-         fetchUserRestaurants()         
+         setResponse(data.message)                
          setShowNotificationBox(true)        
          return
  
