@@ -13,7 +13,7 @@ import { UserContext } from '../context/userContext';
 import Confirmation from './modals/Dialoguebox';
 import Ack from './modals/ActionConfirmationDialogueBox'
 
-const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, openingHours:{open, close}, socials:{whatsapp, facebook, instagram}, phone, email, ratings, location, area, onClick, website, googleMap, confirm, acknowledgement}) => {
+const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, openingHours:{open, close}, socials:{whatsapp, facebook, instagram}, phone, email, ratings, location, area, onClick, website, googleMap, confirm, acknowledgement, claimed}) => {
     const [showModalm, setShowModal] = useState(false);
     
 
@@ -67,7 +67,8 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                         <div className="reviews-ownership">                        
                             
                             <div className="owner text">
-                                <span onClick={onClick}>Claim ownership</span>
+                                {claimed ? <span>Claimed</span>:
+                                <span className='unclaimed' onClick={onClick}>Claim ownership</span>}
                                 <Link to={`restaurants/${restaurantId}`}><span>View</span></Link>
                             </div>
                         </div>

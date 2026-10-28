@@ -199,7 +199,7 @@ const [ acknowledgement, setAcknowledgement ] = useState(false);
         {filteredRestaurants.length !=0?
         <div className="restaurant-items">
       
-        {filteredRestaurants.map(({_id, name, coverPhoto, priceRange:{min, max}, openingHours:{open, close}, socials:{whatsapp, facebook, instagram}, phone, email, ratings, location, area, website, googleMap})=>{
+        {filteredRestaurants.map(({_id, name, coverPhoto, priceRange:{min, max}, openingHours:{open, close}, socials:{whatsapp, facebook, instagram}, phone, email, ratings, location, area, website, googleMap, claimed})=>{
             return <Restaurant 
                             key={_id} 
                             name={name} 
@@ -216,7 +216,8 @@ const [ acknowledgement, setAcknowledgement ] = useState(false);
                             area={area}
                             onClick={()=>handleDialogueBox(_id)}
                             website={website}
-                            googleMap={googleMap}                         
+                            googleMap={googleMap}
+                            claimed={claimed}                         
                             restaurantId={_id}
                           
 

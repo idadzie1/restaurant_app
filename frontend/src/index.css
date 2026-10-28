@@ -765,6 +765,11 @@ iframe::-webkit-scrollbar {
     padding: 0.17rem;
 }
 
+.owner span.unclaimed{
+    cursor: pointer;
+    
+}
+
 .website span a, .clicktext a{    
     color: #3b43d6;
     color: #22396F;
