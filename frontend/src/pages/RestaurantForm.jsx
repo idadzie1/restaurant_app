@@ -124,7 +124,7 @@ const RestaurantForm = () => {
             setLoading(true)
             try {
 
-                if(!restaurantData.name || !restaurantData.priceRange.min || !restaurantData.priceRange.max || !restaurantData.openingHours.open || !restaurantData.openingHours.close || !restaurantData.phone || !restaurantData.email || !restaurantData.socials.whatsapp || !restaurantData.socials.facebook || !restaurantData.socials.instagram || !restaurantData.location || !restaurantData.area || !restaurantData.website || !restaurantData.googleMap){
+                if(!restaurantData.name || !restaurantData.captionPhoto || !restaurantData.priceRange.min || !restaurantData.priceRange.max || !restaurantData.openingHours.open || !restaurantData.openingHours.close || !restaurantData.phone || !restaurantData.email || !restaurantData.socials.whatsapp || !restaurantData.socials.facebook || !restaurantData.socials.instagram || !restaurantData.location || !restaurantData.area || !restaurantData.website || !restaurantData.googleMap){
                     setErrorMessage("Fill all fields")
                     setShowErrorAndResDialogueBox(true)
                     return;
