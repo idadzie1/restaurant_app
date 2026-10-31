@@ -18,12 +18,12 @@ export default function About() {
         <div className="introduction">
           <h1>About</h1>
           <p className='app-intro'>
-            The Dine Finder web app directory was conceptualized and concieved to help Ghanaian businesses, with particular focus on restaurateurs, operators of food joints and what is locally referrred to as "chop bars" extend their reach within Ghana and beyond. 
-            The aim is to aggregate or concentrate these establishments in one place on the web to save time and energy of prospective clients seaching on the internet for a favorite restaurant or food joint.           
+            The GhanaRestaurantsHub web app directory was conceptualized and concieved to help Ghanaian businesses, with particular focus on restaurateurs, operators of food joints and what is locally referrred to as "chop bars" extend their reach within Ghana and beyond. 
+            The aim is to centralize these establishments in one place on the web app to save time and energy of prospective clients seaching on the internet for a favorite restaurant or food joint.           
           </p>
 
           <p className='app-intro'>
-            Having designed the web app with restaurateurs and operators of food joints in mind, it allows them to claim ownership of any preloaded basic information about any restraurants and update them once varifiaction and validation processes have been met. Restaurateurs and operators of food joints can also upload and post informtion about their busineses, including photos.                 
+            Having designed the web app with restaurateurs and operators of food joints in mind, it allows legitimate operators to claim ownership of any preloaded basic information about any restraurants, and also gives them rights to update whatever preloaded informtion concerning any establishment, once varifiaction and validation processes have been met. Restaurateurs and operators of food joints can then also upload and post informtion about their busineses as they own the privilege to do so.                 
           </p>
       </div>
        

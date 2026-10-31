@@ -4,7 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet";
 import Header from '../components/Header';
 import Restaurant from '../components/Restaurant';
-import restaurantData from '../data/datafile'
+import restaurantData from '../data/datafile';
+import NotificationBox from '../components/modals/NotificationBox.jsx';
 import Loader from '../components/Loader/Loader.jsx'
 import DialogueBox from '../components/modals/Dialoguebox.jsx';
 import ConfirmAndAckBox from '../components/modals/ConfirmAndAckBox.jsx'
@@ -26,6 +27,8 @@ const [ actionType, setActionType ] = useState(null)
 const {currentUser} = useContext(UserContext);
 const [ confirm, setConfirm ] = useState(false);
 const [ acknowledgement, setAcknowledgement ] = useState(false);
+const [ contactType, setContactType ] = useState("");
+const [ showNotification, setShowNotification ] = useState(false);
 
 
 
@@ -75,6 +78,11 @@ const [ acknowledgement, setAcknowledgement ] = useState(false);
 //   setSelectRestaurantId(restaurantId);
 //   setShowDialogueBox(true);
 // };
+
+    const handleUnavailableContact=(type)=>{
+      setContactType(type);
+      
+    }
 
       const handleUserConfirm =(e)=>{
         setConfirm(e.target.checked)

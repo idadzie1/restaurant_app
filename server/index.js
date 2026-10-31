@@ -7,7 +7,12 @@ const upload = require("express-fileupload")
 
 const app = express();
 
-const allowedOrigins = [ "http://localhost:5173", "https://restaurant-app-1-rvx6.onrender.com" ];
+const allowedOrigins = [ 
+    "http://localhost:5173", 
+    "https://restaurant-app-1-rvx6.onrender.com",
+    "https://ghanarestaurantshub.com",
+    "https://www.ghanarestaurantshub.com" 
+];
 
 app.use(express.json({extended: true}))
 app.use(express.urlencoded({extended: true}))

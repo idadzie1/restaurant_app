@@ -51,7 +51,7 @@ const PrivacyPolicy = () => {
               <strong>Data Controller:</strong> dimustapha@gmail.com
             </p>
             <p>
-              <strong>Trading Name:</strong> Dine Finder
+              <strong>Trading Name:</strong> Ghana Restaurants Hub
             </p>
             <p>
               <strong>Address:</strong> Fan Milk Junction, Temple Street, Ablekuma, Accra

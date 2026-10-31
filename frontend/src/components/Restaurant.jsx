@@ -53,10 +53,22 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                             <span>Opening Hours:</span> <span>{open} - {close}</span>
                         </div>
                         <div className="contact text">
-                            <span className='telephone'><BsTelephone /><a href={`tel:${phone}`} target='_blank'>Call</a></span>
-                            <span className='whatsapp'><FaWhatsapp /><a href={`https://wa.me/${whatsapp}`} target='_blank'>Whatsapp</a></span>
-                            <span className='mail'><MdOutlineMail /><a href={`mailto:${email}`} target='_blank'>email</a></span>       
-                            
+                            <div className="contacts-section">
+                                <span className='telephone'><BsTelephone />{phone !==""? <a href={`tel:${phone}`} target='_blank'>Call</a>:<span>Call</span>}</span>
+
+                                {phone==""? <span>Unavailable</span>:<span className='status-text'><a href={`tel:${phone}`} target='_blank'>Available</a></span>}
+                            </div>
+                            <div className="contacts-section">
+                                <span className='whatsapp'><FaWhatsapp />{whatsapp!==""? <a href={`https://wa.me/${whatsapp}`} target='_blank'>Whatsapp</a>:<span>Whatsapp</span>}</span>
+
+                                {whatsapp===""? <span>Unavailable</span>:<span className='status-text'><a href={`https://wa.me/${whatsapp}`} target='_blank'>Available</a></span>}
+                            </div>
+
+                            <div className="contacts-section">
+                                <span className='mail'><MdOutlineMail />{email !== "sample@email.com"? <a href={`mailto:${email}`} target='_blank'>email</a>: <span>email</span>}</span> 
+                                
+                                {email === "sample@email.com" ?<span>Unavailable</span> : <span className='status-text'><a href={`mailto:${email}`} target='_blank'>Available</a></span>}       
+                            </div>
                             
                             <span className='loc-area'><span>{location}:</span> <span>{area}</span></span> 
                         </div>
@@ -72,8 +84,10 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                                 <Link to={`restaurants/${restaurantId}`}><span>View</span></Link>
                             </div>
                         </div>
-                        <div className="website">
-                            <span className='text'><a href={website} target='_blank'>Visit website</a></span>
+                        <div className="website text">
+                            <span className='text'>{website !== "n/a" ?<a href={website} target='_blank'>Visit website</a>: <span>website</span>}</span>
+
+                            {website==="n/a"? <span>Uavailable</span>:<span className='status-text'><a href={website} target='_blank'>Available</a></span>}
                         </div>
                         <hr />
                     </div>
