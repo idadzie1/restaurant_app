@@ -266,7 +266,7 @@ const RestaurantForm = () => {
                 id='email'
                 onChange={handleChanges}
             />
-            <span className='subtext'>Enter "sample@email.com" if your email address is not available. You may change it your valid email when it becomes available</span>    
+            <span className='subtext'>Enter "sample@email.com" if your email address is not available. You may change it to your valid email when it becomes available</span>    
             <div className="socials">
                 <span className='socials-heading'>Social Media</span>
                 <label htmlFor="wa">Whatsapp</label>
@@ -286,7 +286,7 @@ const RestaurantForm = () => {
                     id='fb'
                     onChange={handleChanges} 
             />
-                <span className='subtext'>Enter "n/a" if relevant information is not available</span>
+                <span className='subtext'>Enter "n/a" if the relevant information is not available</span>
 
                 <label htmlFor="in">instagram</label>
                 <input 
@@ -296,7 +296,7 @@ const RestaurantForm = () => {
                     id='in'
                     onChange={handleChanges}
             /> 
-            <span className='subtext'>Enter "n/a" if relevant information is not available</span> 
+            <span className='subtext'>Enter "n/a" if the relevant information is not available</span> 
             </div>  
 
                 <label htmlFor="loc">Location</label>
@@ -325,7 +325,7 @@ const RestaurantForm = () => {
                     id='web'
                     onChange={handleChanges}
                 /> 
-                <span className="subtext">If your website address is not available, emter "n/a". You can change it later as when your website address is available</span>
+                <span className="subtext">If your website address is not available, enter "n/a". You may change it later to your valid website address when it becomes available</span>
 
                 <label htmlFor="map">googlemap</label>
                 <input 
@@ -335,7 +335,7 @@ const RestaurantForm = () => {
                     id='map'
                     onChange={handleChanges}
                 />
-                <span className='subtext'>If you're not sure of the google map link, enter "n/a". The webadmin will correct it or assist you by contacting you.</span>
+                <span className='subtext'>If you're not sure of the google map link, enter "n/a". The web admin will correct it or assist you by first contacting you.</span>
 
                 <div className="buttons">
                     <button type='submit'>Submit</button>
