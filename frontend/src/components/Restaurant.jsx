@@ -91,7 +91,7 @@ const Restaurant = ({restaurantId, name, coverPhoto, priceRange:{min, max}, open
                         </div>
                         <hr />
                     </div>
-                                    <hr />
+                        <hr />
                 <div className="googlemap-location">
                     <iframe src={googleMap} frameborder="0"></iframe>
                 </div>

@@ -18,7 +18,7 @@ export default function About() {
         <div className="introduction">
           <h1>About</h1>          
           <p className='app-intro'>
-            GhanaRestaurantsHub was conceptualized and developed with a vision to help Ghanaian businesses, particularly restaurateurs, food-joint operators and owners of traditional Ghanaian chop bars, expand their visibility and reach customers across Ghana and beyond.
+            <strong>GhanaRestaurantsHub</strong> was conceptualized and developed with a vision to help Ghanaian businesses, particularly restaurateurs, food-joint operators and owners of traditional Ghanaian chop bars, expand their visibility and reach customers across Ghana and beyond.
            </p> 
            <p className='app-intro'>
             Our goal is to bring restaurants, food joints and other food establishments together on one centralized online platform, making it easier and more convenient for prospective customers to discover, explore and connect with their preferred dining destinations without spending unnecessary time searching across multiple websites.          
@@ -45,10 +45,7 @@ export default function About() {
             </p>
             <p className='app-intro'>
             Upon approval, your establishment can become part of GhanaRestaurantsHub, giving it an additional opportunity to reach prospective customers searching for restaurants and food establishments.
-            </p>
-            <h4>
-                GhanaRestaurantsHub — Connecting People to Ghana's Restaurants and Food Destinations.               
-            </h4>
+            </p>          
           
       </div>
        
@@ -141,7 +138,9 @@ export default function About() {
             </Accordion>))}
           </div>
 
-        </div>      
+        </div>
+          <h4 className='slogan'>  GhanaRestaurantsHub — Connecting People to Ghana's Restaurants and Food                 Destinations.               
+          </h4>      
       </section>
     </div>    
   );

@@ -187,7 +187,7 @@ const RestaurantForm = () => {
             <label htmlFor="nor">Name of Restaurant</label>
             <input 
                 type="text"
-                name='name'
+                name='name'                
                 value={restaurantData.name}
                 id='nor'
                 onChange={handleChanges}            
@@ -251,6 +251,7 @@ const RestaurantForm = () => {
             <input 
                 type="tel"
                 name='phone'
+                className='restaurant-info'
                 value={restaurantData.phone}
                 id='tel'
                 onChange={handleChanges} 
@@ -260,11 +261,14 @@ const RestaurantForm = () => {
             <input 
                 type="email" 
                 name='email'
+                className='restaurant-info'
                 value={restaurantData.email}
                 id='email'
                 onChange={handleChanges}
             />
-            <div className="socials">Social Media
+            <span className='subtext'>Enter "sample@email.com" if your email address is not available. You may change it your valid email when it becomes available</span>    
+            <div className="socials">
+                <span className='socials-heading'>Social Media</span>
                 <label htmlFor="wa">Whatsapp</label>
                 <input 
                     type="text"
@@ -282,6 +286,7 @@ const RestaurantForm = () => {
                     id='fb'
                     onChange={handleChanges} 
             />
+                <span className='subtext'>Enter "n/a" if relevant information is not available</span>
 
                 <label htmlFor="in">instagram</label>
                 <input 
@@ -290,18 +295,9 @@ const RestaurantForm = () => {
                     value={restaurantData.socials.instagram}
                     id='in'
                     onChange={handleChanges}
-            />  
-            </div>
-
-                {/* <label htmlFor="ra">rating</label>
-                <input 
-                    type="number"
-                    min='1'
-                    max='5'
-                    name='rate'
-                    value=""
-                    id='ra'
-                /> */}
+            /> 
+            <span className='subtext'>Enter "n/a" if relevant information is not available</span> 
+            </div>  
 
                 <label htmlFor="loc">Location</label>
                 <input 
@@ -329,6 +325,7 @@ const RestaurantForm = () => {
                     id='web'
                     onChange={handleChanges}
                 /> 
+                <span className="subtext">If your website address is not available, emter "n/a". You can change it later as when your website address is available</span>
 
                 <label htmlFor="map">googlemap</label>
                 <input 
@@ -337,7 +334,8 @@ const RestaurantForm = () => {
                     value={restaurantData.googleMap}
                     id='map'
                     onChange={handleChanges}
-                />  
+                />
+                <span className='subtext'>If you're not sure of the google map link, enter "n/a". The webadmin will correct it or assist you by contacting you.</span>
 
                 <div className="buttons">
                     <button type='submit'>Submit</button>

@@ -946,6 +946,13 @@ h4.how-it-works{
     font-weight:bold;
 }
 
+section.about h4.slogan{
+    width: 100%;
+    text-align: center;
+    font-style: italic;
+    margin-top: 2rem;
+}
+
 /* ================================ About media query ================================== */
 @media screen and (min-width:320px) and (max-width:600px){
     .app-intro{       
@@ -1168,7 +1175,7 @@ form.main-contact{
     width: 45%;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between;    
     
 }
 
@@ -1181,7 +1188,7 @@ form.main-contact{
 }
 
 /* ==================================== Media Query for Contact form ============== */
-@media screen and (min-width: 320px) and (max-width: 650px){
+@media screen and (min-width: 320px) and (max-width: 768px){
     .contact-form{
         width: 100%;
     }
@@ -1193,6 +1200,13 @@ form.main-contact{
     .sender-message textarea{
           width: 90%;
     }
+
+    .message-action-buttons{
+        width: 90%;
+        
+    }
+
+   
 }
 
 /* ================================= register form ========================== */
@@ -1840,7 +1854,7 @@ button.add-menu, button.add-gallery{
 
 
 label.form-restaurant{
-       display: block;
+    display: block;
     width: 100%;
     margin: 3rem auto 1rem;
     background-color: #3b43d6;
@@ -1853,6 +1867,30 @@ label.form-restaurant{
     border-radius: 0.5rem;
 }
 
+span.socials-heading{
+    margin-bottom: -2rem;
+    font-size: medium;
+    font-weight: 600;
+}
+
+.subtext{
+    margin-top: -2.2rem;
+    font-size: small;
+    width: 100%;
+}
+
+/* ============================ Medis Queries for Restaurant Form ======================= */
+@media screen and (min-width:320px) and (max-width:912px){
+form.admin-form input.restaurant-info{    
+    width: 66%;
+}    
+.subtext{
+    width: 66%;
+    margin: -2.9rem auto 0rem;
+    text-align: justify;   
+   }
+
+}
 
 /* ========================= Media queries for restaurant Detail ======================= */
 @media screen and (min-width:320px) and (max-width:912px){
@@ -1861,7 +1899,7 @@ label.form-restaurant{
         gap: 1rem;
     }
 
-  
+
 
     .description-text{
         width: 95vw;       
@@ -1969,17 +2007,6 @@ label.form-restaurant{
 }
 
 .gallery-upload form label{
-    /* width: 8rem;
-    height: 4rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0.5rem;
-    background-color: #fff;
-    cursor: pointer;
-    border-radius: 15px;
-    box-shadow: 0 9px #999;
-    background-color: #fff; */
     display: block;
     width: 100%;
     margin: 3rem auto 1rem;
@@ -1994,13 +2021,11 @@ label.form-restaurant{
 }
 
 .gallery-upload form label:hover{
-    /* background-color: #EDE9E6; */
+    
 }
 
 .gallery-upload form label:active{
-    /* background-color: #EDE9E6;
-    box-shadow: 0 5px #666;
-    transform: translateY(4px) */
+
 }
 
 input.fileupload{
@@ -2015,21 +2040,17 @@ input.fileupload{
 }
 
 .button-conrol button{
-    /* border-radius: 15px;
-    box-shadow: 0 9px #999;
-    background-color: #fff; */
+   
 }
 
-/* EDE9E6 */
+
 
 .button-conrol button:hover{
-    /* background-color: #EDE9E6;  */
+    
 }
 
 .button-conrol button:active{
-    /* background-color: #EDE9E6;
-    box-shadow: 0 5px #666;
-    transform: translateY(4px) */
+ 
 }
 
 .display-area{
