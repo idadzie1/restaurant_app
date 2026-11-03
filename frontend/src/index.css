@@ -916,8 +916,9 @@ section.about{
     margin: 0 auto 1rem;
 }
 
-.introduction p:last-child{    
+.introduction p{    
     margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 h4.how-it-works{
@@ -1098,6 +1099,100 @@ section.services main{
 .anchor-buttons a:hover{
     background-color: #1F06AC;
     transition: all 300ms ease-in-out;
+}
+
+
+/* ============================== Contact Form ====================================== */
+
+.contact-form{
+    width: 95%;
+    margin: 6rem auto 1rem;
+    /* margin-top: 8rem; */
+}
+
+.contact-form h2{
+   width: 100%;
+   text-align: center;
+}
+
+
+.main-contact-form{
+    width: 100%;    
+}
+
+form.main-contact{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: #A5CF83;
+    background-color: lightgray;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    
+}
+
+.sender-details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    gap: 1rem;
+}
+
+.sender-details input, input[type='email'].email{
+    width: 35%;   
+    border: none;    
+}
+
+/* input[type='email'].email{
+    background-color: red;
+    width: 70%;
+} */
+
+
+.sender-message{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sender-message textarea{
+    width: 45%;
+    margin-bottom: 0.1rem;
+    border: none;
+    
+}
+
+.message-action-buttons{
+    width: 45%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.contact-form h4{
+    margin-top: 3rem;
+    font-style: italic;
+    width: 100%;
+    text-align: center;
+    font-weight: 400;
+}
+
+/* ==================================== Media Query for Contact form ============== */
+@media screen and (min-width: 320px) and (max-width: 650px){
+    .contact-form{
+        width: 100%;
+    }
+
+    .sender-details input, input[type='email'].email{
+        width: 90%;
+    }
+
+    .sender-message textarea{
+          width: 90%;
+    }
 }
 
 /* ================================= register form ========================== */

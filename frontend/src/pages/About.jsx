@@ -16,15 +16,40 @@ export default function About() {
       
       <section className='about'>
         <div className="introduction">
-          <h1>About</h1>
+          <h1>About</h1>          
           <p className='app-intro'>
-            The GhanaRestaurantsHub web app directory was conceptualized and concieved to help Ghanaian businesses, with particular focus on restaurateurs, operators of food joints and what is locally referrred to as "chop bars" extend their reach within Ghana and beyond. 
-            The aim is to centralize these establishments in one place on the web app to save time and energy of prospective clients seaching on the internet for a favorite restaurant or food joint.           
+            GhanaRestaurantsHub was conceptualized and developed with a vision to help Ghanaian businesses, particularly restaurateurs, food-joint operators and owners of traditional Ghanaian chop bars, expand their visibility and reach customers across Ghana and beyond.
+           </p> 
+           <p className='app-intro'>
+            Our goal is to bring restaurants, food joints and other food establishments together on one centralized online platform, making it easier and more convenient for prospective customers to discover, explore and connect with their preferred dining destinations without spending unnecessary time searching across multiple websites.          
+          </p>
+          
+          <h4>Empowering Restaurant Owners and Food Businesses</h4>
+          <p className='app-intro'>
+            With restaurateurs and food-business operators at the heart of our platform, GhanaRestaurantsHub provides legitimate business owners and operators with the opportunity to claim ownership of their establishments' existing listings.
+           </p>
+
+            <p className='app-intro'>
+            Once the necessary verification and validation processes have been successfully completed, approved owners and operators can update their business information, upload photographs, publish menus and manage other relevant details about their establishments.
+
+            This approach gives business owners greater control over how their establishments are presented online while helping prospective customers access more accurate and up-to-date information.                            
           </p>
 
+          <h4>Is Your Restaurant Not Listed?</h4>
           <p className='app-intro'>
-            Having designed the web app with restaurateurs and operators of food joints in mind, it allows legitimate operators to claim ownership of any preloaded basic information about any restraurants, and also gives them rights to update whatever preloaded informtion concerning any establishment, once varifiaction and validation processes have been met. Restaurateurs and operators of food joints can then also upload and post informtion about their busineses as they own the privilege to do so.                 
-          </p>
+             If you cannot find your restaurant, food joint or chop bar on GhanaRestaurantsHub, you can register for free, log in and submit your establishment's details through our restaurant registration process.
+            </p> 
+
+            <p className='app-intro'>
+            Once submitted, your listing will undergo an administrative review and approval process. Please allow at least two weeks for the review process to be completed.
+            </p>
+            <p className='app-intro'>
+            Upon approval, your establishment can become part of GhanaRestaurantsHub, giving it an additional opportunity to reach prospective customers searching for restaurants and food establishments.
+            </p>
+            <h4>
+                GhanaRestaurantsHub — Connecting People to Ghana's Restaurants and Food Destinations.               
+            </h4>
+          
       </div>
        
         <div className="accordion-main">

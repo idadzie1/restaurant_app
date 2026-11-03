@@ -21,6 +21,7 @@ import ForgottenPassword from './pages/ForgottenPassword';
 import ChangePassword from './pages/ChangePassword';
 import About from './pages/About';
 import Services from './pages/Services';
+import Contact from './pages/Contact';
 import BlogPage from './pages/Blog/BlogPage';
 import ChangeProfilePhoto from './pages/ChangeProfilePhoto';
 import Message from './pages/Message'
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
     children: [
       {index: true, element: <Home />},
       {path: "about", element: <About />},
+      {path: "contact", element: <Contact />},
       {path: "services", element: <Services />}, 
       {path: "blognews", element: <BlogPage />},
       {path: "register", element: <Register />},
