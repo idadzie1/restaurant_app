@@ -109,9 +109,7 @@ const createRestaurant = async (req, res, next)=>{
                         console.error("Email notification failed:", emailError.message);
                     }
 
-                    console.log(subject, text, html)
-
-                    console.log("email api called")
+                    
                 }
                 res.status(201).json("Success. Pending verification and approval")
                 

@@ -47,7 +47,7 @@ const Footer = () => {
                 <p>facebook</p>
                 <p>Instagram</p>
                 <p>email: astrolyncs@gmail.com</p>
-                <p>Tel: +233 029453410</p>
+                <p>Tel: +233 209453410</p>
             </div>
             <div className="quick-links">
               Quick Likns
