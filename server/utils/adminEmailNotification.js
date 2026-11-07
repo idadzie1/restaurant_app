@@ -51,7 +51,7 @@ const sendAdminNotification = async ({ subject, text, html }) => {
 
     if (
         !process.env.EMAIL_USER ||
-        !process.env.ADMIN_EMAIL ||
+        !process.env.EMAIL_ADMIN ||
         !process.env.EMAIL_PASS
     ) {
         throw new Error("Email environment variables are missing.");
@@ -60,7 +60,7 @@ const sendAdminNotification = async ({ subject, text, html }) => {
     try {
         const sendNotification = await transporter.sendMail({
             from: `"Ghana Restaurants Hub" <${process.env.EMAIL_USER}>`,
-            to: process.env.ADMIN_EMAIL,
+            to: process.env.EMAIL_ADMIN,
             subject,
             text,
             html
