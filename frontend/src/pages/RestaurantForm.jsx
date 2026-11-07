@@ -124,7 +124,7 @@ const RestaurantForm = () => {
             setLoading(true)
             try {
 
-                if(!restaurantData.name || !restaurantData.captionPhoto || !restaurantData.priceRange.min || !restaurantData.priceRange.max || !restaurantData.openingHours.open || !restaurantData.openingHours.close || !restaurantData.phone || !restaurantData.email || !restaurantData.socials.whatsapp || !restaurantData.socials.facebook || !restaurantData.socials.instagram || !restaurantData.location || !restaurantData.area || !restaurantData.website || !restaurantData.googleMap){
+                if(!restaurantData.name.trim() || !restaurantData.captionPhoto.trim() || !restaurantData.priceRange.min.trim() || !restaurantData.priceRange.max.trim() || !restaurantData.openingHours.open || !restaurantData.openingHours.close || !restaurantData.phone.trim() || !restaurantData.email.trim() || !restaurantData.socials.whatsapp.trim() || !restaurantData.socials.facebook.trim() || !restaurantData.socials.instagram.trim() || !restaurantData.location.trim() || !restaurantData.area.trim() || !restaurantData.website.trim() || !restaurantData.googleMap.trim()){
                     setErrorMessage("Fill all fields")
                     setShowErrorAndResDialogueBox(true)
                     return;
@@ -192,13 +192,14 @@ const RestaurantForm = () => {
                 id='nor'
                 onChange={handleChanges}            
             />
-            <label className='form-restaurant' htmlFor="file">upload cover photo</label>
+            <label className='form-restaurant' htmlFor="file">upload cover photo</label>            
             <input 
                 type="file"
                 name='coverPhoto'
                 id='file'
                 onChange={handleFileChanges} 
             />
+            <span className='subtext'>{file === null? `No image selected` : `Image is selected`}</span>
 
             <label htmlFor="SDMessage">Short Descriptive Message</label>
             <textarea 
@@ -266,7 +267,7 @@ const RestaurantForm = () => {
                 id='email'
                 onChange={handleChanges}
             />
-            <span className='subtext'>Enter "sample@email.com" if your email address is not available. You may change it to your valid email when it becomes available</span>    
+            <span className='subtext'>Enter <strong>sample@email.com</strong> if your email address is not available. You may change it to your valid email when it becomes available</span>    
             <div className="socials">
                 <span className='socials-heading'>Social Media</span>
                 <label htmlFor="wa">Whatsapp</label>
@@ -286,7 +287,7 @@ const RestaurantForm = () => {
                     id='fb'
                     onChange={handleChanges} 
             />
-                <span className='subtext'>Enter "n/a" if the relevant information is not available</span>
+                <span className='subtext'>Enter <strong>n/a</strong> if the relevant information is not available</span>
 
                 <label htmlFor="in">instagram</label>
                 <input 
@@ -296,7 +297,7 @@ const RestaurantForm = () => {
                     id='in'
                     onChange={handleChanges}
             /> 
-            <span className='subtext'>Enter "n/a" if the relevant information is not available</span> 
+            <span className='subtext'>Enter <strong>n/a</strong> if the relevant information is not available</span> 
             </div>  
 
                 <label htmlFor="loc">Location</label>
@@ -325,7 +326,7 @@ const RestaurantForm = () => {
                     id='web'
                     onChange={handleChanges}
                 /> 
-                <span className="subtext">If your website address is not available, enter "n/a". You may change it later to your valid website address when it becomes available</span>
+                <span className="subtext">If your website address is not available, enter <strong>n/a</strong>. You may change it later to your valid website address when it becomes available</span>
 
                 <label htmlFor="map">googlemap</label>
                 <input 
@@ -335,7 +336,7 @@ const RestaurantForm = () => {
                     id='map'
                     onChange={handleChanges}
                 />
-                <span className='subtext'>If you're not sure of the google map link, enter "n/a". The web admin will correct it or assist you by first contacting you.</span>
+                <span className='subtext'>Paste your Google Maps location link here. If you're unable to obtain the link, enter <strong>n/a</strong>. Our administrators can help update your restaurant's location information later.</span>
 
                 <div className="buttons">
                     <button type='submit'>Submit</button>

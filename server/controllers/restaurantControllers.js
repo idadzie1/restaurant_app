@@ -8,7 +8,8 @@ const { userInfo } = require("os");
 const cloudinary = require('../config/cloudinary')
 const mongoose = require('mongoose');
 const { getCloudinaryPublicId } = require("../utils/cloudinaryUtils");
-// const nodemailer = require('nodemailer');
+
+const { sendAdminNotification } = require("../utils/adminEmailNotification.js")
 
   
 
@@ -96,6 +97,19 @@ const createRestaurant = async (req, res, next)=>{
                 }            
 
                 const newRestauant = await Restaurant.create({_id:restaurantId, name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: url, claimed:true, approvalStatus:"pending", claimer:req.user.firstName, claimedBy:req.user.id, creator:req.user.id})
+                if(newRestauant.approvalStatus === "pending"){
+                    try {
+                        await sendAdminNotification({
+                            subject:`A new restaurant Posted`,
+                            text:`Check out and review a newly posted restaurant for approval`,
+                            html: `<p>Check out and review a newly posted restaurant for approval</p>`
+                        });
+                    } catch (emailError) {
+                        console.error("Email notification failed:", emailError.message);
+                    }
+
+                    console.log(sendAdminNotification)
+                }
                 res.status(201).json("Success. Pending verification and approval")
                 
         }        
