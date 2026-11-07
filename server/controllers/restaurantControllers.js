@@ -97,6 +97,7 @@ const createRestaurant = async (req, res, next)=>{
                 }            
 
                 const newRestauant = await Restaurant.create({_id:restaurantId, name, captionPhoto, priceRange:{min:minNum, max:maxNum}, openingHours:{open, close}, phone, email:decapEmail, socials:{whatsapp, facebook, instagram}, location, area, website, googleMap, coverPhoto: url, claimed:true, approvalStatus:"pending", claimer:req.user.firstName, claimedBy:req.user.id, creator:req.user.id})
+                console.log("call the email api")
                 if(newRestauant.approvalStatus === "pending"){
                     try {
                         await sendAdminNotification({
@@ -108,7 +109,9 @@ const createRestaurant = async (req, res, next)=>{
                         console.error("Email notification failed:", emailError.message);
                     }
 
-                    console.log(sendAdminNotification)
+                    console.log(subject, text, html)
+
+                    console.log("email api called")
                 }
                 res.status(201).json("Success. Pending verification and approval")
                 
