@@ -59,7 +59,7 @@ const sendAdminNotification = async ({ subject, text, html }) => {
     try {
         const sendNotification = await transporter.sendMail({
             from: `"Ghana Restaurants Hub" <${process.env.EMAIL_USER}>`,
-            to: `dimustapha@gmail.com`,
+            to: process.env.EMAIL.ADMIN,
             subject,
             text,
             html
