@@ -786,7 +786,7 @@ const deleteRestaurant = async(req, res, next)=>{
         
             const { restaurantId } = req.params;
             const restaurant = await Restaurant.findById(restaurantId)
-            if((req.user.id === restaurant.creator.toString() && req.user.role === 'user') || req.user.role === 'admin'){
+            if((req.user.id === restaurant.creator && req.user.role === 'user') || req.user.role === 'admin'){
                 if(!restaurant){
                     return next(HttpError("Restaurant resourve not found", 404))
                 }
