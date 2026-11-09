@@ -19,7 +19,7 @@ const ConfirmAndAckBox = ({userconfirm, userack, userConfirm, onChangeCfm, onCha
               onChange={onChangeCfm}
               />
             <p>
-                I confirm that I am authorised to claim or manage this restaurant listing and that the information I have provided is accurate. I understand that Dine Finder may verify my claim and may contact me or request additional information where reasonably necessary for verification.
+                I confirm that I am authorised to claim or manage this restaurant listing and that the information I have provided is accurate. I understand that GhanaRestaurantsHub may verify my claim and may contact me or request additional information where reasonably necessary for verification.
             </p>
           </div>
           <div className="ack-checkbox">
