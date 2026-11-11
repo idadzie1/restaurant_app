@@ -100,11 +100,12 @@ const createRestaurant = async (req, res, next)=>{
                 console.log("call the email api")
                 if(newRestauant.approvalStatus === "pending"){
                     try {
-                        await sendAdminNotification({
-                            subject:`A new restaurant Posted`,
-                            text:`Check out and review a newly posted restaurant for approval`,
-                            html: `<p>Check out and review a newly posted restaurant for approval</p>`
-                        });
+                            await sendAdminNotification({
+                                    to: process.env.ADMIN_EMAIL,
+                                    subject: "New Restaurant Posted",
+                                    text: "A new restaurant has been submitted.",
+                                    html: `<p>A new restaurant has been submitted. </p>`
+                                });
                     } catch (emailError) {
                         console.error("Email notification failed:", emailError.message);
                     }
