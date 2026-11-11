@@ -161,5 +161,5 @@ const sendAdminNotification = async ({
     }
 };
 
-module.exports = sendAdminNotification;
+module.exports = { sendAdminNotification };
 
