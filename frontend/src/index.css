@@ -2595,6 +2595,16 @@ footer{
     align-items: center;
 }
 
+.quick-links{    
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+
+.quick-links button{
+    background-color: gray;
+}
+
 footer small{
     display: block;
     background-color:#fff;

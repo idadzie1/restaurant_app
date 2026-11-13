@@ -11,6 +11,7 @@ import DialogueBox from '../components/modals/Dialoguebox.jsx';
 import ConfirmAndAckBox from '../components/modals/ConfirmAndAckBox.jsx'
 import ErrorAndResDialogueBox from '../components/modals/ErrorAndResDialogueBox.jsx';
 import { UserContext } from '../context/userContext.jsx';
+import CookieConsent from "../components/CookieConsent";
 
 const Home = () => {
 const [ dataInfo, setDataInfo ] = useState([]);
@@ -236,7 +237,8 @@ const [ showNotification, setShowNotification ] = useState(false);
         </div>  
           : <div className='no-listings'>No available listings </div>}     
             
-      </section>     
+      </section> 
+      <CookieConsent />    
   </>
   )
   }

@@ -50,7 +50,21 @@ const Footer = () => {
                 <p>Tel: +233 209453410</p>
             </div>
             <div className="quick-links">
-              Quick Likns
+              Quick Links
+
+              <button
+                  type="button"
+                  className="footer-cookie-settings"
+                  onClick={() => {
+                    window.dispatchEvent(
+                      new Event("openCookieSettings")
+                    );
+                  }}
+                >
+                  Cookie & Tracking Preferences
+            </button>
+
+
             </div>
           </div>
         </div> 
