@@ -1599,7 +1599,7 @@ input[type='number']{
 .description-text{
     width: 80%;
     margin: 0 auto;
-    text-align: justify;
+    text-align: justify;    
 }
 
 
@@ -1614,14 +1614,37 @@ input[type='number']{
     display: flex;
     flex-direction: row;    
     margin: -1rem auto 1rem;
-    justify-content: space-between;
+    justify-content:space-between;    
+    
 }
+
+/* #3b43d6 */
+.phone-contact,
+.website-contact,
+.email-contact{
+    width: 5rem;
+    height: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #3b43d6;    
+}
+
+.phone-contact a,
+.website-contact a,
+.email-contact a{
+    color: #fff;
+}
+
 
 .contact-details h3{
     width: 50%;
     margin: 2rem auto 1rem;
     /* background-color: #FF6B35; */
     text-align: center;
+    
 }
 
 .contact-details .social-media{
@@ -1937,7 +1960,9 @@ form.admin-form input.restaurant-info{
     .contact-details .contact{
         width: 70%;
         flex-direction: column;
+        gap: 0.7rem;
         align-items: center;
+        
     }
 
     .opening-closing{

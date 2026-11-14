@@ -233,7 +233,7 @@ const RestaurantDetail = () => {
         <h3>Contact</h3>
         <div className="contact">
           <div className="phone-contact"><a href={`tel:${restaurant.phone}`}>call</a></div>
-          <div className="website"><a href={`${restaurant.website}`} target='_blank'>website</a></div>
+          <div className="website-contact"><a href={`${restaurant.website}`} target='_blank'>website</a></div>
           <div className="email-contact"><a href={`mailto:${restaurant.email}`}>email</a></div>
         </div>
         <div className="social-media">
