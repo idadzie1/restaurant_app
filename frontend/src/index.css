@@ -1959,7 +1959,7 @@ form.admin-form input.restaurant-info{
 
     .contact-details .contact{
         width: 70%;
-        flex-direction: column;
+        /* flex-direction: column; */
         gap: 0.7rem;
         align-items: center;
         
