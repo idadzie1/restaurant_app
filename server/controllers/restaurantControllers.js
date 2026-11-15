@@ -149,10 +149,10 @@ const editRestaurant = async (req, res, next)=>{
 
             // =======================================================================
                // phone regex here
-                    const phoneRegex = /^(?:\+233|233|0)(2[03456789]|5[0-9])\d{7}$/;
-                    if(!phoneRegex.test(phone)){
-                        return next(new HttpError("Invalid phone number", 422));
-                    }
+                    // const phoneRegex = /^(?:\+233|233|0)(2[03456789]|5[0-9])\d{7}$/;
+                    // if(!phoneRegex.test(phone)){
+                    //     return next(new HttpError("Invalid phone number", 422));
+                    // }
 
                     const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
                     if(!timeRegex.test(open) || !timeRegex.test(close)){
