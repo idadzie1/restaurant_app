@@ -2,7 +2,6 @@ import React from 'react'
 
 const ActionConfirmationDialogueBox = ({ confirmationMessage, clickYes, clickNo}) => {
   
- 
 
   return (
     <div className='confirmation-modal'>

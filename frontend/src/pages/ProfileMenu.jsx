@@ -37,8 +37,13 @@ const ProfileMenu = ({click, showProfileMenu, setShowProfileMenu, arrowRef}) => 
 
             <Link className='only-mobile' to='/LogOut'>
                 <li onClick={click}>Log Out</li> 
+            </Link>
+
+            <Link>
+                 <li>Delete Account</li>   
             </Link>               
             
+
         </ul>      
     </div>}
     </>
