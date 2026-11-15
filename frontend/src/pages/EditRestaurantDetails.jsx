@@ -272,7 +272,7 @@ const EditRestaurantDetails = () => {
 
             <label htmlFor="tel">Telephone Contact</label>
             <input 
-                type="text"
+                type="tel"
                 name='phone'
                 value={restaurantData.phone}
                 id='tel'

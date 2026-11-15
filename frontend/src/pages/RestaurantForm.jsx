@@ -250,7 +250,7 @@ const RestaurantForm = () => {
 
             <label htmlFor="tel">Telephone Contact</label>
             <input 
-                type="text"
+                type="tel"
                 name='phone'
                 className='restaurant-info'
                 value={restaurantData.phone}
