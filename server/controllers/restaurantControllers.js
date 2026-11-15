@@ -147,6 +147,27 @@ const editRestaurant = async (req, res, next)=>{
             const minNum = parseInt(min);
             const maxNum = parseInt(max);
 
+            // =======================================================================
+               // phone regex here
+                    const phoneRegex = /^(?:\+233|233|0)(2[03456789]|5[0-9])\d{7}$/;
+                    if(!phoneRegex.test(phone)){
+                        return next(new HttpError("Invalid phone number", 422));
+                    }
+
+                    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+                    if(!timeRegex.test(open) || !timeRegex.test(close)){
+                        return next(new HttpError("Invalid open or close times"));
+                    }
+
+                    const decapEmail = email.toLowerCase()
+                    //use regex to validate email later
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(decapEmail)) {
+                        return next(new HttpError("Invalid email", 422))
+                    }
+
+            // ======================================================================
+
           
 
             if(!req.files || !req.files.coverPhoto){
