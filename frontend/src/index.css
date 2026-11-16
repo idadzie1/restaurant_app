@@ -149,6 +149,15 @@ img.profile-image{
 
 .profile ul li:hover{
     background-color: #F3F4F4;
+    
+}
+
+.profile ul :last-child li{
+    background-color: #FFCB56;
+}
+
+.profile ul :last-child li:hover{
+    background-color: #FFA500;
 }
 
 .closeprofile{
@@ -2518,6 +2527,8 @@ input.profileInput-label{
     font-size: larger;
     font-weight: 700;
 }
+
+
 
 /* ========================= Profile Page Media Queris =========================================== */
 

@@ -39,7 +39,7 @@ const ProfileMenu = ({click, showProfileMenu, setShowProfileMenu, arrowRef}) => 
                 <li onClick={click}>Log Out</li> 
             </Link>
 
-            <Link>
+            <Link className='account-delete'>
                  <li>Delete Account</li>   
             </Link>               
             
