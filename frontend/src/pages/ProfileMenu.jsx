@@ -1,10 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useState, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
+import { DialogboxContext } from '../context/dialogboxContext';
 
 const ProfileMenu = ({click, showProfileMenu, setShowProfileMenu, arrowRef}) => {
-
-       
+        
+    const { dialog, setDialog } = useContext(DialogboxContext)       
         const menuProfileRef = useRef(null);
         // const arrowRef = useRef(null);
 
@@ -22,6 +23,8 @@ const ProfileMenu = ({click, showProfileMenu, setShowProfileMenu, arrowRef}) => 
         };
     }, [setShowProfileMenu, arrowRef]);
 
+  
+
 
   return (
     <>
@@ -37,12 +40,14 @@ const ProfileMenu = ({click, showProfileMenu, setShowProfileMenu, arrowRef}) => 
 
             <Link className='only-mobile' to='/LogOut'>
                 <li onClick={click}>Log Out</li> 
-            </Link>
+            </Link>            
 
-            <Link className='account-delete'>
-                 <li>Delete Account</li>   
-            </Link>               
-            
+            <Link className='account-delete' to='/'>
+                 <li onClick={()=> {
+                    {click}
+                    setDialog(true)
+                 }}>Delete Account</li>   
+            </Link>      
 
         </ul>      
     </div>}

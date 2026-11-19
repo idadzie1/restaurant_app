@@ -314,4 +314,19 @@ const changePassword = async (req, res, next)=>{
 
 }
 
+
+const deleteUserAcctsAndRecords= async (req, res, next)=>{
+    // find user which is the currebt user
+    // find all user's restaurants records posts if any and delete them all and photos in cloudinary
+    // delete user all user records and profile photo in cloudinary
+    // if user had no resturants records proceed to user records and delete all user records and delete profile pgoto from cloudinary
+    try {
+         const findUser = await User.findById(req.user.id)
+    } catch (error) {
+        
+    }
+   
+
+}
+
 module.exports = { registerUser, loginUser, getUser, changeAvatar, editUser, allUsers, changePassword }

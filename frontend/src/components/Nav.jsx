@@ -15,7 +15,7 @@ import avatar from '../assets/imageAvatar.jpg'
 const Nav = () => {
   const[menuShowing, setMenuShowing] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false)
-  const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);  
   const arrowRef = useRef(null)
   const token = currentUser?.token  
   const role = currentUser?.role;

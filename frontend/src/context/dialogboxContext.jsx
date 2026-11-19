@@ -1,14 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext} from "react";
 
-const DialogboxContext = createContext();
+export const DialogboxContext = createContext();
 
-const DialogboxProvider = ({ children }) => {
-
-
-    return(
-        <DialogboxContext.Provider>
-
-        </DialogboxContext.Provider>
-    )
-
-}

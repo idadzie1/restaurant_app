@@ -30,13 +30,15 @@ import TermsAndConditions from './pages/Legal_docs/TermsAndConditions';
 import CookiePolicy from './pages/Legal_docs/CookiePoliciy';
 import './index.css'
 import UserProvider from './context/userContext';
+import DialogboxProvider from './context/dialogBoxProvider'
+import AccDeleteDiaglogueBox from './components/modals/AccDeleteDiaglogueBox'
 
 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <UserProvider> <Layout /></UserProvider>,
+    element: <UserProvider><DialogboxProvider><AccDeleteDiaglogueBox /><Layout /></DialogboxProvider></UserProvider>,
     errorElement: <ErrorPage />,
     children: [
       {index: true, element: <Home />},

@@ -8,7 +8,7 @@ const BlogPage = () => {
   return (
     <section className='blog-page'>
         <p className='under-construction'>Blog Page Is Under Construction</p>
-       <img src={underConstrutionGif} alt="" srcset="" />        
+       <img src={underConstrutionGif} alt="Under Construction" srcset="" />        
     </section>
    
   )
