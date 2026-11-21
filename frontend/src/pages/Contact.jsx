@@ -1,28 +1,32 @@
-import React, { useState } from 'react'
 
-const Contact = () => {
-    const [ contact, setContact ]=useState({
-        name: "",
-        emailAddress:"",
-        subject:"",
-        message: ""
-    })
+import React, { useState } from 'react';
+import { useForm, ValidationError } from '@formspree/react';
+import { useNavigate } from 'react-router-dom';
 
-    const [errorMessage, setErrorMessage]=useState("")
 
-    const handleChanges = (e)=>{
-        setContact(prev=>({
-            ...prev, [e.target.name]:e.target.value
-        }))
-    }
 
-    const handleSubmit=(e)=>{
-        e.preventDefault();
-        if(!contact.name || !contact.emailAddress || !contact.subject || contact.message){
-           setErrorMessage("Fill in all Fields")
-           return
-        }
-    }
+const ContactForm = () => {
+      const [state, handleSubmit] = useForm("xrpqgkkq");
+      const [ display, setDisplay ] = useState(false)
+      const navigate = useNavigate();
+  
+      if (state.succeeded && display) {
+      return     <div className='confirmation-modal'>
+      <div className="modal-information">
+        <div className="confirmation-notice">
+            <p>Thank you for contacting us</p>
+        </div>
+        <div className="buttons-controls">
+            <button onClick={
+                () => {navigate('/contact')
+                setDisplay(false)}
+                }>Ok</button>            
+        </div>
+      </div>      
+    </div>    
+
+  } 
+
    
   return (
     <section className='contact-form'>
@@ -30,38 +34,66 @@ const Contact = () => {
         <div className="main-contact-form">
             <form className='main-contact' onSubmit={handleSubmit}>
                 <div className="sender-details">
-                    <label htmlFor="">Your Name</label>
+                    <label htmlFor="name">Your Name</label>
                     <input type="text"
-                        name={contact.name}
+                        name="name"
                         placeholder='Kofi Mensah' 
-                        className=''
-                        onChange={handleChanges}
+                        className='name'                        
                     />
-                    <label htmlFor="">Your Email</label>
+                       <ValidationError 
+                        prefix="name" 
+                        field="name"
+                        errors={state.errors}
+                    />
+                    <label htmlFor="email">Your Email</label>
                     <input type="email"
-                        name={contact.emailAddress}
+                        name="email"
                         placeholder='example@email.com'
-                        className='email'
-                        onChange={handleChanges} 
+                        className="email"
+                         
                     />
-                    <label htmlFor="">Subject</label>    
+                       <ValidationError 
+                        prefix="Email" 
+                        field="email"
+                        errors={state.errors}
+                    />
+
+                    <label htmlFor="subject">Subject</label>    
                     <input type="text"
-                        name={contact.emailAddress} 
-                        className=''
-                        onChange={handleChanges}
+                        name="subject" 
+                        className="subject"       
+                        
                     />
+                    <ValidationError 
+                        prefix="subject" 
+                        field="subject"
+                        errors={state.errors}
+                    />
+
                 </div> 
                 <div className="sender-message">
                     <label htmlFor="">Message</label>
-                    <textarea type='text' name={contact.message} id="" className='' onChange={handleChanges}>
+                    <textarea 
+                        type='text' 
+                        name="message" 
+                        id="message" 
+                        className='message' 
+                        />
+                       <ValidationError 
+                        prefix="message" 
+                        field="message"
+                        errors={state.errors}
+                    />
                         
-                    </textarea>
+                    {/* </textarea> */}
+                    
                 </div>    
                 <div className="message-action-buttons">
-                    <button>Send</button>
+                    <button type='submit' disabled={state.submitting} onClick={()=>setDisplay(true)}>Send</button>
                     <button>Clear</button>
                 </div>           
             </form>
+            
         </div>
             <h4>
                 GhanaRestaurantsHub — Connecting People to Ghana's Restaurants and Food Destinations.               
@@ -70,4 +102,4 @@ const Contact = () => {
   )
 }
 
-export default Contact
+export default ContactForm

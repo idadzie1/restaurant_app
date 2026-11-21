@@ -1196,6 +1196,11 @@ form.main-contact{
     font-weight: 400;
 }
 
+/* p.delivery-confirmation{
+    position: absolute;
+    top: 10rem;
+} */
+
 /* ==================================== Media Query for Contact form ============== */
 @media screen and (min-width: 320px) and (max-width: 768px){
     .contact-form{
