@@ -25,7 +25,8 @@ const ContactForm = () => {
       </div>      
     </div>    
 
-  } 
+  }
+    
 
    
   return (
@@ -38,7 +39,8 @@ const ContactForm = () => {
                     <input type="text"
                         name="name"
                         placeholder='Kofi Mensah' 
-                        className='name'                        
+                        className='name'
+                        required                        
                     />
                        <ValidationError 
                         prefix="name" 
@@ -50,6 +52,7 @@ const ContactForm = () => {
                         name="email"
                         placeholder='example@email.com'
                         className="email"
+                        required
                          
                     />
                        <ValidationError 
@@ -62,7 +65,7 @@ const ContactForm = () => {
                     <input type="text"
                         name="subject" 
                         className="subject"       
-                        
+                        required
                     />
                     <ValidationError 
                         prefix="subject" 
@@ -77,7 +80,8 @@ const ContactForm = () => {
                         type='text' 
                         name="message" 
                         id="message" 
-                        className='message' 
+                        className='message'
+                        required 
                         />
                        <ValidationError 
                         prefix="message" 
