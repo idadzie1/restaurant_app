@@ -86,11 +86,10 @@ const ContactForm = () => {
                        <ValidationError 
                         prefix="message" 
                         field="message"
-                        errors={state.errors}
+                        errors={state.errors}                    
                     />
                         
-                    {/* </textarea> */}
-                    
+                                    
                 </div>    
                 <div className="message-action-buttons">
                     <button type='submit' disabled={state.submitting} onClick={()=>setDisplay(true)}>Send</button>

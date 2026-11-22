@@ -81,85 +81,119 @@
 
 // ================================================================================
 
-const sendAdminNotification = async ({
-    to = process.env.ADMIN_EMAIL,
-    subject,
-    text,
-    html,
-    replyTo
-}) => {
+// const sendAdminNotification = async ({
+//     to = process.env.ADMIN_EMAIL,
+//     subject,
+//     text,
+//     html,
+//     replyTo
+// }) => {
 
-    if (
-        !process.env.BREVO_API_KEY ||
-        !process.env.BREVO_SENDER_EMAIL ||
-        !to
-    ) {
-        throw new Error("Brevo email environment variables are missing.");
-    }
+//     if (
+//         !process.env.BREVO_API_KEY ||
+//         !process.env.BREVO_SENDER_EMAIL ||
+//         !to
+//     ) {
+//         throw new Error("Brevo email environment variables are missing.");
+//     }
+
+//     try {
+
+//         const recipients = Array.isArray(to)
+//             ? to.map(recipient =>
+//                 typeof recipient === "string"
+//                     ? { email: recipient }
+//                     : recipient
+//             )
+//             : [{ email: to }];
+
+//         const emailPayload = {
+//             sender: {
+//                 name: process.env.BREVO_SENDER_NAME || "Ghana Restaurants Hub",
+//                 email: process.env.BREVO_SENDER_EMAIL
+//             },
+
+//             to: recipients,
+//             subject,
+//             textContent: text,
+//             htmlContent: html
+//         };
+
+//         // Include replyTo only when supplied
+//         if (replyTo) {
+//             emailPayload.replyTo = {
+//                 email: replyTo
+//             };
+//         }
+
+//         const response = await fetch(
+//             "https://api.brevo.com/v3/smtp/email",
+//             {
+//                 method: "POST",
+
+//                 headers: {
+//                     "accept": "application/json",
+//                     "api-key": process.env.BREVO_API_KEY,
+//                     "content-type": "application/json"
+//                 },
+
+//                 body: JSON.stringify(emailPayload)
+//             }
+//         );
+
+//         const result = await response.json();
+
+//         if (!response.ok) {
+//             throw new Error(
+//                 `Brevo API error (${response.status}): ${JSON.stringify(result)}`
+//             );
+//         }
+
+//         console.log("Email successfully accepted by Brevo:", result.messageId);
+
+//         return result;
+
+//     } catch (error) {
+
+//         console.error("Email notification failed:", error.message);
+
+//         throw error;
+//     }
+// };
+
+// module.exports = { sendAdminNotification };
+
+const  { Resend } =require('resend')
+
+const sendAdminNotification = async({
+    to,
+    subject,
+    html,
+    text
+})=>{
 
     try {
+        if(!process.env.RESEND_API_KEY || !process.env.SENDER_EMAIL || !process.env.ADMIN_EMAIL){
+            throw new Error("Brevo email environment variables are missing.");
+        }
+       
 
-        const recipients = Array.isArray(to)
-            ? to.map(recipient =>
-                typeof recipient === "string"
-                    ? { email: recipient }
-                    : recipient
-            )
-            : [{ email: to }];
+            const resend = new Resend(process.env.RESEND_API_KEY);
 
-        const emailPayload = {
-            sender: {
-                name: process.env.BREVO_SENDER_NAME || "Ghana Restaurants Hub",
-                email: process.env.BREVO_SENDER_EMAIL
-            },
-
-            to: recipients,
+            resend.emails.send({
+            from: process.env.SENDER_EMAIL,
+            to,
             subject,
-            textContent: text,
-            htmlContent: html
-        };
+            html,
+            text
+            });
 
-        // Include replyTo only when supplied
-        if (replyTo) {
-            emailPayload.replyTo = {
-                email: replyTo
-            };
-        }
-
-        const response = await fetch(
-            "https://api.brevo.com/v3/smtp/email",
-            {
-                method: "POST",
-
-                headers: {
-                    "accept": "application/json",
-                    "api-key": process.env.BREVO_API_KEY,
-                    "content-type": "application/json"
-                },
-
-                body: JSON.stringify(emailPayload)
-            }
-        );
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(
-                `Brevo API error (${response.status}): ${JSON.stringify(result)}`
-            );
-        }
-
-        console.log("Email successfully accepted by Brevo:", result.messageId);
-
-        return result;
 
     } catch (error) {
-
         console.error("Email notification failed:", error.message);
-
         throw error;
     }
-};
+
+}
 
 module.exports = { sendAdminNotification };
-
