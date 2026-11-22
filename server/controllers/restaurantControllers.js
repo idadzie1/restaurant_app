@@ -101,6 +101,7 @@ const createRestaurant = async (req, res, next)=>{
                 if(newRestauant.approvalStatus === "pending"){
                     try {
                             await sendAdminNotification({
+                                    from,
                                     to: process.env.ADMIN_EMAIL,
                                     subject: "New Restaurant Posted",
                                     text: "A new restaurant has been submitted.",
