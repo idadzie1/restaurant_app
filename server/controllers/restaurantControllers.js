@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 const { getCloudinaryPublicId } = require("../utils/cloudinaryUtils");
 
 const { sendAdminNotification } = require("../utils/adminEmailNotification.js")
+const { sendUserNotification } = require("../utils/userRestaurantPostNotifications.js")
 
   
 
@@ -106,6 +107,13 @@ const createRestaurant = async (req, res, next)=>{
                                     text: "A new restaurant has been submitted.",
                                     html: `<p>A new restaurant has been submitted. </p>`
                                 });
+
+                              await sendUserNotification({                                                                      
+                                    to: newRestauant.email,
+                                    subject: "We Acknowledge Reciept of Your Post",
+                                    text: "An administrator will call you to begin the process of validation. Please allow for some time to complete the process",
+                                    html: `<p>A An administrator will call you to begingthe process of validation. Please allow for some time to complete the process </p>`
+                                });   
                     } catch (emailError) {
                         console.error("Email notification failed:", emailError.message);
                     }
