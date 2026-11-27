@@ -111,8 +111,32 @@ const createRestaurant = async (req, res, next)=>{
                               await sendUserNotification({                                                                      
                                     to: newRestauant.email,
                                     subject: "We Acknowledge Reciept of Your Post",
-                                    text: "An administrator will call you to begin the process of validation. Please allow for some time to complete the process",
-                                    html: `<p>An administrator will call you to begin the process of validation. Please allow for some time to complete the process </p>`
+                                    text: "Thank you for submitting your restaurant to GhanaRestaurantsHub.We have successfully received your listing. Our administration team will review the information provided and contact you to begin the verification process.Please allow some time for the review and verification process to be completed. We appreciate your patience and interest in being featured on GhanaRestaurantsHub.Thank you for choosing GhanaRestaurantsHub.",
+
+                                    html: `<h2>Thank You for Your Submission!</h2>
+
+                                            <p>Dear Restaurant Owner,</p>
+
+                                            <p>Thank you for choosing <strong>GhanaRestaurantsHub</strong>
+                                            to showcase your restaurant.</p>
+
+                                            <p>We have successfully received your restaurant listing.</p>
+
+                                            <p>Our administration team will review the information
+                                            provided and contact you to begin the verification process.</p>
+
+                                            <p>Please allow some time for the review and verification
+                                            process to be completed. We appreciate your patience
+                                            and cooperation.</p>
+
+                                            <p>We look forward to helping your restaurant gain
+                                            visibility and connect with more people across Ghana.</p>
+
+                                            <p>Warm regards,<br>
+                                            <strong>GhanaRestaurantsHub Team</strong></p>
+
+                                            <p><a href="https://www.ghanarestaurantshub.com">
+                                            Visit GhanaRestaurantsHub</a></p>`
                                 });   
                     } catch (emailError) {
                         console.error("Email notification failed:", emailError.message);
