@@ -174,7 +174,7 @@ const sendAdminNotification = async({
 
     try {
         if(!process.env.RESEND_API_KEY || !process.env.SENDER_EMAIL || !process.env.ADMIN_EMAIL){
-            throw new Error("Brevo email environment variables are missing.");
+            throw new Error("Resend email environment variables are missing.");
         }
        
 
