@@ -110,7 +110,7 @@ const createRestaurant = async (req, res, next)=>{
 
                               await sendUserNotification({                                                                      
                                     to: newRestauant.email,
-                                    subject: "We Acknowledge Reciept of Your Post",
+                                    subject: "We've Received Your Restaurant Submission - GhanaRestaurantsHub",
                                     text: "Thank you for submitting your restaurant to GhanaRestaurantsHub.We have successfully received your listing. Our administration team will review the information provided and contact you to begin the verification process.Please allow some time for the review and verification process to be completed. We appreciate your patience and interest in being featured on GhanaRestaurantsHub.Thank you for choosing GhanaRestaurantsHub.",
 
                                     html: `<h2>Thank You for Your Submission!</h2>
