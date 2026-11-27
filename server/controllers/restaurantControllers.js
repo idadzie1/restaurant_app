@@ -112,7 +112,7 @@ const createRestaurant = async (req, res, next)=>{
                                     to: newRestauant.email,
                                     subject: "We Acknowledge Reciept of Your Post",
                                     text: "An administrator will call you to begin the process of validation. Please allow for some time to complete the process",
-                                    html: `<p>A An administrator will call you to begingthe process of validation. Please allow for some time to complete the process </p>`
+                                    html: `<p>An administrator will call you to begin the process of validation. Please allow for some time to complete the process </p>`
                                 });   
                     } catch (emailError) {
                         console.error("Email notification failed:", emailError.message);
